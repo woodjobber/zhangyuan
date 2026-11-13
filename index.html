@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>章圆学员层级定位工具</title>
+<style>
+:root{--pri:#1E6FD9;--pri-d:#1657B0;--pri-l:#EAF2FC;--bg:#F4F7FB;--ink:#1B2733;--sub:#5B6B7C;--line:#DCE6F2;--ok:#1F9D6B;--warn:#E08A1E;--bad:#D6433B;--card:#fff;--sh:0 2px 14px rgba(30,111,217,.08);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6}
+.topbar{background:linear-gradient(120deg,var(--pri) 0%,#2E86E8 55%,#4AA0F0 100%);color:#fff;padding:26px 20px 22px;box-shadow:0 4px 18px rgba(30,111,217,.25)}
+.topbar h1{text-align:center;font-size:26px;font-weight:800;letter-spacing:3px;margin:0}
+.topbar .subline{text-align:center;font-size:13.5px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.9);margin:8px auto 0}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}
+.tab{padding:10px 18px;border-radius:10px;background:var(--card);border:1px solid var(--line);color:var(--sub);cursor:pointer;font-weight:600;font-size:14px;transition:.15s}
+.tab:hover{border-color:var(--pri);color:var(--pri)}
+.tab.on{background:var(--pri);color:#fff;border-color:var(--pri);box-shadow:0 3px 10px rgba(30,111,217,.3)}
+.panel{display:none;animation:fade .25s}
+.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--sh)}
+.card h2{font-size:16px;color:var(--pri-d);margin-bottom:14px;padding-left:11px;border-left:4px solid var(--pri)}
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+label{display:block;font-size:12.5px;color:var(--sub);font-weight:600;margin-bottom:5px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px;background:#fff;color:var(--ink);transition:.15s;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(30,111,217,.13)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border:none;border-radius:9px;background:var(--pri);color:#fff;font-weight:700;font-size:14px;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(30,111,217,.25)}
+.btn:hover{background:var(--pri-d);transform:translateY(-1px)}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri);box-shadow:none}
+.btn.sec:hover{background:var(--pri-l)}
+.btn.gho{background:var(--pri-l);color:var(--pri-d);box-shadow:none}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.hint{font-size:12px;color:var(--sub);margin-top:5px}
+.red{color:var(--bad);font-weight:600}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700}
+.t-ba{background:#E8F6EF;color:var(--ok)}.t-lin{background:#FDF3E3;color:var(--warn)}.t-jc{background:#FCEAE9;color:var(--bad)}
+.t-zhu{background:#EEF1F5;color:#5B6B7C}.t-gg{background:#E7F0FB;color:var(--pri)}.t-tz{background:#EFEAFB;color:#7A5BD0}.t-bg{background:#FBEAF6;color:#C0469A}
+.result{background:linear-gradient(135deg,var(--pri-l),#F4F9FF);border:1px solid #C7DCF5;border-radius:12px;padding:18px 20px;margin-top:16px}
+.big{font-size:34px;font-weight:800;color:var(--pri-d)}
+.kv{display:flex;flex-wrap:wrap;gap:8px 22px;margin:10px 0;font-size:13.5px}
+.kv b{color:var(--pri-d)}
+.note{background:#FFF9EE;border:1px solid #F3E0B5;border-radius:10px;padding:11px 14px;font-size:13px;color:#8A6D2E;margin-top:12px}
+.danger{background:#FDEEED;border:1px solid #F3C9C6;color:#B0231C;border-radius:10px;padding:11px 14px;font-size:13px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:center}
+th{background:var(--pri-l);color:var(--pri-d);font-weight:700}
+tr:nth-child(even) td{background:#FAFCFF}
+.ed{width:70px;text-align:center;padding:5px;border:1px solid var(--line);border-radius:6px}
+.mod{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.mod>.mh{background:var(--pri-l);padding:9px 14px;font-weight:700;color:var(--pri-d);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.mod .mb{padding:12px 14px;display:none}
+.mod.open .mb{display:block}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1px solid var(--line);border-radius:20px;margin:4px 5px 4px 0;cursor:pointer;font-size:12.5px;background:#fff;transition:.12s}
+.chip:hover{border-color:var(--pri)}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.chip .lv{font-size:10px;opacity:.8}
+#report{background:#fff}
+.rpt{background:#fff;padding:0;color:#1B2733}
+.rpt .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--pri);padding-bottom:14px;margin-bottom:18px}
+.rpt .rhead .logo{max-width:150px;max-height:66px;object-fit:contain}
+.rpt .rhead .org{font-size:20px;font-weight:800;color:var(--pri-d)}
+.rpt h3{font-size:15px;color:var(--pri-d);margin:18px 0 8px;padding-left:9px;border-left:3px solid var(--pri)}
+.rpt table{font-size:12.5px}
+.rlist{margin:6px 0 0 2px;padding-left:18px}.rlist li{margin:4px 0}
+.pill{display:inline-block;background:var(--pri-l);color:var(--pri-d);border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0;font-weight:600}
+.muted{color:var(--sub);font-size:12px}
+.srch{margin-bottom:10px}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#C3D4E8;border-radius:6px}
+@media print{.topbar,.tabs,.noprint{display:none!important}.wrap{max-width:100%;padding:0}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<div id="loginMask" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#144C9C 0%,#1E6FD9 55%,#3E8BEE 100%);display:flex;align-items:center;justify-content:center;font-family:'Microsoft YaHei','PingFang SC',sans-serif">
+  <div style="background:#fff;border-radius:16px;padding:38px 34px;width:344px;max-width:90vw;box-shadow:0 20px 64px rgba(8,40,90,.32);text-align:center">
+    <div style="width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,#1E6FD9,#3E8BEE);color:#fff;font-size:24px;font-weight:800;line-height:52px;margin:0 auto 14px">章</div>
+    <div style="font-size:21px;font-weight:800;color:#144C9C;letter-spacing:.5px">章圆学员层级定位工具</div>
+    <div style="font-size:12.5px;color:#5B6B7C;margin-top:6px">难度系数校准体系 · 教师登录</div>
+    <div style="margin-top:22px;text-align:left">
+      <label style="font-size:13px;color:#33445A;font-weight:600" for="pwInput">机构口令</label>
+      <input id="pwInput" type="password" placeholder="请输入机构口令" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <div id="pwErr" style="color:#D6433B;font-size:12.5px;margin-top:8px;min-height:16px"></div>
+    </div>
+    <button onclick="doLogin()" style="width:100%;margin-top:2px;padding:11px;border:none;border-radius:9px;background:#1E6FD9;color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(30,111,217,.35)">登 录</button>
+    <div style="font-size:11px;color:#9AA7B5;margin-top:14px">仅限授权教师使用 · 数据全程不出本机</div>
+  </div>
+</div>
+<script>
+var TEACHER_PW="985211";
+var PW_KEY="zydb_pwcache";
+function savePwCache(){try{var r={pw:TEACHER_PW,v:1,t:new Date().toISOString()};localStorage.setItem(PW_KEY,JSON.stringify(r));}catch(e){}}
+function loadPwCache(){try{var raw=localStorage.getItem(PW_KEY);if(!raw)return false;var r=JSON.parse(raw);return (r&&r.pw===TEACHER_PW);}catch(e){return false;}}
+function clearPwCache(){try{localStorage.removeItem(PW_KEY);}catch(e){}}
+function enterTool(){
+  var m=document.getElementById('loginMask');if(m)m.style.display='none';
+  try{sessionStorage.setItem('zydb_auth','1');}catch(e){}
+}
+function doLogin(){
+  var v=document.getElementById('pwInput');var val=(v&&v.value||"").replace(/\s/g,"");var err=document.getElementById('pwErr');
+  if(val===TEACHER_PW){
+    savePwCache();
+    if(err)err.textContent='';
+    enterTool();
+  }else{
+    if(err)err.textContent='口令错误，请重新输入';
+    if(v){v.value='';v.focus();}
+  }
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var authed=false;
+  try{authed=loadPwCache() || sessionStorage.getItem('zydb_auth')==='1';}catch(e){}
+  var m=document.getElementById('loginMask');
+  if(authed){if(m)m.style.display='none';}
+  else{if(m)m.style.display='flex';var v=document.getElementById('pwInput');if(v)setTimeout(function(){v.focus();},50);}
+});
+</script>
+<div class="topbar"><h1>章圆学员层级定位工具</h1><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">① 单人定位</div>
+    <div class="tab" data-p="batch" onclick="switchTab('batch',this)">② 批量定位</div>
+    <div class="tab" data-p="advice" onclick="switchTab('advice',this)">③ 补短建议</div>
+    <div class="tab" data-p="report" onclick="switchTab('report',this)">④ 机构报告</div>
+    <div class="tab" data-p="city" onclick="switchTab('city',this)">⑤ 城市与基准P</div>
+    <div class="tab" data-p="ref" onclick="switchTab('ref',this)">⑥ 口径与参考表</div>
+  </div>
+
+  <!-- 单人定位 -->
+  <div class="panel on" id="p-locate">
+    <div class="card">
+      <h2>学员信息</h2>
+      <div class="grid g4">
+        <div><label>姓名</label><input id="l_name" placeholder="如 张明"></div>
+        <div><label>学段</label><select id="l_stage" onchange="onStageChange()"><option value="初中">初中</option><option value="高中" selected>高中</option></select></div>
+        <div><label>年级</label><select id="l_grade"></select></div>
+        <div><label>学校</label><input id="l_school" placeholder="如 成都七中"></div>
+      </div>
+      <div class="grid g4" style="margin-top:12px">
+        <div><label>校区</label><input id="l_campus" placeholder="选填"></div>
+        <div><label>班级</label><input id="l_class" placeholder="选填"></div>
+        <div id="cityWrap"><label>城市 / 考区</label><select id="l_city" onchange="onCityChange()"></select></div>
+        <div id="subjWrap"><label>科目</label><select id="l_subject" onchange="onSubjectChange()"></select></div>
+      </div>
+      <div class="grid g4" style="margin-top:12px">
+        <div id="poolWrap"><label>考试名称 / 卷别（比较群体）</label><select id="l_pool" onchange="onPoolChange()"></select></div>
+        <div><label>考试范围 / 卷型</label><select id="l_scope" onchange="livePreview()"></select></div>
+        <div><label>参考人数（置信度）</label><input id="l_refn" type="number" placeholder="选填，如 48" oninput="livePreview()"></div>
+        <div class="hint" id="poolHint2" style="grid-column:span 4;align-self:end"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>成绩录入</h2>
+      <div class="grid g4">
+        <div><label>卷面得分</label><input id="l_score" type="number" placeholder="如 118" oninput="livePreview()"></div>
+        <div><label>试卷满分</label><input id="l_full" type="number" value="150" oninput="livePreview()"></div>
+        <div><label>本校年级均分（实测优先）</label><input id="l_avg" type="number" placeholder="留空则用卷别兜底P" oninput="livePreview()"></div>
+        <div><label>基础题满分（铁律用）</label><input id="l_bfull" type="number" placeholder="选填，如 90" oninput="livePreview()"></div>
+      </div>
+      <div class="grid g4" style="margin-top:12px">
+        <div><label>基础题实得（铁律用）</label><input id="l_bgot" type="number" placeholder="选填，如 74" oninput="livePreview()"></div>
+        <div style="grid-column:span 3;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="doLocate()">🔍 开始定位</button>
+          <button class="btn sec" onclick="fillDemo()">填入示例</button>
+          <button class="btn gho" onclick="resetLocate()">重置</button>
+        </div>
+      </div>
+      <div class="hint">校准得分率 = 卷面得分率 −（本校均分率 − 常模池基准P）。填了年级均分即以本校实测为准；不填则用所选卷别的兜底P。</div>
+    </div>
+    <div id="locResult"></div>
+  </div>
+
+  <!-- 批量定位 -->
+  <div class="panel" id="p-batch">
+    <div class="card">
+      <h2>批量定位（一次多个学员）</h2>
+      <div class="grid g4">
+        <div><label>学段</label><select id="b_stage" onchange="onBatchStageChange()"><option value="初中">初中</option><option value="高中" selected>高中</option></select><select id="b_city" onchange="onBatchCityChange()" title="按考区筛选卷别" style="min-width:120px"></select></div>
+        <div><label>年级</label><select id="b_grade"></select></div>
+        <div><label>科目</label><select id="b_subject" onchange="onBatchSubjectChange()"></select></div>
+        <div><label>卷别（比较群体）</label><select id="b_pool"></select></div>
+      </div>
+      <div class="grid g3" style="margin-top:12px">
+        <div><label>试卷满分</label><input id="b_full" type="number" value="150"></div>
+        <div><label>本校年级均分</label><input id="b_avg" type="number" placeholder="留空用兜底P"></div>
+        <div><label>考试范围 / 卷型</label><select id="b_scope"></select></div>
+        <div style="display:flex;align-items:flex-end;gap:8px"><button class="btn sec" onclick="fillBatchDemo()">填入示例</button><button class="btn gho" onclick="clearBatch()">清空</button></div>
+      </div>
+      <div style="margin-top:14px"><label>学员数据（每行一位：姓名, 卷面分, 基础题实得, 基础题满分）</label>
+        <textarea id="b_text" rows="8" placeholder="张明,118,74,90&#10;李晓,132,86,90&#10;王芳,96,60,90"></textarea></div>
+      <div class="btns"><button class="btn" onclick="doBatch()">⚙ 批量计算</button><button class="btn sec" onclick="exportBatchCSV()">⬇ 导出CSV</button><button class="btn gho" onclick="clearBatch()">清空</button></div>
+      <div class="hint">基础题两列可省略（留空则不判铁律）。CSV 含 26 列，可直接存档或导入台账。</div>
+    </div>
+    <div id="batchResult"></div>
+  </div>
+
+  <!-- 补短建议 -->
+  <div class="panel" id="p-advice">
+    <div class="card">
+      <h2>知识点与题型补短建议</h2>
+      <div class="grid g4">
+        <div><label>学段</label><select id="a_stage" onchange="onAdvStageChange()"><option value="初中">初中</option><option value="高中" selected>高中</option></select></div>
+        <div><label>年级</label><select id="a_grade" onchange="onAdvGradeChange()"></select></div>
+        <div><label>学期（对应教材册次）</label><select id="a_term" onchange="onAdvTermChange()"></select></div>
+        <div><label>科目</label><select id="a_subject" onchange="onAdvSubjectChange()"></select></div>
+        <div><label>当前层级（定位后自动带入）</label><select id="a_layer"><option value="基础巩固层">基础巩固层</option><option value="临界观察">临界观察</option><option value="拔高冲刺层">拔高冲刺层</option></select></div>
+      </div>
+      <div class="hint" id="a_from" style="margin-top:8px"></div>
+      <div style="margin-top:14px"><label>勾选本次实际丢分的题型（可多选，展开板块查看）：</label></div>
+      <div id="modList" style="margin-top:8px"></div>
+      <div class="btns">
+        <button class="btn" onclick="genAdvice()">✨ 生成补短建议</button>
+        <button class="btn sec" onclick="aiAdvice()">🤖 AI 生成建议</button>
+        <button class="btn gho" onclick="clearChips()">清空勾选</button>
+      </div>
+      <div class="hint">AI 建议在「城市与基准P → AI接口设置」配置后可用；未配置时自动改用内置规则库，结果同样可用。</div>
+    </div>
+    <div id="advResult"></div>
+  </div>
+
+  <!-- 机构报告 -->
+  <div class="panel" id="p-report">
+    <div class="card">
+      <h2>机构报告设置</h2>
+      <div class="grid g3">
+        <div><label>机构名称</label><input id="r_org" placeholder="如 章圆智学中心"></div>
+        <div><label>报告教师 / 顾问</label><input id="r_teacher" placeholder="选填"></div>
+        <div><label>机构LOGO（本地上传，存本机）</label>
+          <input id="r_logoFile" type="file" accept="image/*" onchange="onLogoFile()" style="padding:6px;border:1px dashed var(--line);background:#FAFCFF">
+          <input id="r_logo" placeholder="或粘贴图片URL（可选）" oninput="previewLogo()" style="margin-top:6px">
+        </div>
+      </div>
+      <div style="margin-top:12px"><label>LOGO 预览</label><div id="logoBox" style="border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:60px;display:flex;align-items:center;justify-content:center;background:#FAFCFF"><span class="muted">暂无 LOGO</span></div></div>
+      <div class="hint" style="margin-top:8px">报告自动使用最近一次「单人定位」的结果与「补短建议」的勾选。请先完成定位。</div>
+      <div class="btns"><button class="btn" onclick="genReport()">📄 生成机构报告</button><button class="btn sec" onclick="exportPDF(event)">⬇ 导出PDF</button><button class="btn sec" onclick="exportWord()">⬇ 导出Word（.doc）</button><button class="btn gho" onclick="clearLogo()">✕ 清除LOGO</button><button class="btn gho" onclick="doLogout()">🚪 退出登录·清除口令缓存</button></div>
+      <div class="hint">导出PDF直接生成PDF文件（A4版式、含LOGO，断网可用）；导出Word生成可编辑 .doc。LOGO一经上传自动保存在本机，下次打开仍在。</div>
+    </div>
+    <div class="card"><div id="report"><div class="muted">点击「生成机构报告」后，此处显示完整报告。</div></div></div>
+  </div>
+
+  <!-- 城市与基准P -->
+  <div class="panel" id="p-city">
+    <div class="card">
+      <h2>城市与基准P（可编辑 · 自动保存）</h2>
+      <div class="hint" style="margin-bottom:10px">下表为成都现行默认口径（机构预估·非官方）。可增删改；改动自动存本机，刷新不丢。点「恢复默认」回到内置口径，「检查更新」在检测到新版内置口径时提示合并。</div>
+      <div class="srch"><input id="citySearch" placeholder="🔎 搜索城市 / 卷别 / 科目" oninput="renderCity()"></div>
+      <div style="overflow:auto"><table id="cityTable"></table></div>
+      <div class="btns">
+        <button class="btn sm" onclick="addCityRow()">＋ 新增一条</button>
+        <button class="btn sm sec" onclick="checkUpdate()">🔄 检查更新</button>
+        <button class="btn sm gho" onclick="resetCity()">恢复默认口径</button>
+        <button class="btn sm gho" onclick="exportCityJSON()">⬇ 导出配置</button>
+        <button class="btn sm gho" onclick="document.getElementById('impCity').click()">⬆ 导入配置</button>
+        <input id="impCity" type="text" style="display:none" >
+      </div>
+      <div class="hint">导入配置：把对方「导出配置」复制的文本，粘贴到下方框后点确认导入。</div>
+      <div style="margin-top:8px"><textarea id="impCityText" rows="3" placeholder="在此粘贴配置JSON，然后点右侧按钮"></textarea>
+      <button class="btn sm sec" style="margin-top:6px" onclick="importCityJSON()">确认导入</button></div>
+    </div>
+    <div class="card">
+      <h2>AI 接口设置（可选 · 已预置免费AI产品）</h2>
+      <div class="grid g3">
+        <div><label>免费AI产品（预置，选后自动带出地址与模型）</label>
+          <select id="ai_preset" onchange="onAIPreset()">
+            <option value="tokenhub" selected>腾讯云 TokenHub · 元宝AI（默认）</option>
+            <option value="siliconflow">硅基流动 SiliconFlow（Qwen 免费模型）</option>
+            <option value="glm">智谱AI · GLM-4-Flash（免费）</option>
+            <option value="cfworker">Cloudflare Worker 中转（推荐，本地可用）</option>
+            <option value="custom">自定义（自建 / 其他兼容接口）</option>
+          </select>
+        </div>
+        <div><label>接口地址（兼容 OpenAI /chat/completions）</label><input id="ai_url" placeholder="https://api.xxx.com/v1/chat/completions"></div>
+        <div><label>模型名（可下拉选择预置，也可手动输入）</label>
+          <select id="ai_model_preset" onchange="onModelPreset()" style="margin-bottom:4px">
+            <option value="">— 手动输入 / 从下方选择 —</option>
+            <option value="DeepSeek-V4.1-Flash-1017">DeepSeek-V4.1-Flash-1017</option>
+            <option value="DeepSeek-V4-Pro-0813">DeepSeek-V4-Pro 0813 正式版</option>
+            <option value="hy3">hy3</option>
+            <option value="DeepSeek-V4-Pro">DeepSeek-V4-Pro</option>
+            <option value="hy4">hy4</option>
+            <option value="Qwen/Qwen2.5-7B-Instruct">Qwen/Qwen2.5-7B-Instruct（硅基流动）</option>
+            <option value="glm-4-flash">glm-4-flash（智谱）</option>
+          </select>
+          <input id="ai_model" placeholder="选择预置自动填入，或直接手动输入模型名">
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:8px">
+        <div><label>API Key（到对应官网免费领取）</label><input id="ai_key" type="password" placeholder="粘贴免费领取的 Key，未填则自动用内置规则库"></div>
+        <div style="grid-column:span 2"><label>免费 Key 领取指引</label><div class="hint" id="aiGuide" style="margin-top:4px"></div></div>
+      </div>
+      <div class="btns"><button class="btn sm" onclick="saveAI()">保存AI设置</button><button class="btn sm gho" onclick="clearAI()">恢复默认</button></div>
+      <div class="hint" id="aiState"></div>
+    </div>
+  </div>
+
+  <!-- 口径与参考表 -->
+  <div class="panel" id="p-ref">
+    <div class="card">
+      <h2>校准公式与分层口径（默认内置 · 与校准卡V3.7一致）</h2>
+      <div class="result" style="margin-top:0">
+        <div style="font-size:15px;font-weight:700;color:var(--pri-d)">校准得分率 = 卷面得分率 −（本校均分率 − 常模池基准P）</div>
+        <div class="kv" style="margin-top:10px">
+          <span><b>≥75%</b> → <span class="tag t-ba">拔高冲刺层</span>（75%~78% 为拔高下沿缓冲带，追踪3次）</span>
+          <span><b>72%~75%</b> → <span class="tag t-lin">临界观察</span></span>
+          <span><b>&lt;72%</b> → <span class="tag t-jc">基础巩固层</span></span>
+        </div>
+        <div class="kv">
+          <span>四层台阶：<span class="tag t-zhu">筑基&lt;60%</span> <span class="tag t-gg">巩固60~70%</span> <span class="tag t-tz">拓展70~80%</span> <span class="tag t-bg">拔高≥80%</span></span>
+        </div>
+        <div class="danger" style="margin-top:10px">⛔ 铁律：基础题应得率（基础题实得÷基础题满分）&lt;85% 时，无论总分多高，强制降为<b>基础巩固层</b>并标「待复核」。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>各卷制划线（零平移速查值）</h2>
+      <div style="overflow:auto"><table id="lineTable"></table></div>
+      <div class="hint">划线 = ceil(比例×满分)。本校均分偏离基准超过3个百分点时，以工具精算结果为准，勿直接套划线。</div>
+    </div>
+    <div class="card">
+      <h2>常模池（比较群体）取数规则</h2>
+      <table>
+        <tr><th>考试类型</th><th>取哪个池</th><th>为什么</th></tr>
+        <tr><td>本校平日卷 / 月考</td><td>本校同年级本次均分÷满分（实测）</td><td>高一高二无区域统考，本校年级是唯一可靠参照</td></tr>
+        <tr><td>成都各区中考/诊断</td><td>分区取值，不跨区</td><td>各区命题难度不同</td></tr>
+        <tr><td>四川高考</td><td>数学分物理类/历史类，语文物理类/历史类分列</td><td>两类分开投档，是两个独立竞争群体</td></tr>
+        <tr><td>高三一诊/二诊/三诊</td><td>按届次、物理类/历史类分列（数学）</td><td>同届三次难度差最大约0.07</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>范围—锚点匹配规则（防"用全卷锚校半卷考"）</h2>
+      <table>
+        <tr><th>考试范围</th><th>推荐比较群体(锚)</th><th>可否套全卷常模锚</th></tr>
+        <tr><td>章节考 / 月考</td><td>本校同年级本次均分（自锚）</td><td class="red">不可，须自锚</td></tr>
+        <tr><td>期中考试（半册）</td><td>本校同年级本次均分（自锚）</td><td class="red">不可，须自锚</td></tr>
+        <tr><td>期末（整册）/ 诊断模考 / 中高考</td><td>对应区·对应科·对应科类常模池</td><td>可（范围一致）</td></tr>
+      </table>
+      <div class="note">校准得分率 = 卷面得分率 −（本校均分率 − 常模池基准P）。教材、进度、群体等共模因子，只要常模池与本次考试<b>同教材、同范围、同群体</b>就自动抵消；错配（半卷套全卷锚、成都北师大版数学套德阳人教锚、实验班均分套全年级池）才变成系统偏差。精度重心在<b>选对比较池与范围</b>，不是改 75% 这条线。</div>
+    </div>
+    <div class="card">
+      <h2>科学性优化项（v7.2）</h2>
+      <table>
+        <tr><th>因子</th><th>处理方式</th></tr>
+        <tr><td>学期 / 教学进度</td><td>年级×上下学期 → 教材册次上限；补短只在已学知识点配题，未学册次灰显暂缓，不超纲</td></tr>
+        <tr><td>教材版本</td><td>四川高中全省同教材，池内自动抵消；初中数学北师大/人教/西南师大跨市不同，跨市须本校均分回算</td></tr>
+        <tr><td>考试范围 / 卷型</td><td>新增范围选择；半卷考套全卷锚时警告并引导自锚</td></tr>
+        <tr><td>样本量 / 置信度</td><td>参考人数 &lt;30 低置信、30~100 谨慎定档，报告中标注</td></tr>
+        <tr><td>评分宽严（主观题）</td><td>语文/英语标"评分宽严敏感"，建议以本校历次均分纵向自比</td></tr>
+        <tr><td>群体构成（班型）</td><td>实验班/尖子班须按班型分池或用班均分自锚</td></tr>
+        <tr><td>建议个性化</td><td>补短建议融入校准得分率、基础题应得率、勾选题型、本学期进度四要素</td></tr>
+      </table>
+      <div class="hint">2026 春起八下数学、九下物理启用新教材（内容变多变难），同年级跨届基准P不可混用，口径表建议加"教材届次"备注。</div>
+    </div>
+    <div class="card">
+      <h2>内置默认常模池（v<span id="refVer"></span>，自动随版本更新；在「城市与基准P」可改）</h2>
+      <div style="overflow:auto"><table id="refCityTable"></table></div>
+      <div class="hint">平日卷请以本校同年级均分实测为准；表中值为机构预估/兜底，非官方发布。</div>
+      <div class="hint">初中=中考与平日卷；高中=高考、高三诊断与平日卷。切学段时卷别下拉自动只显示对应条目。</div>
+      <div class="note">选错池差两档：卷面120/150，物理类池算得79.8%判拔高，误套历史类池得71.8%判基础巩固层。<b>选对「科目/卷别」比分数填得准更重要。</b>所有基准P均为机构预估，首学期须用本校均分回算替换。</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ 默认数据（内置口径，版本 5.1.0） ============ */
+var DATA_VERSION="7.4.0";
+var DEFAULT_CITY=[
+  // 高中：四川高考
+  {city:"四川高考",subject:"数学",pool:"物理类",p:0.54,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"数学",pool:"历史类",p:0.46,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"语文",pool:"物理类",p:0.64,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"语文",pool:"历史类",p:0.63,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"英语",pool:"通用",p:0.62,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"物理",pool:"通用",p:0.52,src:"机构预估",stage:"高中"},
+  {city:"四川高考",subject:"历史",pool:"通用",p:0.58,src:"机构预估",stage:"高中"},
+  // 初中：成都各区中考（数学，分区取值）
+  {city:"成都·青羊",subject:"数学",pool:"中考",p:0.52,src:"机构预估",stage:"初中"},
+  {city:"成都·天府新区",subject:"数学",pool:"中考",p:0.59,src:"机构预估",stage:"初中"},
+  {city:"成都·天府新区",subject:"数学",pool:"A卷",p:0.70,src:"机构预估",stage:"初中"},
+  {city:"成都·天府新区",subject:"数学",pool:"B卷",p:0.45,src:"机构预估",stage:"初中"},
+  {city:"成都·成华",subject:"数学",pool:"中考",p:0.63,src:"机构预估",stage:"初中"},
+  {city:"成都·双流",subject:"数学",pool:"中考",p:0.62,src:"机构预估",stage:"初中"},
+  {city:"成都·金牛/武侯/高新",subject:"数学",pool:"中考",p:0.58,src:"机构预估",stage:"初中"},
+  {city:"成都·二三圈层",subject:"数学",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
+  {city:"成都·远郊",subject:"数学",pool:"中考",p:0.72,src:"机构预估",stage:"初中"},
+  // 初中：中考其他科目（无分科公布值，用中考整体难度近似，须以本校均分回算替换）
+  {city:"成都·中考通用",subject:"语文",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
+  {city:"成都·中考通用",subject:"英语",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
+  {city:"成都·中考通用",subject:"物理",pool:"中考",p:0.62,src:"机构预估",stage:"初中"},
+  {city:"成都·中考通用",subject:"化学",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
+  // 高中：高三诊断考（分科基准P）
+  {city:"成都高三诊断",subject:"数学",pool:"一诊",p:0.56,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"数学",pool:"二诊",p:0.587,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"数学",pool:"三诊",p:0.60,src:"校准卡V3.7区间中值",stage:"高中"},
+  {city:"成都高三诊断",subject:"语文",pool:"一诊",p:0.65,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"语文",pool:"二诊",p:0.585,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"英语",pool:"一诊",p:0.60,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"英语",pool:"二诊",p:0.61,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"物理",pool:"一诊",p:0.56,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"物理",pool:"二诊",p:0.545,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"历史",pool:"一诊",p:0.59,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"历史",pool:"二诊",p:0.565,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"四川高考",subject:"化学",pool:"通用",p:0.55,src:"机构预估",stage:"高中"},
+  // 其他城市（非成都）：高中高考通用
+  {city:"其他城市(通用)",subject:"数学",pool:"高考",p:0.55,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"语文",pool:"高考",p:0.63,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"英语",pool:"高考",p:0.62,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"物理",pool:"高考",p:0.52,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"化学",pool:"高考",p:0.55,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"历史",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"地理",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"政治",pool:"高考",p:0.60,src:"机构预估·非官方",stage:"高中"},
+  {city:"其他城市(通用)",subject:"生物",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
+  // 其他城市（非成都）：初中中考通用
+  {city:"其他城市(通用)",subject:"数学",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"语文",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"英语",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"物理",pool:"中考",p:0.62,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"化学",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"历史",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  {city:"其他城市(通用)",subject:"政治",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
+  // 初高中通用：平日卷兜底（优先本校均分实测，与城市无关）
+  {city:"本校平日卷",subject:"通用",pool:"兜底(标准卷)",p:0.60,src:"兜底值",stage:"全部"},
+  {city:"本校平日卷",subject:"通用",pool:"兜底(偏难卷)",p:0.54,src:"兜底值",stage:"全部"},
+  {city:"本校平日卷",subject:"通用",pool:"兜底(偏易卷)",p:0.68,src:"兜底值",stage:"全部"}
+];
+
+/* ============ 题型库（初中/高中 × 语数物化英，分板块） ============ */
+/* level: zhu筑基 gg巩固 tz拓展 bg拔高 */
+var BANK={
+"初中":{
+ "数学":{
+  "数与代数":[
+   {n:"有理数混合运算",lv:"zhu",f:"符号错、运算顺序乱",x:"重练符号法则与优先级，每日10道纯运算"},
+   {n:"整式与因式分解",lv:"zhu",f:"公式套错、提不净",x:"背熟乘法公式，练提取公因式+公式法两步"},
+   {n:"分式运算与化简求值",lv:"gg",f:"通分错、约分漏条件",x:"规范通分步骤，标定义域限制"},
+   {n:"一元二次方程",lv:"gg",f:"判别式/韦达用不熟",x:"练判别式分类、韦达定理求根关系"},
+   {n:"二次函数综合",lv:"tz",f:"含参最值、图像平移卡壳",x:"练配方求顶点、含参区间最值分类"},
+   {n:"规律探索与代数推理",lv:"bg",f:"不会归纳通项",x:"练从特殊到一般，写通项并验证"}],
+  "图形与几何":[
+   {n:"三角形全等证明",lv:"gg",f:"条件找不全、书写不规范",x:"练四种判定，规范三步书写"},
+   {n:"相似三角形",lv:"tz",f:"对应边找错、比例式列错",x:"练A字/X字模型，标对应顶点"},
+   {n:"圆（垂径/圆周角/切线）",lv:"tz",f:"辅助线不会添",x:"练连半径、作弦心距两类辅助线"},
+   {n:"几何压轴（动点/存在性）",lv:"bg",f:"分类讨论漏情形",x:"练动点分段、存在性先假设再验证"}],
+  "函数":[
+   {n:"一次函数与图像",lv:"zhu",f:"k/b意义不清",x:"练k正负与增减性、截距读图"},
+   {n:"反比例函数",lv:"gg",f:"k几何意义、与一次交点",x:"练k的几何意义、联立求交点"},
+   {n:"函数与几何综合",lv:"bg",f:"不会建坐标建模",x:"练建系设点、用函数表达几何量"}],
+  "统计与概率":[
+   {n:"统计图表分析",lv:"zhu",f:"读图错、平均数/中位数混",x:"练条形/扇形/折线读图，区分三数"},
+   {n:"概率计算（列表/树状图）",lv:"gg",f:"有放回无放回混、漏情形",x:"规范画树状图，标清放回与否"}],
+  "综合与实践":[
+   {n:"实际应用题（方程/不等式）",lv:"gg",f:"不会设未知、审错题",x:"练圈关键量、列等量/不等关系"},
+   {n:"方案优化与最值",lv:"tz",f:"不会建函数求最值",x:"练设变量→列函数→定范围求最值"},
+   {n:"跨学科情境题",lv:"bg",f:"读不懂陌生情境",x:"练提取数学模型，忽略干扰信息"}]
+ },
+ "物理":{
+  "声光热":[
+   {n:"声现象",lv:"zhu",f:"音调响度音色混",x:"辨三特性，联系生活实例"},
+   {n:"光现象（反射/折射/成像）",lv:"gg",f:"作图不规范、成像规律乱",x:"练光路图，记平面镜/凸透镜成像"},
+   {n:"物态变化与热学",lv:"zhu",f:"六种变化辨不清",x:"列表辨吸放热，练温度计读数"}],
+  "力学":[
+   {n:"力与运动（受力分析）",lv:"gg",f:"漏力、多力",x:"练隔离法画受力图，先重力再接触力"},
+   {n:"压强（固/液/大气）",lv:"gg",f:"公式选错、深度理解错",x:"辨固液压强公式，练液体深度取值"},
+   {n:"浮力",lv:"tz",f:"多解法不会选、受力漏",x:"练称重法/阿基米德/平衡三法"},
+   {n:"简单机械与功/功率/效率",lv:"tz",f:"机械效率算错",x:"练有用功/总功辨析，滑轮组绕线"}],
+  "电学":[
+   {n:"电路识别与电表",lv:"zhu",f:"串并联判断错、电表接错",x:"练去表法判电路，电流表串电压表并"},
+   {n:"欧姆定律",lv:"gg",f:"动态电路分析乱",x:"练滑变引起的I/U变化链"},
+   {n:"电功电功率与电热",lv:"tz",f:"额定实际混、公式乱套",x:"辨额定/实际，练P=UI及变形选用"},
+   {n:"电学综合计算",lv:"bg",f:"多状态电路列不出方程",x:"练分状态画等效电路列方程"}],
+  "实验探究":[
+   {n:"测量类实验（长度/密度/电阻）",lv:"zhu",f:"读数/步骤不规范",x:"练量筒天平电表读数，规范步骤"},
+   {n:"探究类实验（控制变量）",lv:"gg",f:"变量控制表述不清",x:"练写'控制…不变，改变…'句式"},
+   {n:"电学/力学设计性实验",lv:"bg",f:"不会设计方案",x:"练画电路图+写步骤+表达式"}]
+ },
+ "化学":{
+  "身边的化学物质":[
+   {n:"空气与氧气",lv:"zhu",f:"性质用途混、实验现象记错",x:"记O2性质与制法，练现象描述"},
+   {n:"水与溶液（溶解度曲线）",lv:"gg",f:"溶解度曲线读错、质量分数算错",x:"练曲线交点/饱和判断，算溶质质量分数"},
+   {n:"碳及其氧化物",lv:"zhu",f:"CO/CO2性质混",x:"对比CO还原性与CO2酸性"},
+   {n:"金属与金属材料",lv:"gg",f:"活动性顺序、置换反应错",x:"背金属活动顺序，练置换判断"},
+   {n:"酸碱盐",lv:"tz",f:"复分解条件、离子共存错",x:"练复分解发生条件，判离子共存"}],
+  "物质构成的奥秘":[
+   {n:"微粒与元素/化合价",lv:"zhu",f:"化合价记错、化学式写错",x:"背常见化合价，练化学式与命名"},
+   {n:"质量守恒与化学方程式",lv:"gg",f:"不配平、计算按错量",x:"练配平，化方程计算按纯净物质量"}],
+  "化学与社会":[
+   {n:"化学与生活/材料/能源",lv:"zhu",f:"常识性丢分",x:"整理生活化学常识卡"}],
+  "科学探究":[
+   {n:"常见气体制取装置",lv:"gg",f:"装置选择/收集方法错",x:"练发生+收集装置匹配"},
+   {n:"物质的检验/除杂/推断",lv:"tz",f:"推断线索断、除杂引新杂",x:"练特征现象突破，除杂不引新杂质"},
+   {n:"实验探究与定量计算",lv:"bg",f:"综合实验无从下手",x:"练假设-验证-结论，化方程综合计算"}]
+ },
+ "语文":{
+  "积累与运用":[
+   {n:"字音字形/词语运用",lv:"zhu",f:"多音字、成语误用",x:"建错字音形成语本，周清"},
+   {n:"病句修改",lv:"gg",f:"病因辨不出",x:"归类六大病句类型，练修改"},
+   {n:"古诗文默写",lv:"zhu",f:"写错别字、张冠李戴",x:"理解性默写，易错字专项"}],
+  "古诗文阅读":[
+   {n:"文言实词虚词",lv:"gg",f:"一词多义、词类活用错",x:"整理120实词+常用虚词"},
+   {n:"文言文翻译与理解",lv:"tz",f:"直译漏点、句意不通",x:"练留删调换补，逐字落实"},
+   {n:"古诗词鉴赏",lv:"tz",f:"手法情感答不全",x:"练手法+画面+情感答题模板"}],
+  "现代文阅读":[
+   {n:"记叙文/散文阅读",lv:"gg",f:"概括不全、赏析不到位",x:"练分层概括，词句赏析角度"},
+   {n:"说明文/议论文阅读",lv:"gg",f:"说明方法/论证方法混",x:"辨方法类型，练作用分析"}],
+  "写作":[
+   {n:"记叙文写作",lv:"gg",f:"流水账、缺细节",x:"练细节描写与立意升华"},
+   {n:"考场作文审题立意",lv:"bg",f:"偏题、结构散",x:"练审题扣题，结构模板化"}]
+ },
+ "英语":{
+  "词汇地基（先决·门槛）":[
+   {n:"核心词汇与词组（课标1600词）",lv:"zhu",pre:"vocab",f:"形近词/固定搭配混淆，生词量不足直接拖垮阅读与完形",x:"每天定量过词+高频搭配本+构词法；词汇不过关，阅读写作一律暂缓"},
+   {n:"词形变化与语法填空",lv:"zhu",pre:"vocab",f:"词性转换、名词复数/动词形式错",x:"练句子成分+构词法，先补词再补句"}],
+  "语法句法":[
+   {n:"时态与语态",lv:"gg",pre:"grammar",f:"时态标志词混用、被动语态漏",x:"专项练时态标志词+主被动转换"},
+   {n:"三大从句",lv:"gg",pre:"grammar",f:"引导词选错、从句语序乱",x:"练定语/宾语/状语从句引导词判断"},
+   {n:"完形填空",lv:"gg",pre:"grammar",f:"上下文逻辑断、词汇复现漏（根基仍是词汇量）",x:"先扫清生词再通读抓主线回填"}],
+  "语篇阅读":[
+   {n:"阅读·细节与主旨",lv:"gg",pre:"discourse",f:"细节定位错、主旨概括偏（前提：词汇认全）",x:"题干定位原文，区分事实与概括；先扫生词"},
+   {n:"阅读·推断与态度",lv:"tz",pre:"discourse",f:"过度推断、态度误判（依赖长难句拆解）",x:"练主干剥离+选项证伪"},
+   {n:"任务型阅读/还原",lv:"tz",pre:"discourse",f:"逻辑衔接、指代判断错",x:"练代词/连接词/复现线索"}],
+  "写作输出":[
+   {n:"书面表达（把要点写对）",lv:"gg",pre:"output",f:"要点漏、语法错误多",x:"背框架+要点全覆盖，先写对再写好"},
+   {n:"书面表达（提分表达）",lv:"tz",pre:"output",f:"句式单一、高级表达缺",x:"词汇语法稳了再加高分句型与连接词"},
+   {n:"看图/情境写作",lv:"bg",pre:"output",f:"信息组织乱、语域错",x:"练要点排序+成文逻辑"}]
+ }
+},
+"高中":{
+ "数学":{
+  "集合与函数":[
+   {n:"集合运算与逻辑",lv:"zhu",f:"补集/子集漏端点",x:"练数轴画集合，注意空集"},
+   {n:"函数定义域值域",lv:"zhu",f:"复合函数定义域错",x:"练'外层看内层'定义域求法"},
+   {n:"函数性质（奇偶/单调/周期）",lv:"gg",f:"性质综合用不熟",x:"练性质联动，抽象函数赋值"},
+   {n:"基本初等函数（指对幂）",lv:"gg",f:"图像性质混、比较大小错",x:"练图像+单调性比较大小"}],
+  "导数":[
+   {n:"导数与单调性/极值",lv:"tz",f:"含参讨论分类不全",x:"练导函数符号分类，端点取舍"},
+   {n:"含参恒成立/存在",lv:"bg",f:"分离参数/最值转化卡壳",x:"练参变分离，转最值问题"},
+   {n:"导数放缩证明不等式",lv:"bg",f:"不会构造、放缩方向错",x:"练经典放缩e^x≥x+1等构造函数"}],
+  "三角与数列":[
+   {n:"三角恒等变换",lv:"gg",f:"公式记混、角变换卡",x:"练和差倍角+辅助角"},
+   {n:"解三角形（正余弦定理）",lv:"gg",f:"多解讨论漏",x:"练正弦定理判断解的个数"},
+   {n:"数列通项与求和",lv:"tz",f:"递推求通项、错位相减错",x:"练累加法/构造法，错位相减规范"},
+   {n:"数列不等式综合",lv:"bg",f:"放缩求和无从下手",x:"练数列放缩与裂项"}],
+  "立体几何与解析":[
+   {n:"立体几何（空间向量）",lv:"tz",f:"建系坐标错、法向量求错",x:"练规范建系，法向量解方程"},
+   {n:"直线与圆",lv:"gg",f:"弦长/切线计算错",x:"练点到直线距离+几何法"},
+   {n:"圆锥曲线（椭圆/双曲/抛物）",lv:"tz",f:"联立韦达、范围讨论错",x:"练设而不求，韦达定理+判别式"},
+   {n:"圆锥曲线压轴",lv:"bg",f:"定点定值/最值不会设",x:"练设线设点、斜率积/和转化"}],
+  "概率统计":[
+   {n:"计数原理与二项式",lv:"gg",f:"排列组合分不清",x:"练分类分步，捆绑插空"},
+   {n:"概率分布（超几何/二项/正态）",lv:"tz",f:"模型选错、期望方差算错",x:"辨模型，练分布列+期望方差"},
+   {n:"统计与回归/独立性检验",lv:"gg",f:"公式套错、读表错",x:"练回归方程与卡方计算"}],
+  "选填技巧":[
+   {n:"小题压轴（函数/不等式）",lv:"bg",f:"耗时多、无策略",x:"练特值/图像/极限排除法"}]
+ },
+ "物理":{
+  "力学":[
+   {n:"受力分析与共点力平衡",lv:"zhu",f:"漏力、正交分解错",x:"练隔离受力图，正交分解列方程"},
+   {n:"牛顿运动定律应用",lv:"gg",f:"连接体/临界加速度错",x:"练整体隔离法，临界条件分析"},
+   {n:"曲线运动与万有引力",lv:"tz",f:"向心力来源辨错、天体模型乱",x:"练向心力来源，黄金代换"},
+   {n:"功和能/动量",lv:"tz",f:"过程选错、守恒条件判错",x:"练选过程，动量能量守恒判据"}],
+  "电学":[
+   {n:"电场（场强/电势/电容）",lv:"gg",f:"场强叠加、电势高低混",x:"练电场线+等势面，叠加原理"},
+   {n:"恒定电流与电路",lv:"gg",f:"动态电路、电表内阻错",x:"练串反并同，内外接误差"},
+   {n:"磁场与电磁感应",lv:"tz",f:"安培力/洛伦兹方向、感应电动势错",x:"练左手定则，楞次定律+法拉第"},
+   {n:"交变电流与变压器",lv:"gg",f:"有效值、原副线圈关系错",x:"练有效值定义，变压比+功率守恒"}],
+  "实验":[
+   {n:"力学实验（纸带/验证定律）",lv:"gg",f:"数据处理、误差分析弱",x:"练逐差法，误差来源表述"},
+   {n:"电学实验（测电阻/伏安法）",lv:"tz",f:"电路选择、仪器选取错",x:"练内外接、滑动变阻器分压限流"}],
+  "选考模块":[
+   {n:"热学/振动波/光学（选考）",lv:"tz",f:"概念多记不牢、计算题套路不熟",x:"练分子动理论/波动图像/折射率高频考法"},
+   {n:"物理压轴（多过程综合）",lv:"bg",f:"过程拆分不清、衔接条件漏",x:"练分过程画情景图，抓衔接速度/位移"}]
+ },
+ "化学":{
+  "化学基础":[
+   {n:"物质的量与化学计量",lv:"zhu",f:"n/M/Vm/c关系混",x:"练四量换算，阿伏加德罗陷阱"},
+   {n:"离子反应与离子方程式",lv:"gg",f:"拆写错、过量少量错",x:"练强弱电解质拆分，量比书写"},
+   {n:"氧化还原反应",lv:"gg",f:"配平错、强弱比较错",x:"练化合价升降配平，氧化性还原性排序"}],
+  "元素化合物":[
+   {n:"金属及其化合物（Na/Al/Fe）",lv:"gg",f:"性质转化链不熟",x:"练'价类二维'转化关系"},
+   {n:"非金属及其化合物（Cl/S/N）",lv:"tz",f:"性质多、方程记错",x:"练含氧酸性质与工业流程"},
+   {n:"元素推断/化工流程",lv:"bg",f:"流程信息提取难",x:"练核心反应识别，箭头前后物质"}],
+  "化学反应原理":[
+   {n:"化学平衡（速率/限度/移动）",lv:"tz",f:"平衡判据、等效平衡错",x:"练三段式，勒夏特列+等效"},
+   {n:"水溶液中的离子平衡",lv:"bg",f:"三大守恒、离子浓度排序错",x:"练电荷/物料/质子守恒，大小比较"},
+   {n:"电化学（原电池/电解池）",lv:"tz",f:"电极判断、离子移动错",x:"练阴阳极判断，电子流向"},
+   {n:"反应热与盖斯定律",lv:"gg",f:"ΔH符号、盖斯叠加错",x:"练热化学方程叠加"}],
+  "有机与实验":[
+   {n:"有机化学（结构/反应/推断）",lv:"tz",f:"官能团性质、同分异构漏",x:"练官能团转化，同分异构书写"},
+   {n:"化学实验综合",lv:"bg",f:"装置/操作/探究设计弱",x:"练实验目的-原理-装置-现象逻辑链"}]
+ },
+ "语文":{
+  "现代文阅读":[
+   {n:"论述类文本（信息筛选）",lv:"gg",f:"曲解文意、无中生有",x:"练选项与原文比对，标逻辑词"},
+   {n:"文学类文本（小说/散文）",lv:"tz",f:"形象/手法/主旨答题空",x:"练情节-人物-环境-主题四维答题"},
+   {n:"实用类文本（非连续性）",lv:"gg",f:"多材料整合漏点",x:"练分材料概括+比较"}],
+  "古诗文":[
+   {n:"文言文阅读（实虚词/文化常识）",lv:"gg",f:"实词推断、断句错",x:"练语境推断+标志词断句"},
+   {n:"古代诗歌鉴赏",lv:"tz",f:"手法/情感/形象答不全",x:"练'手法+分析+效果+情感'模板"},
+   {n:"名篇名句默写",lv:"zhu",f:"情境默写错字",x:"理解性默写，易错字专项"}],
+  "语言运用":[
+   {n:"成语/病句/衔接",lv:"gg",f:"成语误用、衔接逻辑断",x:"归类积累+语境逻辑"},
+   {n:"图文转换/语言表达",lv:"tz",f:"信息压缩、得体性错",x:"练概括要点+对象得体"}],
+  "写作":[
+   {n:"议论文审题立意",lv:"tz",f:"立意偏浅、任务驱动漏",x:"练任务指令拆解，多角度立意"},
+   {n:"议论文结构与论证",lv:"bg",f:"结构散、论据空泛",x:"练'引议联结'结构+分层论证"},
+   {n:"作文素材与语言",lv:"gg",f:"素材陈旧、语言平淡",x:"建时鲜素材库，练思辨表达"}]
+ },
+ "英语":{
+  "词汇地基（先决·门槛）":[
+   {n:"核心词汇与词组（课标3500词）",lv:"zhu",pre:"vocab",f:"3500词未过关，生词量拖垮阅读、完形与续写",x:"高频词+熟词生义+搭配，每天定量滚动；词汇不过关，读写一律暂缓"},
+   {n:"语法填空·词性与构词",lv:"zhu",pre:"vocab",f:"词性转换、词缀判断错",x:"练构词法+句子成分，先词后句"},
+   {n:"长难句拆解",lv:"gg",pre:"vocab",f:"主干找不出、从句套嵌看不懂（依赖词汇认全）",x:"练主干剥离+从句切分"}],
+  "语法与完形":[
+   {n:"语法填空·谓语与非谓语",lv:"gg",pre:"grammar",f:"谓语vs非谓语判断错、时态语态乱",x:"练句子成分分析+时态语态"},
+   {n:"完形填空",lv:"gg",pre:"grammar",f:"语篇逻辑、词汇复现漏（根基仍是词汇）",x:"先扫生词再练篇章主线+前后照应"}],
+  "语篇阅读":[
+   {n:"阅读·细节与主旨",lv:"gg",pre:"discourse",f:"定位错、主旨概括偏（先扫生词）",x:"题干定位+选项证伪"},
+   {n:"阅读·推断与态度",lv:"tz",pre:"discourse",f:"过度推断、态度误判",x:"练证据链+长难句主干"},
+   {n:"七选五",lv:"tz",pre:"discourse",f:"衔接逻辑、指代判断错",x:"练代词/连接词/复现线索"}],
+  "写作输出":[
+   {n:"应用文写作",lv:"gg",pre:"output",f:"要点漏、格式语域错",x:"背格式+要点全覆盖，先写对"},
+   {n:"读后续写/概要写作",lv:"bg",pre:"output",f:"情节衔接、语言协同弱",x:"原文语言植入+情节推进（词汇语法稳了再加高级表达）"}]
+ }
+}
+};
+
+/* ============ V7.2 新增：教材册次·学期进度·范围锚点匹配·置信度 ============ */
+(function(){var s=document.createElement('style');s.textContent='.chip.lazy{opacity:.42;cursor:not-allowed;filter:grayscale(.45)}.chip.lazy:hover{opacity:.42}.bk{font-size:11px;color:#8A97A5;margin-left:3px}.scopeWarn{border-left:4px solid #D6433B}';document.head.appendChild(s);})();
+
+/* 册次代码 → 通用学期槽位（跨科目统一轴，1=初一上/高一上 … 6=初三下/高三下总复习） */
+var BOOK_SLOT={M1:1,M2:2,M3:3,M4:4,M5:5,M6:6, P1:3,P2:4,P3:5, C1:5,C2:6, E1:1,E2:2,E3:3,E4:4,E5:5, G1:1,G2:2,G3:3,G4:4,G5:5, REV:6};
+var BOOK_LABEL={M1:"七上",M2:"七下",M3:"八上",M4:"八下",M5:"九上",M6:"九下", P1:"八上",P2:"八下",P3:"九全", C1:"九上",C2:"九下", E1:"七上",E2:"七下",E3:"八上",E4:"八下",E5:"九全", G1:"必修一",G2:"必修二",G3:"选必一",G4:"选必二",G5:"选必三", REV:"总复习/压轴"};
+var CAP_LABEL_J=["","七年级上册","七年级下册","八年级上册","八年级下册","九年级上册","九年级下册/中考总复习"];
+var CAP_LABEL_S=["","必修第一册(必修上)","必修第二册(必修下)","选择性必修一","选择性必修二","选择性必修三","高三一轮总复习"];
+
+/* 逐题型所属册次（默认教材顺序：初中数学=北师大版；物理/化学/英语=人教版；语文=部编版；高中=人教A/2019人教版。可按本校教学进度在口径表核对） */
+var PROG={
+ "初中":{
+  "数学":{"有理数混合运算":"M1","整式与因式分解":"M4","分式运算与化简求值":"M4","一元二次方程":"M5","二次函数综合":"M6","规律探索与代数推理":"REV","三角形全等证明":"M4","相似三角形":"M5","圆（垂径/圆周角/切线）":"M6","几何压轴（动点/存在性）":"REV","一次函数与图像":"M3","反比例函数":"M6","函数与几何综合":"REV","统计图表分析":"M3","概率计算（列表/树状图）":"M5","实际应用题（方程/不等式）":"M5","方案优化与最值":"REV","跨学科情境题":"REV"},
+  "物理":{"声现象":"P1","光现象（反射/折射/成像）":"P1","物态变化与热学":"P3","力与运动（受力分析）":"P2","压强（固/液/大气）":"P2","浮力":"P2","简单机械与功/功率/效率":"P2","电路识别与电表":"P3","欧姆定律":"P3","电功电功率与电热":"P3","电学综合计算":"REV","测量类实验（长度/密度/电阻）":"P3","探究类实验（控制变量）":"REV","电学/力学设计性实验":"REV"},
+  "化学":{"空气与氧气":"C1","水与溶液（溶解度曲线）":"C2","碳及其氧化物":"C1","金属与金属材料":"C2","酸碱盐":"C2","微粒与元素/化合价":"C1","质量守恒与化学方程式":"C1","化学与生活/材料/能源":"C2","常见气体制取装置":"C1","物质的检验/除杂/推断":"C2","实验探究与定量计算":"REV"},
+  "语文":{"字音字形/词语运用":"M1","病句修改":"M4","古诗文默写":"M1","文言实词虚词":"M2","文言文翻译与理解":"M3","古诗词鉴赏":"M5","记叙文/散文阅读":"M1","说明文/议论文阅读":"M5","记叙文写作":"M1","考场作文审题立意":"REV"},
+  "英语":{"词汇与词组辨析":"E1","语法（时态/语态/从句）":"E5","完形填空":"E3","阅读理解（细节/主旨/推断）":"E1","任务型阅读/还原":"E4","书面表达":"E2","看图/情境写作":"E3"}
+ },
+ "高中":{
+  "数学":{"集合运算与逻辑":"G1","函数定义域值域":"G1","函数性质（奇偶/单调/周期）":"G1","基本初等函数（指对幂）":"G1","导数与单调性/极值":"G4","含参恒成立/存在":"REV","导数放缩证明不等式":"REV","三角恒等变换":"G1","解三角形（正余弦定理）":"G2","数列通项与求和":"G4","数列不等式综合":"REV","立体几何（空间向量）":"G3","直线与圆":"G3","圆锥曲线（椭圆/双曲/抛物）":"G3","圆锥曲线压轴":"REV","计数原理与二项式":"G5","概率分布（超几何/二项/正态）":"G5","统计与回归/独立性检验":"G5","小题压轴（函数/不等式）":"REV"},
+  "物理":{"受力分析与共点力平衡":"G1","牛顿运动定律应用":"G1","曲线运动与万有引力":"G2","功和能/动量":"G3","电场（场强/电势/电容）":"G3","恒定电流与电路":"G3","磁场与电磁感应":"G4","交变电流与变压器":"G4","力学实验（纸带/验证定律）":"G2","电学实验（测电阻/伏安法）":"G3","热学/振动波/光学（选考）":"G5","物理压轴（多过程综合）":"REV"},
+  "化学":{"物质的量与化学计量":"G1","离子反应与离子方程式":"G1","氧化还原反应":"G1","金属及其化合物（Na/Al/Fe）":"G2","非金属及其化合物（Cl/S/N）":"G2","元素推断/化工流程":"REV","化学平衡（速率/限度/移动）":"G3","水溶液中的离子平衡":"G3","电化学（原电池/电解池）":"G3","反应热与盖斯定律":"G3","有机化学（结构/反应/推断）":"G5","化学实验综合":"REV"},
+  "语文":{"论述类文本（信息筛选）":"G1","文学类文本（小说/散文）":"G1","实用类文本（非连续性）":"G2","文言文阅读（实虚词/文化常识）":"G1","古代诗歌鉴赏":"G1","名篇名句默写":"G1","成语/病句/衔接":"G1","图文转换/语言表达":"G2","议论文审题立意":"G1","议论文结构与论证":"G2","作文素材与语言":"G1"},
+  "英语":{"语法填空（谓语/非谓语/词性）":"G1","词汇与长难句":"G2","完形填空":"G1","阅读理解（七选五）":"G2","阅读（细节/主旨/推断/态度）":"G1","应用文写作":"G1","读后续写/概要写作":"G3"}
+ }
+};
+
+/* 考试范围 → 常模锚的跨度匹配（科学优化第1条：锚点须与考试「范围/阶段/卷型」匹配） */
+var EXAM_SCOPES=[
+ {v:"chapter",t:"章节考 / 月考（单章~几章）",span:"partial"},
+ {v:"midterm",t:"期中考试（约半册）",span:"half"},
+ {v:"final", t:"期末考试（整册全卷）",span:"full"},
+ {v:"diag",  t:"诊断模考（中/高考全卷模拟）",span:"full"},
+ {v:"gate",  t:"中考 / 高考（正式全卷）",span:"full"}
+];
+var SUBJ_SUBJECTIVE={"语文":1,"英语":1};
+
+function scopeSpan(v){for(var i=0;i<EXAM_SCOPES.length;i++){if(EXAM_SCOPES[i].v==v)return EXAM_SCOPES[i];}return EXAM_SCOPES[2];}
+function bookSlot(b){return BOOK_SLOT[b]!=null?BOOK_SLOT[b]:6;}
+function qBook(stage,subject,name){var p=PROG[stage]&&PROG[stage][subject];return (p&&p[name])?p[name]:"REV";}
+function gradeTermCap(stage,grade,term){
+  var base={"初一":0,"初二":2,"初三":4,"高一":0,"高二":2,"高三":4};
+  var b=base[grade];if(b==null)b=(stage=="初中"?4:4);
+  return b+((term=="下")?2:1);
+}
+function capLabel(stage,grade,term){var cap=gradeTermCap(stage,grade,term);return (stage=="初中"?CAP_LABEL_J:CAP_LABEL_S)[cap]||("第"+cap+"学期");}
+function inScope(book,cap){return bookSlot(book)<=cap;}
+function autoTerm(){var m=new Date().getMonth()+1;return (m>=8||m<=1)?"上":"下";}
+function fillSelSimple(id,arr,def){
+  var s=$(id);if(!s)return;s.innerHTML="";
+  for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i].v;o.text=arr[i].t;if(def&&def==arr[i].v)o.selected=true;s.add(o);}
+}
+function fillTermSel(id,def){var s=$(id);if(!s)return;s.innerHTML="";
+  var a=[{v:"上",t:"上学期（上册）"},{v:"下",t:"下学期（下册）"}];
+  for(var i=0;i<a.length;i++){var o=document.createElement('option');o.value=a[i].v;o.text=a[i].t;if(def==a[i].v)o.selected=true;s.add(o);}
+}
+
+/* 置信度 / 口径 / 范围-锚点 提示（科学优化第2、3条） */
+function buildFlags(r){
+  var h="";
+  var isSelf=(r.poolVal=="__auto"||r.poolVal=="__none");
+  if(r.scopeSpan&&r.scopeSpan!="full"&&!isSelf){
+    var pn="全卷常模锚";
+    h+='<div class="danger scopeWarn">⛔ <b>范围不匹配</b>：本次是「'+esc(r.scopeName||"阶段考")+'」，只覆盖部分教材；而所选卷别用的是'+pn+'。用全卷难度锚校半卷考试，会把"进度难度"误算成"题目难度"，产生系统性偏差。<b>建议：卷别改「本校均分实测」+ 填本校年级本次均分</b>（同范围自锚最准）。</div>';
+  }
+  if(isSelf&&r.avg==null){
+    h+='<div class="danger">⛔ 选了「本校均分实测」但未填本校年级均分，无法校准，下方显示的是<b>卷面原始得分率</b>。请补填均分。</div>';
+  }
+  if(r.refN!=null&&r.refN>0&&r.refN<30){
+    h+='<div class="danger">⚠ 参考人数仅 '+r.refN+' 人，样本过小、均分抖动大，校准值<b>低置信</b>，仅作本校纵向参考，不建议跨班定档。</div>';
+  }else if(r.refN!=null&&r.refN>=30&&r.refN<100){
+    h+='<div class="note">⚠ 参考人数 '+r.refN+' 人偏小（建议≥100），定档谨慎，优先看连续趋势。</div>';
+  }
+  if(SUBJ_SUBJECTIVE[r.subject]){
+    h+='<div class="note">🖊 <b>评分宽严敏感</b>：'+esc(r.subject)+'作文/主观题跨师评分尺度差异大，常模平移无法自测此项，建议以<b>本校历次均分纵向自比</b>为主，跨校横比降为参考。</div>';
+  }
+  h+='<div class="hint">口径标签：基准P '+esc(r.basePSrc||(r.usedAvg?"本校实测":"机构预估"))+' · '+(isSelf?"自锚(本校均分)":"常模锚")+' · 范围「'+esc(r.scopeName||"未标注")+'」'+(r.refN!=null?" · 样本"+r.refN+"人":"")+'。教材/进度/群体因子在"同池+同范围"时自动抵消，错配时才产生偏差。</div>';
+  return h;
+}
+
+/* ============ 状态 ============ */
+var ST={lastLocate:null,lastBatch:null,lastAdvice:null,lastReport:null,lastAIText:'',lastAISig:''};
+var CITY_KEY="zydb_city_v51",AI_KEY="zydb_ai_v51";
+
+/* ============ 工具 ============ */
+function $(id){return document.getElementById(id);}
+function num(id){var v=parseFloat($(id)&&$(id).value);return isNaN(v)?null:v;}
+function val(id){return $(id)?$(id).value.trim():"";}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function ceilPct(p,full){return Math.ceil(p*full);}
+function layerOf(cal){ if(cal>=0.75)return "拔高冲刺层"; if(cal>=0.72)return "临界观察"; return "基础巩固层";}
+function stepOf(cal){ if(cal>=0.80)return "拔高"; if(cal>=0.70)return "拓展"; if(cal>=0.60)return "巩固"; return "筑基";}
+function layerTag(l){ if(l=="拔高冲刺层")return '<span class="tag t-ba">拔高冲刺层</span>'; if(l=="临界观察")return '<span class="tag t-lin">临界观察</span>'; return '<span class="tag t-jc">基础巩固层</span>';}
+
+/* ============ Tab ============ */
+function switchTab(name,el){
+  if(!el||!el.classList)el=document.querySelector('.tab[data-p="'+name+'"]')||null;
+  var tabs=document.querySelectorAll('.tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('on');
+  var ps=document.querySelectorAll('.panel');for(var j=0;j<ps.length;j++)ps[j].classList.remove('on');
+  el.classList.add('on');$('p-'+name).classList.add('on');
+  if(name==='advice'&&!hasLocateDone()&&$('advResult'))$('advResult').innerHTML=needLocateTip();
+  if(name=='city')renderCity();
+  if(name=='ref')renderRef();
+  if(name=='advice')renderModules();
+}
+
+/* ============ 年级联动 ============ */
+var GRADES={"初中":["初一","初二","初三"],"高中":["高一","高二","高三"]};
+function fillGrades(selId,stage,def){
+  var s=$(selId);if(!s)return;s.innerHTML="";
+  var arr=GRADES[stage]||GRADES["高中"];
+  for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i];o.text=arr[i];if(def&&def==arr[i])o.selected=true;s.add(o);}
+}
+function smartGrade(selId,stage){var prev=$(selId)?$(selId).value:'';var ok=(GRADES[stage]||[]).indexOf(prev)>=0;fillGrades(selId,stage,ok?prev:(stage=="初中"?"初三":"高二"));var s=$(selId);if(s&&s.value)return;fillGrades(selId,stage,stage=="初中"?"初三":"高二");}
+function onStageChange(){smartGrade('l_grade',val('l_stage'));fillCitySel('l_city',val('l_stage'),'__all');fillSubjects('l_subject',val('l_stage'));onSubjectChange();}
+function onBatchStageChange(){smartGrade('b_grade',val('b_stage'));fillCitySel('b_city',val('b_stage'),'__all');fillSubjects('b_subject',val('b_stage'));onBatchSubjectChange();}
+function onBatchCityChange(){fillSubjects('b_subject',val('b_stage'));onBatchSubjectChange();}
+function onAdvStageChange(){clearChips();smartGrade('a_grade',val('a_stage'));fillAdvSubjects();renderModules();}
+function onAdvGradeChange(){clearChips();renderModules();}
+function onAdvTermChange(){clearChips();renderModules();}
+function onAdvSubjectChange(){clearChips();renderModules();}
+
+/* ============ 科目/卷别联动 ============ */
+function cityData(){ try{var s=localStorage.getItem(CITY_KEY);if(s)return JSON.parse(s);}catch(e){} return DEFAULT_CITY.slice();}
+function subjectsOf(stage){
+  // 从城市数据取科目；初中：语数物化英；高中：语数物化英
+  var set={};var d=cityData();
+  for(var i=0;i<d.length;i++)set[d[i].subject]=1;
+  var base=["数学","物理","化学","语文","英语"];
+  var out=[];
+  for(var k=0;k<base.length;k++)if(set[base[k]])out.push(base[k]);
+  // 高中额外有历史等
+  if(stage=="高中"){var ex=["历史","政治","地理","生物"];for(var j=0;j<ex.length;j++)if(set[ex[j]])out.push(ex[j]);}
+  if(out.length==0)out=base.slice();
+  return out;
+}
+function fillSubjects(selId,stage){
+  var s=$(selId);if(!s)return;s.innerHTML="";
+  var arr=subjectsOf(stage);
+  for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i];o.text=arr[i];s.add(o);}
+}
+function citiesOf(stage){
+  var d=cityData(),out=[],seen={};
+  for(var i=0;i<d.length;i++){var r=d[i];var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;if(seen[r.city])continue;seen[r.city]=1;out.push(r.city);}
+  return out;
+}
+function fillCitySel(selId,stage,keep){
+  var s=$(selId);if(!s)return;
+  var cur=keep||s.value||"__all";s.innerHTML="";
+  var a=document.createElement('option');a.value="__all";a.text="全部考区";s.add(a);
+  var arr=citiesOf(stage);
+  for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i];o.text=arr[i];s.add(o);}
+  s.value=(cur=="__all"||arr.indexOf(cur)>=0)?cur:"__all";
+}
+function poolsOf(stage,subject,city,selId){
+  var d=cityData(),out=[];
+  if(!city){var cs=document.getElementById(selId==='b_pool'?'b_city':'l_city');city=cs?cs.value:"__all";}
+  for(var i=0;i<d.length;i++){var r=d[i];if(r.subject!=subject)continue;
+    var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;
+    if(city&&city!="__all"&&r.city!=city)continue;out.push(r);}
+  // 平日卷兜底排在最后（本校均分实测为首项）
+  return out;
+}
+function fillPools(selId,stage,subject){
+  var s=$(selId);if(!s)return;s.innerHTML="";
+  var arr=poolsOf(stage,subject,undefined,selId);
+  if(arr.length==0){var o0=document.createElement('option');o0.value="__none";o0.text="（该考区无预置，将用本校均分实测）";s.add(o0);return;}
+  // "全部/推荐"首项：按本校均分实测优先
+  var all=document.createElement('option');all.value="__auto";all.text="➤ 本校均分实测（推荐，需填年级均分）";s.add(all);
+  for(var i=0;i<arr.length;i++){
+    var d=arr[i];var o=document.createElement('option');
+    o.value=d.city+"|"+d.pool;o.text=d.city+" · "+d.pool+"（P="+d.p+"）";
+    s.add(o);
+  }
+}
+function onCityChange(){fillPools('l_pool',val('l_stage'),val('l_subject'));updatePoolHint('l_pool','poolHint2');}
+function onSubjectChange(){
+  fillPools('l_pool',val('l_stage'),val('l_subject'));
+  updatePoolHint('l_pool','poolHint2');
+}
+/* 卷别选择变化：即时给出反馈并刷新实时预览，避免“选了没反应” */
+function onPoolChange(){
+  updatePoolHint('l_pool','poolHint2');
+  var w=$('poolWrap');
+  if(w){w.style.transition='box-shadow .3s';w.style.boxShadow='0 0 0 3px rgba(30,111,217,.35)';w.style.borderRadius='9px';setTimeout(function(){w.style.boxShadow='';},600);}
+  try{livePreview();}catch(e){}
+}
+function onBatchSubjectChange(){fillPools('b_pool',val('b_stage'),val('b_subject'),val('b_city'));}
+function updatePoolHint(selId,hintId){
+  var v=$(selId).value,h=$(hintId);if(!h)return;
+  if(v=="__auto"||v=="__none"){h.innerHTML='<span class="red">当前为「本校均分实测」模式：请务必填写本校年级均分，工具用 均分÷满分 作为常模池基准。</span>';}
+  else{var p=v.split('|');h.innerHTML='比较群体：<b>'+esc(p[0])+' · '+esc(p[1])+'</b>。填了年级均分以本校实测为准，不填则用此兜底P。<span class="red">选对群体比分数填准更重要，选错池可差两档。</span>';}
+}
+
+/* ============ 核心计算 ============ */
+function compute(score,full,avg,poolVal,scope,refN){
+  var sr=score/full;
+  var baseP,basePSrc="机构预估";
+  var sc=scope||{v:"final",t:"期末考试（整册全卷）",span:"full"};
+  if(poolVal&&poolVal!="__auto"&&poolVal!="__none"){
+    var pp=poolVal.split('|');var d=cityData();var found=null;
+    for(var i=0;i<d.length;i++){if(d[i].city==pp[0]&&d[i].pool==pp[1]){found=d[i];break;}}
+    if(found){baseP=found.p;basePSrc=found.src||"机构预估";}else{baseP=(avg!=null?avg/full:0.60);}
+  }else{baseP=(avg!=null?avg/full:0.60);basePSrc=(avg!=null?"本校实测":"兜底0.60");}
+  var usedAvg=(avg!=null);
+  var cal=sr-((avg!=null?avg/full:baseP)-baseP); // = sr - (avgRate - baseP)
+  var layer=layerOf(cal),step=stepOf(cal),iron=false,ironNote="";
+  return {sr:sr,baseP:baseP,basePSrc:basePSrc,usedAvg:usedAvg,cal:cal,layer:layer,step:step,iron:iron,ironNote:ironNote,full:full,score:score,avg:avg,poolVal:poolVal,
+    scopeV:sc.v,scopeName:sc.t,scopeSpan:sc.span,refN:(refN==null||refN===""?null:refN)};
+}
+function applyIron(r,bgot,bfull){
+  r.bgot=(bgot==null?'':bgot);r.bfull=(bfull==null?'':bfull);
+  if(bgot!=null&&bfull!=null&&bfull>0){
+    var br=bgot/bfull;r.baseRate=br;
+    if(br<0.85){r.iron=true;r.ironNote="基础题应得率 "+(br*100).toFixed(1)+"% < 85%，触发铁律，强制降为基础巩固层（待复核）";r.layer="基础巩固层";r.ironHold=true;}
+  }
+  return r;
+}
+function linesFor(full){return {ba:ceilPct(0.75,full),linLo:ceilPct(0.72,full),bufHi:ceilPct(0.78,full),stepGg:ceilPct(0.60,full),stepTz:ceilPct(0.70,full),stepBg:ceilPct(0.80,full)};}
+
+/* ============ 单人定位 ============ */
+function livePreview(){
+  var score=num('l_score'),full=num('l_full'),avg=num('l_avg');
+  if(score==null||full==null||full<=0){return;}
+  var poolVal=$('l_pool')?$('l_pool').value:'__auto';
+  var r=compute(score,full,avg,poolVal,scopeSpan(val('l_scope')),num('l_refn'));r.subject=val('l_subject');
+  var bg=num('l_bgot'),bf=num('l_bfull');applyIron(r,bg,bf);
+  var L=linesFor(full);
+  var html='<div class="result"><div class="kv"><span>校准得分率</span><span class="big">'+(r.cal*100).toFixed(1)+'%</span><span>'+layerTag(r.layer)+'</span><span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div>'
+   +'<div class="kv"><span>卷面得分率 <b>'+(r.sr*100).toFixed(1)+'%</b></span><span>常模池基准P <b>'+r.baseP.toFixed(3)+'</b>（'+(r.usedAvg?'本校实测':'兜底')+'）</span><span>校准折算分 <b>'+Math.round(r.cal*full)+'/'+full+'</b></span></div>'
+   +'<div class="kv"><span>'+full+'分制划线：拔高≥<b>'+L.ba+'</b> · 临界 '+L.linLo+'~'+(L.ba-1)+' · 缓冲 '+L.ba+'~'+L.bufHi+'</span></div></div>';
+  html+=buildFlags(r);
+  if(r.iron)html+='<div class="danger">⛔ '+esc(r.ironNote)+'</div>';
+  else if(r.layer=="临界观察")html+='<div class="note">🔎 落在临界观察带（72%~75%），建议连续追踪3次再定层，勿单次下结论。</div>';
+  else if(r.cal>=0.75&&r.cal<0.78)html+='<div class="note">🟡 已进入拔高冲刺层，但处 75%~78% 拔高下沿缓冲带，建议追踪3次确认稳定。</div>';
+  $('locResult').innerHTML=html;
+}
+function doLocate(){
+  var name=val('l_name'),stage=val('l_stage'),grade=val('l_grade'),school=val('l_school');
+  var score=num('l_score'),full=num('l_full'),avg=num('l_avg'),bg=num('l_bgot'),bf=num('l_bfull');
+  if(!name){alert("请填写学员姓名");return;}
+  if(score==null||full==null||full<=0){alert("请填写有效的卷面得分和满分");return;}
+  var subject=val('l_subject'),poolVal=$('l_pool').value;
+  var sc=scopeSpan(val('l_scope')),refN=num('l_refn'),tm=val('a_term')||autoTerm();
+  var r=applyIron(compute(score,full,avg,poolVal,sc,refN),bg,bf);
+  r.name=name;r.stage=stage;r.grade=grade;r.school=school;r.campus=val('l_campus');r.clazz=val('l_class');r.term=tm;r.refN=refN;
+  r.subject=subject;r.poolVal=poolVal;r.examLabel=((poolVal=="__auto"||poolVal=="__none")?"本校平日卷(均分实测)":poolVal.replace('|',' · '))+' · '+sc.t;
+  var L=linesFor(full);r.lines=L;
+  ST.lastLocate=r;ST.lastAdvice=null;ST.lastReport=null;
+  renderLocate(r);
+  // 带入补短页（带入学期）
+  $('a_stage').value=stage;onAdvStageChange2(stage,grade,subject,r.layer,tm);
+}
+function onAdvStageChange2(stage,grade,subject,layer,term){
+  clearChips();
+  fillGrades('a_grade',stage,grade);fillTermSel('a_term',term||autoTerm());fillAdvSubjects(subject);
+  $('a_layer').value=layer;renderModules();
+  var tm=val('a_term')||'上';
+  $('a_from').innerHTML='已带入：<b>'+esc(ST.lastLocate.name)+'</b> · '+esc(grade)+esc(tm=='下'?'下':'上')+'学期（已学到'+esc(capLabel(stage,grade,tm))+'） · '+esc(subject)+' · '+esc(layer)+'（可在下方本学期已学题型中勾选失分点）';
+}
+function fillAdvSubjects(sel){var s=$('a_subject');if(!s)return;s.innerHTML="";var arr=subjectsOf(val('a_stage'));for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i];o.text=arr[i];if(sel&&sel==arr[i])o.selected=true;s.add(o);}}
+function renderLocate(r){
+  var L=r.lines;
+  var h='<div class="result"><div style="font-size:15px;font-weight:700;color:var(--pri-d);margin-bottom:6px">'+esc(r.name)+' · '+esc(r.grade)+(r.school?' · '+esc(r.school):'')+'</div>'
+   +'<div class="kv"><span>校准得分率</span><span class="big">'+(r.cal*100).toFixed(1)+'%</span><span>'+layerTag(r.layer)+'</span><span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div>'
+   +'<table><tr><th>卷面得分率</th><th>常模池基准P</th><th>校准折算分</th><th>考试/卷别</th></tr><tr><td>'+(r.sr*100).toFixed(1)+'%</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td>'+Math.round(r.cal*r.full)+'/'+r.full+'</td><td>'+esc(r.examLabel)+'</td></tr></table>'
+   +'<div class="kv" style="margin-top:8px"><span>'+r.full+'分制划线 → 拔高冲刺层 ≥<b>'+L.ba+'</b>；临界观察 '+L.linLo+'~'+(L.ba-1)+'；缓冲带 '+L.ba+'~'+L.bufHi+'；基础巩固层 &lt;'+L.linLo+'</span></div>'
+   +'<div class="kv"><span>四层台阶 → 筑基&lt;'+L.stepGg+' · 巩固 '+L.stepGg+'~'+(L.stepTz-1)+' · 拓展 '+L.stepTz+'~'+(L.stepBg-1)+' · 拔高≥'+L.stepBg+'</span></div></div>';
+  if(r.baseRate!=null)h+='<div class="note">基础题应得率 = '+r.bgot+' ÷ '+r.bfull+' = <b>'+(r.baseRate*100).toFixed(1)+'%</b>'+(r.iron?'（<span class="red">低于85%，已触发铁律</span>）':'（达标，地基扎实）')+'</div>';
+  if(r.iron)h+='<div class="danger">⛔ '+esc(r.ironNote)+'。此类孩子高分多靠压轴赌分，卷子一变常规易崩，须先补基础概念闭环，配题先降一档。</div>';
+  else if(r.layer=="临界观察")h+='<div class="note">🔎 临界观察：校准落 72%~75%，建议追踪3次（看趋势而非单次）再定层。此阶段配题以巩固段为主、拓展段少量试探。</div>';
+  else if(r.cal>=0.75&&r.cal<0.78)h+='<div class="note">🟡 拔高下沿缓冲带：已判拔高冲刺层，处 75%~78%，建议追踪3次确认稳定后再加压轴限时训练。</div>';
+  h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去补短建议</button><button class="btn sec" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
+  $('locResult').innerHTML=h;
+}
+function fillDemo(){
+  $('l_name').value="张明";$('l_stage').value="高中";onStageChange();$('l_grade').value="高二";
+  $('l_school').value="成都七中";$('l_campus').value="天府校区";$('l_class').value="高二(3)班";
+  $('l_subject').value="数学";onSubjectChange();
+  // 选天府新区中考数学A卷? 用高考物理类
+  fillSelSimple('l_scope',EXAM_SCOPES,'final');$('l_scope').value="midterm";onSubjectChange();fillPools();$('l_pool').value="__auto";
+  $('l_score').value=118;$('l_full').value=150;$('l_avg').value=96;$('l_bfull').value=90;$('l_bgot').value=74;$('l_refn').value=48;
+  fillTermSel('a_term',autoTerm());
+  livePreview();
+}
+function resetLocate(){['l_name','l_school','l_campus','l_class','l_score','l_avg','l_bfull','l_bgot'].forEach(function(id){if($(id))$(id).value="";});$('l_full').value=150;$('locResult').innerHTML="";}
+function gotoAdvice(){
+  // 切到补短tab
+  var t=document.querySelector('.tab[data-p="advice"]');switchTab('advice',t);
+}
+function gotoReport(){var t=document.querySelector('.tab[data-p="report"]');switchTab('report',t);genReport();}
+function gotoLocateTab(){switchTab('locate');}
+function gotoBatchTab(){switchTab('batch');}
+function hasLocateDone(){return !!(ST.lastLocate||(ST.lastBatch&&ST.lastBatch.length));}
+function needLocateTip(){return '<div class="danger">📌 请先完成「单人定位」（①）或「批量定位」（②），再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去单人定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
+
+/* ============ 补短建议 ============ */
+var LVName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
+function renderModules(){
+  var stage=val('a_stage'),subject=val('a_subject'),grade=val('a_grade'),term=val('a_term')||'上';
+  var bank=(BANK[stage]&&BANK[stage][subject])||{};
+  var box=$('modList');box.innerHTML="";
+  var mods=Object.keys(bank);
+  if(mods.length==0){box.innerHTML='<div class="muted">该学段/科目暂无题型库，请在「城市与基准P」补充或在教研中自定义。</div>';return;}
+    var cap=gradeTermCap(stage,grade,term);
+  var inN=0,outN=0;
+  mods.forEach(function(m,mi){
+    var qs=bank[m],inIt=[],outIt=[];
+    qs.forEach(function(q,qi){var b=qBook(stage,subject,q.n);if(inScope(b,cap))inIt.push({q:q,qi:qi,b:b});else outIt.push({q:q,qi:qi,b:b});});
+    inN+=inIt.length;outN+=outIt.length;
+    var mk=function(items,dis){
+      var md=document.createElement('div');md.className='mod'+((items.length&&!dis)?' open':'');
+      var h='<div class="mh" onclick="this.parentNode.classList.toggle(\'open\')"><span>'+esc(m)+'（'+items.length+'）</span><span style="font-size:12px;font-weight:400">展开 ▾</span></div><div class="mb">';
+      if(!items.length)h+='<div class="muted" style="padding:6px">本板块本学期暂无已学题型</div>';
+      items.forEach(function(it){
+        var bk=esc(BOOK_LABEL[it.b]||'总复习');
+        if(dis){h+='<span class="chip lazy"><span class="tag t-'+it.q.lv+'">'+LVName[it.q.lv]+'</span>'+esc(it.q.n)+'<span class="bk">● '+bk+' 未学到·暂缓</span></span>';return;}
+        var key=m+'||'+it.qi;
+        h+='<span class="chip" role="checkbox" tabindex="0" id="chip_'+mi+'_'+it.qi+'" onclick="toggleChip(\''+mi+'_'+it.qi+'\',\''+esc(key).replace(/'/g,"")+'\')"><input type="checkbox" style="display:none"><span class="tag t-'+it.q.lv+'">'+LVName[it.q.lv]+'</span>'+esc(it.q.n)+'<span class="bk">'+bk+'</span></span>';
+      });
+      h+='</div>';md.innerHTML=h;return md;
+    };
+    if(inIt.length)box.appendChild(mk(inIt,false));
+    if(outIt.length)box.appendChild(mk(outIt,true));
+  });
+  var sum=document.createElement('div');sum.className='note';sum.style.marginTop='0';
+  sum.innerHTML='📚 <b>进度范围：</b>'+esc(grade)+(term=="下"?"下学期":"上学期")+' → 按默认教材进度已学到 <b>'+esc(capLabel(stage,grade,term))+'</b>。共 <b>'+inN+'</b> 个题型在已学范围（可勾选补短），<b>'+outN+'</b> 个属后续册次（灰显·暂缓，不超纲补短）。<span class="muted">册次为默认教材顺序（初中数学北师大版，其余人教/部编通用），可按本校实际进度在「⑥ 口径与参考表」核对。</span>';
+  box.insertBefore(sum,box.firstChild);
+  if(outN){var tt=document.createElement('div');tt.className='muted';tt.style.margin='10px 0 4px';tt.textContent='— 以下为后续册次题型，当前学期暂缓 —';box.appendChild(tt);}
+}
+var CHIPS={};
+function toggleChip(id,key){
+  var el=$('chip_'+id);if(!el)return;
+  var on=el.classList.toggle('on');el.setAttribute('aria-checked',on?'true':'false');
+  if(on)CHIPS[key]=true;else delete CHIPS[key];
+}
+function clearChips(){CHIPS={};var c=document.querySelectorAll('#modList .chip.on');for(var i=0;i<c.length;i++)c[i].classList.remove('on');$('advResult').innerHTML="";}
+function bankFind(stage,subject,mod,qi){var b=BANK[stage]&&BANK[stage][subject];if(!b)return null;var a=b[mod];if(!a)return null;return a[qi]||null;}
+function ruleAdvice(){
+  var stage=val('a_stage'),subject=val('a_subject'),grade=val('a_grade'),term=val('a_term')||'上',layer=$('a_layer').value;
+  var cap=gradeTermCap(stage,grade,term);
+  var learnedAll=function(q){return inScope(qBook(stage,subject,q.n),cap);};
+  var picked=[],skipped=0;var ks=Object.keys(CHIPS);
+  ks.forEach(function(k){var p=k.split('||');var q=bankFind(stage,subject,p[0],+p[1]);if(q){if(learnedAll(q))picked.push({mod:p[0],q:q});else skipped++;}});
+  var ord={zhu:1,gg:2,tz:3,bg:4};
+  // 按层级确定目标段
+  var target;
+  if(layer=="基础巩固层")target=["zhu","gg"];
+  else if(layer=="临界观察")target=["gg","tz"];
+  else target=["tz","bg"];
+  // 先补：勾选里属于目标段且优先级低的（该拿却丢的）
+  // 英语提分阶梯：词汇是地基/门槛，不是与语法、阅读并列的题型
+  // 词汇不过关（基础题应得率<85% 或 词汇题型失分），语篇与输出类训练一律暂缓
+  var ENG_LADDER=["词汇地基（先决门槛）","语法句法","语篇阅读","写作输出"];
+  var isEng=(subject=="英语");
+  var vocabPicked=false,vocabLost=false;
+  picked.forEach(function(it){if(it.q.pre=="vocab"){vocabPicked=true;if(target.indexOf(it.q.lv)>=0||ord[it.q.lv]<=ord[target[0]])vocabLost=true;}});
+  var _br0=(ST.lastLocate&&ST.lastLocate.baseRate!=null)?ST.lastLocate.baseRate:null;
+  var vocabGate=isEng&&((_br0!=null&&_br0<0.85)||vocabLost);
+  var vocabNote="";
+  if(vocabGate){
+    var _pct=_br0!=null?( _br0*100).toFixed(1)+"%":"未测";
+    vocabNote="英语提分顺序：词汇 → 语法句法 → 语篇阅读 → 写作输出。本次基础题应得率 "+_pct+"（门槛 85%），说明词汇地基仍有洞：阅读/完形/七选五/作文失分多为「生词拖累」而非技巧问题。本周 70% 时间回到核心词汇与词组、词形变化与构词，阅读写作降为保持量，词汇周测过关前不加新内容。";
+  }
+  var fixFirst=[],pract=[],hold=[];
+  picked.forEach(function(it){
+    var lv=it.q.lv;
+    if(target.indexOf(lv)>=0)fixFirst.push(it);
+    else if(ord[lv]<ord[target[0]])fixFirst.push(it);
+    else pract.push(it);
+  });
+  // 若没勾选，按层给全板块代表题型
+  var autoNote="";
+  if(picked.length==0){
+    autoNote="未勾选本学期已学范围内的失分题型，已按「"+layer+"」+"+grade+(term=="下"?"下":"上")+"学期已学范围（学到"+capLabel(stage,grade,term)+"）自动推荐重点题型";
+    var bank=BANK[stage]&&BANK[stage][subject]||{};
+    Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(learnedAll(q)&&target.indexOf(q.lv)>=0)fixFirst.push({mod:m,q:q});});});
+    fixFirst=fixFirst.slice(0,8);
+  }
+  if(skipped>0)autoNote+=(autoNote?"；":"")+"有 "+skipped+" 个勾选题型属后续册次（未学到），已剔除不纳入建议。";
+  // 暂缓：高于目标段且本学期已学
+  var bank=BANK[stage]&&BANK[stage][subject]||{};
+  var maxT=target[target.length-1];
+  Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(ord[q.lv]>ord[maxT]&&learnedAll(q))hold.push({mod:m,q:q});});});
+  var L0=ST.lastLocate;
+  return {layer:layer,subject:subject,stage:stage,grade:grade,term:term,cap:cap,capLabel:capLabel(stage,grade,term),skipped:skipped,vocabNote:vocabNote,
+    target:target,fixFirst:fixFirst,pract:pract,hold:hold,autoNote:autoNote,pickedN:picked.length,
+    cal:L0?L0.cal:null,baseRate:L0?L0.baseRate:null,iron:L0?L0.iron:false,scopeName:L0?L0.scopeName:""};
+}
+function r2_0(x){return (x*100).toFixed(1)+'%';}
+function renderAdvice(a){
+  var lvName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
+  var dirMap={"基础巩固层":"先补地基：停压轴，回补概念闭环与基础题应得率到85%以上，配题以筑基+巩固段为主。","临界观察":"巩固为主、拓展试探：中档题完整步骤拿满，拓展段每周少量进，追踪3次趋势。","拔高冲刺层":"主攻拓展+压轴：综合建模与限时压轴，基础题保持应得率≥85%不丢。"};
+  var h='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">补短方案 · '+esc(a.subject)+' · '+esc(a.layer)+(a.grade?' · '+esc(a.grade)+(a.term=="下"?"下学期":"上学期"):'')+'</div>';
+  var scTxt=(a.cal!=null?"本次校准得分率 <b>"+(a.cal*100).toFixed(1)+"%</b>，"+(a.cal>=0.75?"已达拔高线":a.cal>=0.72?"落在临界带":"尚未到拔高线"):"本次未做定位，仅按所选层级给方向");
+  var brTxt=(a.baseRate!=null?"；基础题应得率 <b>"+(a.baseRate*100).toFixed(1)+"%</b>（"+r2_0(a.baseRate)+"）"+(a.iron?"，<span class=\'red\'>低于 85%，地基有洞——先补基础，压轴暂缓</span>":"，已达 85% 地基线"):"");
+  h+='<div class="note" style="margin-top:0"><b>① 先看什么：</b>'+scTxt+brTxt+'。分数只作初筛，以纸笔痕迹核对层级：看基础题步骤是否完整、卡点在哪一问。<br><b>进度范围：</b>'+esc(a.grade||'')+(a.term=="下"?"下学期":"上学期")+' · 已学到 '+esc(a.capLabel||'')+'，下列建议<b>只在本学期已学知识点内</b>配题。'+(a.autoNote?'<br>'+esc(a.autoNote):'')+'</div>';
+  if(a.vocabNote){h+='<div class="danger"><b>② 英语提分顺序（优先于层级方向）：</b>'+esc(a.vocabNote)+'</div>';}
+  h+='<div class="note"><b>② 培养方向：</b>'+dirMap[a.layer]+'</div>';
+  h+='<div class="note"><b>③ 先补（该拿却丢的，优先）：</b>'+(a.fixFirst.length?'':'<span class="muted">无</span>')+'<ul class="rlist">';
+  a.fixFirst.forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span><b>'+esc(it.q.n)+'</b> <span class="tag t-'+it.q.lv+'">'+lvName[it.q.lv]+'</span><br><span class="muted">易错：'+esc(it.q.f)+'　→ 补法：'+esc(it.q.x)+'</span></li>';});
+  h+='</ul></div>';
+  h+='<div class="note"><b>④ 再练（提分题型）：</b>'+(a.pract.length?'':'<span class="muted">随层级推进再加入</span>')+'<ul class="rlist">';
+  a.pract.forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span>'+esc(it.q.n)+' <span class="tag t-'+it.q.lv+'">'+lvName[it.q.lv]+'</span> — '+esc(it.q.x)+'</li>';});
+  h+='</ul></div>';
+  h+='<div class="note"><b>⑤ 压轴怎么开：</b>'+(a.layer=="拔高冲刺层"?'限时25分钟攻前两问步骤分，第三问只做能写的部分。':'当前层级暂不主攻压轴，先按③④把目标段吃透。')+'</div>';
+  h+='<div class="danger"><b>⑥ 暂缓清单（难度高于当前层，先不碰）：</b>'+(a.hold.length?'':'无')+'<ul class="rlist">';
+  a.hold.slice(0,10).forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span>'+esc(it.q.n)+' <span class="tag t-'+it.q.lv+'">'+lvName[it.q.lv]+'</span></li>';});
+  h+='</ul></div>';
+  h+='<div class="note"><b>⑦ 复核条件：</b>连续3次校准得分率稳定进入上一档区间、且基础题应得率≥85% → 升层；连续2次回落或基础题应得率&lt;85% → 降层重补地基。<br><b>本周动作：</b>③清单每天1个专题（错题当场讲透），周末1次限时小测回看应得率。</div>';
+  h+='<div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button></div></div>';
+  return h;
+}
+function genAdvice(){
+  if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
+  var a=ruleAdvice();ST.lastAdvice=a;
+  $('advResult').innerHTML=renderAdvice(a);
+}
+function aiAdvice(force){
+  if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
+  var cfg=aiCfg();var pn=(AI_PRESETS[cfg.preset]||{}).name||"免费AI";
+  if(!cfg.key){var ra=ruleAdvice();ST.lastAdvice=ra;$('advResult').innerHTML='<div class="note">已预置免费AI（'+esc(pn)+'），但尚未填入 API Key，已自动改用内置规则库生成建议。<br>启用AI：到「城市与基准P → AI接口设置」选好免费产品、到其官网免费领取 Key 粘贴保存即可。免配置用法：点下方按钮复制提示词，粘到'+esc(pn)+'网页/App，再把答案粘回。</div>'+renderAdvice(ra)+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div>';return;}
+  var sig=copyPromptText();
+  if(!force&&ST.lastAIText&&ST.lastAISig===sig){
+    $('advResult').innerHTML='<div class="note">📌 学生信息与勾选未变更，已保留上次 AI 生成建议（未重复调用接口）。如需更新请点「🔄 重新生成建议」。</div><div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · '+esc(val('a_subject'))+' · '+esc(ruleAdvice().layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(ST.lastAIText)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';
+    return;
+  }
+  var a=ruleAdvice();var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
+  var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员层级："+a.layer+"。本次失分题型："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
+  $('advResult').innerHTML='<div class="note">🤖 AI 生成中…</div>';
+  fetch(cfg.url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"hy4",messages:[{role:"user",content:prompt}],temperature:0.4})})
+  .then(function(r){return r.json();})
+  .then(function(d){var txt=(d.choices&&d.choices[0]&&(d.choices[0].message?d.choices[0].message.content:d.choices[0].text))||JSON.stringify(d);ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · '+esc(val('a_subject'))+' · '+esc(a.layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(txt)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';})
+  .catch(function(e){var m=(e&&e.message)||'网络错误';var tip=/HTTP 403/.test(m)?'<br>→ 403：TokenHub 网关策略拒绝（非 Key 问题），本地网页直连不可用。':(/Failed to fetch|NetworkError|Load failed/i.test(m)?'<br>→ 多半是浏览器 CORS 拦截：本地 HTML 直连 AI 接口会被浏览器禁止，单文件工具内无法绕过。':'<br>');$('advResult').innerHTML='<div class="danger">🤖 AI 未能调用成功：'+esc(m)+tip+'<br><b>免配置替代：</b>点下方「复制提示词去元宝」，把提示词粘到元宝网页/App，再把答案粘回下方；已先用内置规则库生成：</div>'+renderAdvice(ruleAdvice())+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div><div class="card" style="margin-top:8px"><label>把元宝的回答粘到这里，再点【导入AI建议】，即可进入报告</label><textarea id="aiPaste" rows="6" style="width:100%"></textarea><div class="btns"><button class="btn" onclick="applyAIText()">📥 导入AI建议</button></div></div>';ST.lastAdvice=a;ST.lastAIText='';ST.lastAISig='';});
+}
+
+function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){var pp=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),pp[0],+pp[1]);if(q)picked.push(pp[0]+'-'+q.n);});var L=ST.lastLocate||{};var nm=L.name||'';var sc=L.score?(L.score+'/'+L.full):'';var cal=L.cal!=null?(L.cal*100).toFixed(1)+'%':'';return '你是资深K12'+val('a_stage')+val('a_subject')+'教研老师。学员'+nm+'，'+val('a_grade')+'，卷面'+sc+'，校准得分率'+cal+'，层级判定：'+ruleAdvice().layer+'。本次失分题型：'+(picked.join('、')||'未指定')+'。请按①先核对卷面痕迹②培养方向③先补题型(含易错点与补法)④再练⑤压轴策略⑥暂缓清单⑦复核条件与本周动作，给出专业、可执行的补短方案，500字内，分点清晰。';}
+function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
+function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · 元宝 · '+esc(val('a_grade'))+' · '+esc(val('a_subject'))+' · '+esc(ruleAdvice().layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(t)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';}
+/* ============ 机构报告 ============ */
+function genReport(){
+  var r=ST.lastLocate;
+  if(!r){$('report').innerHTML='<div class="note">请先完成「单人定位」，报告将自动带入定位结果与补短建议。</div>';return;}
+  var org=val('r_org')||"章圆智学中心",teacher=val('r_teacher'),logo=logoSrc();
+  var a=ST.lastAdvice;
+  var L=r.lines||linesFor(r.full);
+  var d=new Date(),ds=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+  var h='<div class="rpt"><div class="rhead">'+(logo?'<img class="logo" src="'+esc(logo)+'" onerror="this.style.display=\'none\'">':'')+'<div><div class="org">'+esc(org)+'</div><div class="muted">学员层级定位报告 · '+ds+'</div></div></div>';
+  h+='<table><tr><th>姓名</th><th>年级</th><th>学校</th><th>科目</th></tr><tr><td>'+esc(r.name)+'</td><td>'+esc(r.grade)+'</td><td>'+esc(r.school||'—')+'</td><td>'+esc(r.subject)+'</td></tr></table>';
+  if(r.campus||r.clazz||teacher)h+='<table style="margin-top:6px"><tr><th>校区</th><th>班级</th><th>报告教师</th></tr><tr><td>'+esc(r.campus||'—')+'</td><td>'+esc(r.clazz||'—')+'</td><td>'+esc(teacher||'—')+'</td></tr></table>';
+  h+='<h3>一、定位结论</h3><table><tr><th>考试/卷别</th><th>卷面</th><th>满分</th><th>年级均分</th><th>常模池基准P</th><th>校准得分率</th><th>校准折算分</th></tr><tr><td>'+esc(r.examLabel)+'</td><td>'+r.score+'</td><td>'+r.full+'</td><td>'+(r.avg==null?'—':r.avg)+'</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td><b>'+(r.cal*100).toFixed(1)+'%</b></td><td>'+Math.round(r.cal*r.full)+'</td></tr></table>';
+  h+='<p style="margin-top:8px">综合判定：<b>'+esc(r.layer)+'</b>　四层台阶（初筛）：<b>'+esc(r.step)+'</b>　'+r.full+'分制划线：拔高≥'+L.ba+'，临界 '+L.linLo+'~'+(L.ba-1)+'，缓冲 '+L.ba+'~'+L.bufHi+'</p>';
+  if(r.baseRate!=null)h+='<p>基础题应得率：<b>'+(r.baseRate*100).toFixed(1)+'%</b>（'+r.bgot+'/'+r.bfull+'）'+(r.iron?'　<span class="red">⛔ 低于85%，已触发铁律强制降层，待复核</span>':'　达标')+'</p>';
+  h+='<p><b>教学进度：</b>'+esc(r.grade)+(r.term=="下"?"下学期":"上学期")+' · 默认已学到 '+esc(capLabel(r.stage,r.grade,r.term))+'；<b>本次考试范围：</b>'+esc(r.scopeName||"未标注")+(r.refN!=null?'；<b>参考人数：</b>'+r.refN+' 人':'')+'</p>';
+  h+=buildFlags(r);
+  h+='<h3>二、需说明的事项</h3><ul class="rlist">';
+  if(r.iron)h+='<li>⛔ 铁律触发：总分达标但基础题应得率不足85%，属"压轴赌分、地基有洞"型，已强制降为基础巩固层并标待复核，须先补基础概念闭环。</li>';
+  else if(r.layer=="临界观察")h+='<li>🔎 处于临界观察带（72%~75%），建议连续追踪3次看趋势再定层，勿单次下结论。</li>';
+  else if(r.cal>=0.75&&r.cal<0.78)h+='<li>🟡 处拔高下沿缓冲带（75%~78%），已判拔高，建议追踪3次确认稳定。</li>';
+  if(!r.usedAvg)h+='<li>本报告未填本校年级均分，常模池基准采用卷别兜底P（机构预估·非官方）。建议补填本校均分以获得更准定位。</li>';
+  if(r.iron||r.layer=="临界观察"||(r.cal>=0.75&&r.cal<0.78)||!r.usedAvg){}else h+='<li>本次定位口径清晰，基准P取数合理，结论可直接用于配题。</li>';
+  h+='<li>常模池取数规则：平日卷以本校同年级均分实测优先；各区中考/诊断分区取值；高考分物理类/历史类。所有基准P为机构预估，首学期须用本校均分回算校准。</li></ul>';
+  h+='<h3>三、层级含义与培养方向</h3><ul class="rlist"><li><b>'+esc(r.layer)+'</b>：'+({"基础巩固层":"先补地基，停压轴，把基础题应得率提到85%以上，配题以筑基+巩固段为主。","临界观察":"巩固为主、拓展试探，中档题步骤拿满，拓展段少量进入，追踪3次。","拔高冲刺层":"主攻拓展+压轴，综合建模与限时训练，基础题保持应得率≥85%。"})[r.layer]+'</li><li>四层台阶仅作初筛，最终以纸笔痕迹（步骤完整性、卡点位置）裁定，分数不反向推台阶。</li></ul>';
+  h+='<h3>四、知识点与题型补短方案</h3>';
+  if(a){var lvName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
+    if(a.vocabNote)h+='<p><b>⚠️ 英语提分顺序（本报告重点）：</b>'+esc(a.vocabNote)+'</p>';
+    h+='<p class="muted">'+esc(a.autoNote||("基于勾选 "+a.pickedN+" 个本学期已学失分题型生成"))+'　进度范围：'+esc(a.grade||'')+(a.term=="下"?"下":"上")+'学期 · 已学到 '+esc(a.capLabel||capLabel(a.stage,a.grade,a.term))+'</p>';
+    h+='<p><b>先补：</b></p><ul class="rlist">';(a.fixFirst.length?a.fixFirst:[]).forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span>'+esc(it.q.n)+'（'+lvName[it.q.lv]+'）— '+esc(it.q.x)+'</li>';});if(!a.fixFirst.length)h+='<li>随层级推进再加入</li>';h+='</ul>';
+    if(a.pract.length){h+='<p><b>再练：</b></p><ul class="rlist">';a.pract.forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span>'+esc(it.q.n)+'（'+lvName[it.q.lv]+'）</li>';});h+='</ul>';}
+    h+='<p><b>暂缓：</b>'+(a.hold.length?a.hold.slice(0,8).map(function(it){return esc(it.q.n);}).join('、'):'无')+'</p>';
+    if(ST.lastAIText)h+='<p><b>AI 建议：</b></p><div style="white-space:pre-wrap;font-size:12.5px;border:1px dashed var(--line);border-radius:8px;padding:10px">'+esc(ST.lastAIText)+'</div>';
+  }else{h+='<p class="muted">尚未生成补短建议。可到「补短建议」页勾选失分题型后生成，本报告将自动补全本部分。</p>';}
+  h+='<h3>五、升/降层复核条件</h3><ul class="rlist"><li>升层：连续3次校准得分率稳定进入上一档区间，且基础题应得率≥85%。</li><li>降层：连续2次回落原区间，或基础题应得率&lt;85%（铁律立即降层）。</li></ul>';
+  h+='<h3>六、后续复测安排</h3><table><tr><th>复测节点</th><th>内容</th><th>观察指标</th></tr><tr><td>本周</td><td>先补清单限时小测</td><td>基础题应得率是否≥85%</td></tr><tr><td>2~3周</td><td>同卷制整卷</td><td>校准得分率是否上移一档</td></tr><tr><td>下次月考</td><td>年级统一考</td><td>用本校均分回算，复核层级</td></tr></table>';
+  h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「章圆学员层级定位工具」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'</p></div>';
+  $('report').innerHTML=h;ST.lastReport=h;
+}
+var LOGO_KEY='zydb_logo';
+function logoSrc(){try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d)return d;}catch(e){}return val('r_logo');}
+function previewLogo(){
+  var b=$('logoBox');if(!b)return;
+  var src=logoSrc();
+  if(!src){b.innerHTML='<span class="muted">暂无 LOGO</span>';return;}
+  b.innerHTML='<img src="'+src+'" style="max-width:150px;max-height:66px;object-fit:contain" alt="LOGO">';
+}
+function onLogoFile(){
+  var f=$('r_logoFile');if(!f||!f.files||!f.files[0])return;
+  var file=f.files[0];
+  if(file.size>2*1024*1024){alert('图片建议小于2MB，当前 '+(file.size/1048576).toFixed(1)+'MB，请压缩后重试。');return;}
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{localStorage.setItem(LOGO_KEY+'_data',rd.result);localStorage.setItem(LOGO_KEY+'_name',file.name);}catch(e){alert('LOGO已加载，但本机存储写入失败，本次有效、刷新后需重传。');}
+    previewLogo();
+  };
+  rd.onerror=function(){alert('图片读取失败，请换一张 jpg/png 图片。');};
+  rd.readAsDataURL(file);
+}
+function clearLogo(){
+  try{localStorage.removeItem(LOGO_KEY+'_data');localStorage.removeItem(LOGO_KEY+'_name');}catch(e){}
+  var u=$('r_logo');if(u)u.value='';var f=$('r_logoFile');if(f)f.value='';
+  previewLogo();
+}
+/* 导出PDF：调用浏览器打印，在弹窗中选「另存为PDF」、A4纵向，即可离线生成PDF文件。
+   （不依赖任何外部/内嵌重型库，彻底避免组件拖垮整页按钮的问题。） */
+function exportPDF(ev){
+  if(!ST.lastLocate){alert("请先完成单人定位，再生成报告。");return;}
+  if(!ST.lastReport)genReport();
+  if(!$('report')||!$('report').innerHTML.trim()){alert("报告为空");return;}
+  alert("即将打开打印窗口：请在「目标/打印机」中选【另存为PDF】，纸张选 A4、纵向，点保存即可得到PDF文件。\n（如需可编辑文本，请用旁边的「导出Word」。）");
+  window.print();
+}
+function exportWord(){
+  if(!ST.lastReport)genReport();
+  if(!ST.lastLocate){alert("请先完成单人定位");return;}
+  var css="body{font-family:'Microsoft YaHei',sans-serif;color:#1B2733;line-height:1.7} .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1E6FD9;padding-bottom:12px;margin-bottom:16px} .logo{max-width:150px;max-height:66px} .org{font-size:20px;font-weight:800;color:#1657B0} h3{font-size:15px;color:#1657B0;border-left:3px solid #1E6FD9;padding-left:9px;margin:16px 0 8px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px} th,td{border:1px solid #DCE6F2;padding:6px 8px;text-align:center} th{background:#EAF2FC;color:#1657B0} .rlist{margin:4px 0 0 18px} .rlist li{margin:4px 0} .pill{background:#EAF2FC;color:#1657B0;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600} .muted{color:#5B6B7C;font-size:12px} .red{color:#D6433B}";
+  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+$('report').innerHTML+'</body></html>';
+  var blob=new Blob(['\ufeff'+html],{type:'application/msword'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  var nm=(val('r_org')||'章圆')+'_层级定位报告_'+(ST.lastLocate.name||'')+'_'+new Date().toISOString().slice(0,10)+'.doc';
+  a.download=nm;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+}
+
+/* ============ 批量 ============ */
+var BATCH_ROWS=[];
+function doBatch(){
+  var stage=val('b_stage'),grade=val('b_grade'),subject=val('b_subject'),poolVal=$('b_pool').value;
+  var full=num('b_full'),avg=num('b_avg');
+  if(full==null||full<=0){alert("请填写有效满分");return;}
+  var txt=$('b_text').value.trim();
+  if(!txt){alert("请粘贴学员数据");return;}
+  var lines=txt.split(/\n+/),rows=[];
+  for(var i=0;i<lines.length;i++){
+    var parts=lines[i].split(/[,，\t]+/);if(parts.length<2)continue;
+    var nm=(parts[0]||'').trim();var sc=parseFloat(parts[1]);
+    if(!nm||isNaN(sc))continue;
+    var bg=parts.length>2?parseFloat(parts[2]):null;var bf=parts.length>3?parseFloat(parts[3]):null;
+    var r=applyIron(compute(sc,full,avg,poolVal),bg,bf);
+    r.name=nm;r.stage=stage;r.grade=grade;r.subject=subject;r.examLabel=(poolVal=="__auto"||poolVal=="__none")?"本校平日卷":poolVal.replace('|',' · ');
+    rows.push(r);
+  }
+  if(rows.length==0){alert("未解析到有效数据，请检查格式：姓名,卷面分,基础题实得,基础题满分");return;}
+  BATCH_ROWS=rows;ST.lastBatch=rows;
+  renderBatch(rows,full);
+}
+function renderBatch(rows,full){
+  var L=linesFor(full);
+  var ba=0,lc=0,jc=0,iron=0;rows.forEach(function(r){if(r.iron)iron++;if(r.layer=="拔高冲刺层")ba++;else if(r.layer=="临界观察")lc++;else jc++;});
+  var h='<div class="result"><div class="kv"><span>共 <b>'+rows.length+'</b> 人</span><span class="tag t-ba">拔高 '+ba+'</span><span class="tag t-lin">临界 '+lc+'</span><span class="tag t-jc">基础巩固 '+jc+'</span>'+(iron?'<span class="red">⛔ 触铁律 '+iron+' 人</span>':'')+'</div>';
+  var pct=(ba/rows.length*100).toFixed(0);
+  h+='<div class="'+(pct>=15&&pct<=20?'note':'danger')+'">拔高层占比 <b>'+pct+'%</b>'+((pct>=15&&pct<=20)?'（在健康区间15%~20%）':'（偏离15%~20%健康区间：偏离时先核对基准P是否取对本类考生、是否用本校均分实测，<b>不要改75%这条线</b>）')+'</div>';
+  h+='<table><tr><th>姓名</th><th>卷面</th><th>校准得分率</th><th>校准折算分</th><th>大分层航道</th><th>台阶初筛</th><th>基础题应得率</th><th>提示</th></tr>';
+  rows.forEach(function(r){
+    var tip=r.iron?'⛔铁律·降基础巩固(待复核)':(r.layer=="临界观察"?'🔎临界·追踪3次':(r.cal>=0.75&&r.cal<0.78?'🟡拔高下沿·追踪3次':''));
+    h+='<tr><td>'+esc(r.name)+'</td><td>'+r.score+'</td><td>'+(r.cal*100).toFixed(1)+'%</td><td>'+Math.round(r.cal*r.full)+'</td><td>'+layerTag(r.layer)+'</td><td>'+r.step+'</td><td>'+(r.baseRate!=null?(r.baseRate*100).toFixed(1)+'%':'—')+'</td><td style="text-align:left;font-size:12px">'+tip+'</td></tr>';
+  });
+  h+='</table><div class="hint">'+full+'分制划线：拔高≥'+L.ba+' · 临界 '+L.linLo+'~'+(L.ba-1)+' · 缓冲 '+L.ba+'~'+L.bufHi+'</div>';
+  h+='<div class="btns noprint"><button class="btn sec" onclick="exportBatchCSV()">⬇ 导出CSV（26列）</button></div></div>';
+  $('batchResult').innerHTML=h;
+}
+function fillBatchDemo(){$('b_stage').value="高中";onBatchStageChange();$('b_grade').value="高二";onBatchStageChange();$('b_grade').value="高二";$('b_subject').value="数学";onBatchSubjectChange();if($('b_pool').options.length)$('b_pool').selectedIndex=0;$('b_full').value=150;$('b_avg').value=96;$('b_text').value="张明,118,74,90\n李晓,132,86,90\n王芳,96,60,90\n陈晨,108,88,90";}
+function clearBatch(){$('b_text').value="";BATCH_ROWS=[];$('batchResult').innerHTML="";}
+
+/* ============ CSV 导出 ============ */
+function csvCell(v){v=String(v==null?"":v);return '"'+v.replace(/"/g,'""')+'"';}
+function downloadCSV(rows,fname){
+  var bom="\ufeff";var out=bom+rows.map(function(r){return r.map(csvCell).join(',');}).join('\r\n');
+  try{
+    var blob=new Blob([out],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=fname;document.body.appendChild(a);a.click();
+  setTimeout(function(){try{document.body.removeChild(a);URL.revokeObjectURL(url);}catch(e){}},500);
+  }catch(e){
+    var w=window.open('','_blank');
+    if(w){w.document.write('<title>'+fname+'</title><p>自动下载不可用，请全选下方文本复制，粘贴到 Excel 后另存为 .csv：</p><textarea style="width:100%;height:80%">'+esc(out)+'</textarea>');w.document.close();}
+    else{alert('自动下载被浏览器拦截，请允许本页“下载多个文件”后重试。');}
+  }
+}
+function locCSVHeader(){return ["导出时间","学段","年级","姓名","学校","校区","班级","科目","考试/卷别","卷面分","满分","年级均分","常模池基准P","取数方式","卷面得分率","校准得分率","校准折算分","大分层航道","台阶初筛","基础题满分","基础题实得","基础题应得率","铁律触发","两轨分歧","最终判定","首要补短"];}
+function r2row(r){
+  var _fq="";
+  var stepLayer={"筑基":"基础巩固层","巩固":"基础巩固层","拓展":"拔高冲刺层","拔高":"拔高冲刺层"};
+  if(stepLayer[r.step]&&stepLayer[r.step]!=r.layer)_fq="航道("+r.layer+")与台阶("+r.step+")差档·取低不取高";
+  var first="";
+  if(ST.lastAdvice&&ST.lastAdvice.fixFirst&&ST.lastAdvice.fixFirst.length)first=ST.lastAdvice.fixFirst[0].mod+"-"+ST.lastAdvice.fixFirst[0].q.n;
+  return [new Date().toLocaleString(),r.stage,r.grade,r.name,r.school||"",r.campus||"",r.clazz||"",r.subject,r.examLabel,r.score,r.full,r.avg==null?"":r.avg,r.baseP.toFixed(3),r.usedAvg?"本校实测":"兜底P",(r.sr*100).toFixed(1)+"%",(r.cal*100).toFixed(1)+"%",Math.round(r.cal*r.full),r.layer,r.step,r.bfull||"",r.bgot||"",r.baseRate!=null?(r.baseRate*100).toFixed(1)+"%":"",r.iron?"是":"否",_fq,r.layer,first];
+}
+function exportLocateCSV(){if(!ST.lastLocate){alert("请先完成定位");return;}downloadCSV([locCSVHeader(),r2row(ST.lastLocate)],"层级定位_"+ST.lastLocate.name+"_"+new Date().toISOString().slice(0,10)+".csv");}
+function exportBatchCSV(){
+  if(!BATCH_ROWS.length){alert("请先批量计算");return;}
+  var rows=[locCSVHeader()];BATCH_ROWS.forEach(function(r){rows.push(r2row(r));});
+  downloadCSV(rows,"批量层级定位_"+new Date().toISOString().slice(0,10)+".csv");
+}
+function exportAdviceCSV(){
+  var a=ST.lastAdvice;if(!a){alert("请先生成补短建议");return;}
+  var lvName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
+  var rows=[["科目","层级","类别","板块","题型","所属段","易错表现","补短动作"]];
+  a.fixFirst.forEach(function(it){rows.push([a.subject,a.layer,"先补",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
+  a.pract.forEach(function(it){rows.push([a.subject,a.layer,"再练",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
+  a.hold.forEach(function(it){rows.push([a.subject,a.layer,"暂缓",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
+  var nm=ST.lastLocate?ST.lastLocate.name:"学员";
+  downloadCSV(rows,"补短建议_"+a.subject+"_"+nm+"_"+new Date().toISOString().slice(0,10)+".csv");
+}
+
+/* ============ 城市与基准P 管理 ============ */
+function renderCity(){
+  var kw=($('citySearch').value||"").trim().toLowerCase();
+  var d=cityData();var tb=$('cityTable');
+  var h='<tr><th>学段</th><th>城市/考区</th><th>科目</th><th>卷别/群体</th><th>基准P</th><th>来源</th><th>操作</th></tr>';
+  var n=0;
+  for(var i=0;i<d.length;i++){var r=d[i];
+    var blob=(r.city+r.subject+r.pool).toLowerCase();
+    if(kw&&blob.indexOf(kw)<0)continue;n++;
+    var srcTag=r.src=="官方"?'<span class="tag t-ba">官方</span>':(r.src=="本校实测"?'<span class="tag t-gg">本校实测</span>':'<span class="tag t-lin">机构预估</span>');
+    h+='<tr><td><select class="ed" onchange="editCity('+i+',\'stage\',this.value)">'+['初中','高中','全部'].map(function(x){return '<option'+( (r.stage||'全部')==x?' selected':'')+'>'+x+'</option>';}).join('')+'</select></td><td><input class="ed" style="width:110px" value="'+esc(r.city)+'" onchange="editCity('+i+',\'city\',this.value)"></td>'
+     +'<td><input class="ed" style="width:70px" value="'+esc(r.subject)+'" onchange="editCity('+i+',\'subject\',this.value)"></td>'
+     +'<td><input class="ed" style="width:120px" value="'+esc(r.pool)+'" onchange="editCity('+i+',\'pool\',this.value)"></td>'
+     +'<td><input class="ed" type="number" step="0.001" min="0" max="1" value="'+r.p+'" onchange="editCity('+i+',\'p\',this.value)"></td>'
+     +'<td>'+srcTag+'</td><td><button class="btn sm gho" onclick="delCity('+i+')">删</button></td></tr>';
+  }
+  if(n==0)h+='<tr><td colspan="6" class="muted">无匹配项</td></tr>';
+  tb.innerHTML=h;
+  // 同步下拉（保持当前选择）
+  refreshSelectsKeep();
+}
+var CITY_CACHE_KEY="zydb_city_v51";
+function saveCity(d){try{localStorage.setItem(CITY_KEY,JSON.stringify(d));}catch(e){}}
+function editCity(i,field,v){
+  var d=cityData();
+  if(field=="p"){v=parseFloat(v);if(isNaN(v)||v<0||v>1){alert("基准P需为0~1之间");renderCity();return;}}
+  d[i][field]=v;saveCity(d);
+  if(field=="p"||field=="pool"||field=="city")refreshSelectsKeep();
+}
+function delCity(i){var d=cityData();d.splice(i,1);saveCity(d);renderCity();}
+function addCityRow(){var d=cityData();d.push({city:"本校平日卷",subject:"数学",pool:"自定义卷",p:0.60,src:"本校实测",stage:"全部"});saveCity(d);renderCity();}
+function resetCity(){if(confirm("恢复为内置默认口径？你自定义的条目将被清除。")){try{localStorage.removeItem(CITY_KEY);}catch(e){}refreshAllSelects();renderCity();alert("已恢复默认口径");}}
+function checkUpdate(){
+  // 与内置默认比较版本
+  var stored=null;try{stored=localStorage.getItem("zydb_city_ver");}catch(e){}
+  if(stored==DATA_VERSION){alert("已是最新内置口径（v"+DATA_VERSION+"）。\n提示：内置口径更新时，本工具会自动合并新增条目、保留你的自定义改动。");return;}
+  // 合并：内置有、本机无的补进来
+  var added=ensureDefaults();
+  refreshAllSelects();renderCity();
+  alert("口径更新完成：新增 "+added+" 条内置条目，你的自定义条目已保留。当前内置版本 v"+DATA_VERSION+"。");
+}
+function exportCityJSON(){var d=cityData();var txt=JSON.stringify({v:DATA_VERSION,data:d},null,2);
+  var blob=new Blob([txt],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="章圆基准P配置_"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);
+  prompt("配置已下载。也可全选复制下方文本发给同事：",txt);
+}
+function importCityJSON(){var t=$('impCityText').value.trim();if(!t){alert("请先粘贴配置JSON");return;}
+  try{var o=JSON.parse(t);var arr=o.data||o;if(!(arr instanceof Array))throw"格式错误";
+    saveCity(arr);try{localStorage.setItem("zydb_city_ver",o.v||DATA_VERSION);}catch(e){}
+    refreshAllSelects();renderCity();$('impCityText').value="";alert("导入成功，共 "+arr.length+" 条。");
+  }catch(e){alert("导入失败：JSON 解析错误。请确认内容完整。");}
+}
+function refreshSelectsKeep(){
+  // 重填单人与批量科目/卷别，尽量保留选择
+  var ls=val('l_stage'),lb=val('b_stage'),la=val('a_stage');
+  var lsub=val('l_subject'),bsub=val('b_subject'),lpool=$('l_pool')?$('l_pool').value:"";
+  if($('l_subject')){fillSubjects('l_subject',ls);setSel('l_subject',lsub);onSubjectChange();if(lpool)setSel('l_pool',lpool);}
+  if($('b_subject')){fillSubjects('b_subject',lb);setSel('b_subject',bsub);onBatchSubjectChange();}
+  if($('a_subject')){fillAdvSubjects();renderModules();}
+}
+function refreshAllSelects(){onStageChange();onBatchStageChange();onAdvStageChange();}
+function setSel(id,v){var s=$(id);if(!s||!v)return;for(var i=0;i<s.options.length;i++){if(s.options[i].value==v){s.selectedIndex=i;return;}}}
+
+/* ============ AI 配置（预置免费AI产品） ============ */
+var AI_PRESETS={
+  tokenhub:{name:"腾讯云 TokenHub（元宝）",url:"https://tokenhub.tencentmaas.com/v1/chat/completions",model:"hy4",guide:"TokenHub 为腾讯云大模型新平台（旧混元平台已于2026-09-30停服，旧Key全部失效）。配置步骤：①登录 TokenHub 控制台 →在线推理 →选模型并开启免费体验（优先消耗免费额度）；②API Key 管理页新建 API Key 粘贴保存；③模型名可从「模型名」下拉直接选择（DeepSeek-V4.1-Flash-1017 / DeepSeek-V4-Pro 0813 正式版 / hy3 / DeepSeek-V4-Pro / hy4），或手动输入模型详情页标注的名称（旧模型名 hunyuan-lite 等已下线）。本地网页直连会被浏览器CORS拦截属正常，请改用下方「Cloudflare Worker 中转」。免配置用法：不填Key，点「复制提示词去元宝」→粘到元宝网页/App→把答案粘回补短页。"},
+  siliconflow:{name:"硅基流动 SiliconFlow",url:"https://api.siliconflow.cn/v1/chat/completions",model:"Qwen/Qwen2.5-7B-Instruct",
+    guide:"免费领取：注册 https://siliconflow.cn →API 密钥 →新建。平台提供多个 0 元免费模型（如 Qwen2.5-7B-Instruct），注册即送额度。"},
+  glm:{name:"智谱AI GLM",url:"https://open.bigmodel.cn/api/paas/v4/chat/completions",model:"glm-4-flash",
+    guide:"免费领取：注册 https://open.bigmodel.cn →控制台 →API Keys。glm-4-flash 模型永久免费。"},
+  cfworker:{name:"Cloudflare Worker 中转（推荐）",url:"https://你的子域.你的账号.workers.dev/?up=tokenhub",model:"hy4",
+    guide:"部署约3分钟（免费，每天10万次）：①登录 https://dash.cloudflare.com → Workers & Pages → Create → Create Worker → Deploy；②点 Edit code，把物料包 01_定位工具/cloudflare-worker/worker.js 的全部代码粘贴进去 → Deploy；③复制你的 Worker 地址（形如 https://xxx.xxx.workers.dev），替换本框中的「你的子域.你的账号」；④?up= 可切换厂商：tokenhub / siliconflow / glm（模型名需同步改：tokenhub 用 hy4 或 hy3-preview，siliconflow 用 Qwen/Qwen2.5-7B-Instruct，glm 用 glm-4-flash）；⑤到对应厂商免费领取 API Key 粘贴保存。本地双击打开 HTML 也可调用，彻底绕过 CORS。"},
+  custom:{name:"自定义",url:"",model:"",guide:"自建或第三方兼容 OpenAI /chat/completions 的接口，自行填写地址、模型名与 Key。"}
+};
+var AI_DEFAULT="tokenhub"; // 默认预置：腾讯混元（元宝）免费模型
+function aiDef(){var p=AI_PRESETS[AI_DEFAULT];return{url:p.url,key:"",model:p.model,preset:AI_DEFAULT};}
+function nk(k){return (k||"").toString().trim().replace(/[\s"']/g,"");}
+function aiCfg(){try{var s=localStorage.getItem(AI_KEY);if(s){var c=JSON.parse(s);var pr=c.preset||(c.url?(function(){for(var k in AI_PRESETS){if(AI_PRESETS[k].url===c.url)return k;}return"custom";})():AI_DEFAULT);var pp=AI_PRESETS[pr]||AI_PRESETS[AI_DEFAULT];return{url:c.url||pp.url,key:nk(c.key),model:c.model||pp.model,preset:pr};}}catch(e){}return aiDef();}
+function onAIPreset(){var k=val('ai_preset');var p=AI_PRESETS[k];if(!p)return;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;syncModelPreset();if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);}
+function onModelPreset(){var m=val('ai_model_preset');if(m&&$('ai_model'))$('ai_model').value=m;}
+function syncModelPreset(){var s=$('ai_model_preset');if(!s)return;var m=val('ai_model');var hit=false;for(var i=0;i<s.options.length;i++){if(s.options[i].value&&s.options[i].value===m){s.value=m;hit=true;break;}}if(!hit)s.value="";}
+function saveAI(){var c={preset:val('ai_preset'),url:val('ai_url').trim(),key:nk(val('ai_key')),model:val('ai_model').trim()};try{localStorage.setItem(AI_KEY,JSON.stringify(c));}catch(e){}aiState();}
+function clearAI(){try{localStorage.removeItem(AI_KEY);}catch(e){}var p=AI_PRESETS[AI_DEFAULT];if($('ai_preset'))$('ai_preset').value=AI_DEFAULT;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;if($('ai_key'))$('ai_key').value="";if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);aiState();}
+function aiState(){var c=aiCfg();var h=$('aiState');var pn=(AI_PRESETS[c.preset]||{}).name||"免费AI";if(!h)return;
+  h.innerHTML=c.key?('<span class="tag t-ba">AI已启用</span> 产品：'+esc(pn)+' · 模型：'+esc(c.model||"")+'，补短页「AI生成建议」将调用该接口。')
+    :('<span class="tag t-lin">已预置免费AI：'+esc(pn)+'</span> 地址与模型已填好，<b>到对应官网免费领取 API Key 粘贴后即可启用</b>；未填 Key 时补短页自动用内置规则库，结果同样可用。');
+  if($('ai_preset'))$('ai_preset').value=c.preset;if($('ai_url'))$('ai_url').value=c.url;if($('ai_key'))$('ai_key').value=c.key;if($('ai_model'))$('ai_model').value=c.model;syncModelPreset();
+  if($('aiGuide'))$('aiGuide').innerHTML=esc((AI_PRESETS[c.preset]||AI_PRESETS[AI_DEFAULT]).guide);}
+
+/* ============ 参考表 ============ */
+function renderRef(){
+  var fulls=[150,120,100,70,50];var h='<tr><th>满分</th><th>拔高冲刺层≥</th><th>临界观察</th><th>缓冲带</th><th>筑基&lt;</th><th>巩固</th><th>拓展</th><th>拔高(台阶)≥</th></tr>';
+  fulls.forEach(function(f){var L=linesFor(f);h+='<tr><td>'+f+'</td><td>'+L.ba+'</td><td>'+L.linLo+'~'+(L.ba-1)+'</td><td>'+L.ba+'~'+L.bufHi+'</td><td>'+L.stepGg+'</td><td>'+L.stepGg+'~'+(L.stepTz-1)+'</td><td>'+L.stepTz+'~'+(L.stepBg-1)+'</td><td>'+L.stepBg+'</td></tr>';});
+  $('lineTable').innerHTML=h;
+  var rt=$('refCityTable');
+  if(rt){var h2='<tr><th>学段</th><th>城市/考区</th><th>科目</th><th>卷别/群体</th><th>基准P</th><th>来源</th></tr>';
+    for(var i=0;i<DEFAULT_CITY.length;i++){var r=DEFAULT_CITY[i];
+      h2+='<tr><td>'+(r.stage||"全部")+'</td><td>'+esc(r.city)+'</td><td>'+esc(r.subject)+'</td><td>'+esc(r.pool)+'</td><td><b>'+r.p.toFixed(2)+'</b></td><td>'+esc(r.src)+'</td></tr>';}
+    rt.innerHTML=h2;}
+  var rv=$('refVer');if(rv)rv.textContent=DATA_VERSION;
+}
+
+/* ============ 初始化 ============ */
+function ensureDefaults(){
+  var d=cityData();if(!(d instanceof Array))d=[];
+  var key=function(r){return (r.city||"")+"|"+(r.subject||"")+"|"+(r.pool||"");};
+  var have={};d.forEach(function(r){have[key(r)]=true;});
+  var added=0;DEFAULT_CITY.forEach(function(r){if(!have[key(r)]){d.push(JSON.parse(JSON.stringify(r)));added++;}});
+  if(added>0)saveCity(d);
+  try{localStorage.setItem("zydb_city_ver",DATA_VERSION);}catch(e){}
+  return added;
+}
+function normStage(id){var e=$(id);if(e&&!e.value)e.value="高中";}
+function init(){
+  var steps=[ensureDefaults,function(){
+  normStage('l_stage');normStage('b_stage');normStage('a_stage');
+  try{fillSelSimple('l_scope',EXAM_SCOPES,'final');fillSelSimple('b_scope',EXAM_SCOPES,'final');}catch(e){console.error('scope init',e);}
+  fillTermSel('a_term',autoTerm());
+  fillGrades('l_grade',val('l_stage'),"高二");
+  fillGrades('b_grade',val('b_stage'),"高二");
+  fillGrades('a_grade',val('a_stage'),"高二");
+  fillCitySel('l_city',val('l_stage'),'__all');
+  fillCitySel('b_city',val('b_stage'),'__all');
+  fillSubjects('l_subject',val('l_stage'));
+  fillSubjects('b_subject',val('b_stage'));
+  fillAdvSubjects();
+  onSubjectChange();onBatchSubjectChange();renderModules();},function(){
+  try{if(!localStorage.getItem("zydb_city_ver"))localStorage.setItem("zydb_city_ver",DATA_VERSION);}catch(e){}
+  aiState();renderRef();}];
+  for(var i=0;i<steps.length;i++){try{steps[i]();}catch(e){console.error("init步骤"+i+"失败："+(e&&e.message));}}
+}
+document.addEventListener('DOMContentLoaded',init);
+/* Node 测试环境导出 */
+if(typeof module!=='undefined'&&module.exports){module.exports={compute:compute,applyIron:applyIron,exportPDF:exportPDF,exportWord:exportWord,onLogoFile:onLogoFile,clearLogo:clearLogo,aiCfg:aiCfg,onCityChange:onCityChange,fillCitySel:fillCitySel,downloadCSV:downloadCSV,layerOf:layerOf,stepOf:stepOf,linesFor:linesFor,ruleAdviceData:ruleAdvice,gradeTermCap:gradeTermCap,inScope:inScope,qBook:qBook,capLabel:capLabel,buildFlags:buildFlags,renderModules:renderModules,onAdvTermChange:onAdvTermChange,EXAM_SCOPES:EXAM_SCOPES,DATA_VERSION:DATA_VERSION};}
+function doLogout(){if(confirm('确定退出登录？此设备将清除口令缓存，下次打开需重新输入口令。')){clearPwCache();try{sessionStorage.removeItem('zydb_auth');}catch(e){}location.reload();}}
+</script>
+</body>
+</html>
