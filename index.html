@@ -214,9 +214,26 @@ function fetchCreds(){ // 读取云端口令库 CSV
   var cfg=getSync();
   return fetch(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}}).then(function(r){return r.text();}).then(function(txt){return parseCredsCSV(txt);});
 }
-function pushCred(ph,hash){ // 写入口令到云端 CSV（异步，不阻塞）
-  var cfg=getSync();if(!cfg||!ph)return;
-  try{fetch(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})}).catch(function(){});}catch(e){}
+/* ===== 口令同步可靠队列：写云端失败自动入队，后续登录/测试连接时自动重试 ===== */
+var CRED_PENDING_KEY='zydb_cred_pending';
+function getCredPending(){try{var o=JSON.parse(localStorage.getItem(CRED_PENDING_KEY)||'{}');if(o&&typeof o==='object')return o;}catch(e){}return {};}
+function addCredPending(ph,hash){var o=getCredPending();o[ph]=hash||'';try{localStorage.setItem(CRED_PENDING_KEY,JSON.stringify(o));}catch(e){}}
+function removeCredPending(ph){var o=getCredPending();delete o[ph];try{localStorage.setItem(CRED_PENDING_KEY,JSON.stringify(o));}catch(e){}}
+function pushCred(ph,hash){ // 写入口令到云端 CSV；先入队，成功后出队，失败保留待重试
+  var cfg=getSync();if(!cfg||!ph)return Promise.resolve({ok:false,error:'未配置云端同步'});
+  addCredPending(ph,hash||'');
+  return fetch(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})}).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok){removeCredPending(ph);return {ok:true};}
+    return {ok:false,error:(d&&d.error)||'云端响应异常'};
+  }).catch(function(){return {ok:false,error:'网络或密钥问题'};});
+}
+function flushCredPending(){ // 重试队列中所有未同步口令（登录成功/测试连接时调用）
+  var o=getCredPending();var phones=Object.keys(o);
+  if(!phones.length)return Promise.resolve({done:0,left:0});
+  var done=0;
+  return Promise.all(phones.map(function(p){return pushCred(p,o[p]).then(function(r){if(r.ok)done++;});})).then(function(){
+    return {done:done,left:Object.keys(getCredPending()).length};
+  });
 }
 function isHash(s){return /^[0-9a-f]{16}$/.test(s||'');} // 16位十六进制=新版哈希；否则视为旧版明文缓存
 function verifyPwRemote(ph,pw){ // 校验口令：云端 CSV 优先，本机缓存兜底（任一匹配即可，防改密写云端失败后被锁）
@@ -293,6 +310,7 @@ function doLogin(){
     if(res.hash){setMyPw(val,res.hash);} // 缓存云端哈希，刷新免登录
     else if(lh&&!isHash(lh)){var hh=pwHash(pword);setMyPw(val,hh);pushCred(val,hh);} // 旧版明文缓存自动迁移为哈希
     if(res.heal)pushCred(val,res.hash||pwHash(pword)); // 云端缺失/滞后 → 回推自愈
+    flushCredPending(); // 重试此前未同步成功的口令
     if(err)err.textContent='';
     if(!res.hash&&pword===DEFAULT_PW){showForcePw();} // 首次登录：强制修改默认口令
     else{addLog('登录');enterTool();}
@@ -311,7 +329,8 @@ function doForcePw(){
   if(n1===DEFAULT_PW){if(err)err.textContent='新口令不能使用默认口令，请重新设置';return;}
   if(n1!==n2){if(err)err.textContent='两次输入的新口令不一致';return;}
   var h=pwHash(n1);
-  setMyPw(me,h);pushCred(me,h);addLog('首次设置个人口令'); // 写入云端CSV，全设备生效
+  setMyPw(me,h);addLog('首次设置个人口令'); // 写入云端CSV，全设备生效
+  pushCred(me,h).then(function(r){if(!r.ok)alert('注意：口令已在本机保存，但同步云端失败（'+r.error+'）。\n下次本机登录成功后将自动重试同步；其他设备在此之前请继续使用旧口令。');});
   var m=document.getElementById('forcePwMask');if(m)m.style.display='none';
   var pw=document.getElementById('pwInput');if(pw)pw.value='';
   var f1=document.getElementById('fp_new'),f2=document.getElementById('fp_new2');if(f1)f1.value='';if(f2)f2.value='';
@@ -343,9 +362,9 @@ function doRecover(){
   if(n1===DEFAULT_PW){if(err)err.textContent='新口令不能使用默认口令，请重新设置';return;}
   if(n1!==n2){if(err)err.textContent='两次输入的新口令不一致';return;}
   var h=pwHash(n1);
-  setMyPw(ph,h);pushCred(ph,h);addLog('找回口令',ph); // 写入云端CSV，全设备生效
+  setMyPw(ph,h);addLog('找回口令',ph); // 写入云端CSV，全设备生效
+  pushCred(ph,h).then(function(r){alert(r.ok?'个人口令已重置成功（已同步云端），请使用该手机号 + 新口令登录。':'口令已在本机重置，但同步云端失败（'+r.error+'）；下次登录成功后将自动重试同步。');});
   hideRecover();
-  alert('个人口令已重置成功（已同步至云端），请使用该手机号 + 新口令登录。');
 }
 /* 登录遮罩立即判定：在页面解析到此处时同步执行，先于首次绘制，避免已登录用户刷新时闪现登录框 */
 (function(){
@@ -1715,7 +1734,11 @@ function saveSync(){
   saveSyncCfg(u,k);
   setSyncState('已保存，正在测试连接…');
   fetch(u+'/ping').then(function(r){return r.json();}).then(function(d){
-    if(d&&d.ok)setSyncState('✅ 连接正常 · 自动上传已开启（之后每次登录/退出等事件都会上传）');
+    if(d&&d.ok){
+      flushCredPending().then(function(f){
+        setSyncState('✅ 连接正常 · 自动上传已开启'+(f.left?(' · 待同步口令重试中：成功 '+f.done+' 个，剩余 '+f.left+' 个'):''));
+      });
+    }
     else setSyncState('⚠️ 地址可达但响应异常，请检查 Worker 是否部署成功');
   }).catch(function(){setSyncState('❌ 连接失败：请检查地址是否正确、Worker 是否已 Deploy');});
 }
@@ -1806,9 +1829,13 @@ function saveMyPw(){
   if(n1!==n2){alert('两次输入的新口令不一致');return;}
   if(n1===cur){alert('新口令不能与当前口令相同');return;}
   var nh=pwHash(n1);
-  setMyPw(me,nh);pushCred(me,nh);addLog('修改口令'); // 同步云端CSV
+  setMyPw(me,nh);addLog('修改口令'); // 同步云端CSV
   try{$('pw_cur').value='';$('pw_new').value='';$('pw_new2').value='';}catch(e){}
-  alert('口令已保存并同步至云端，其他设备下次登录请使用新口令。');pwSettingState();renderAuthPanel();
+  pwSettingState();
+  pushCred(me,nh).then(function(r){
+    alert(r.ok?'口令已保存并同步至云端，其他设备下次登录请使用新口令。':'口令已在本机保存，但同步云端失败（'+r.error+'）；下次登录成功后将自动重试同步。');
+    renderAuthPanel();
+  });
 }
 function addPhone(){
   var inp=$('np_input');var v=((inp&&inp.value)||'').replace(/\s/g,'');var err=$('np_err');
