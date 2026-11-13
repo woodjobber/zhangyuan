@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>章圆学员层级定位工具</title>
+<title>章圆学员层级定位系统</title>
 <style>
 :root{--pri:#1E6FD9;--pri-d:#1657B0;--pri-l:#EAF2FC;--bg:#F4F7FB;--ink:#1B2733;--sub:#5B6B7C;--line:#DCE6F2;--ok:#1F9D6B;--warn:#E08A1E;--bad:#D6433B;--card:#fff;--sh:0 2px 14px rgba(30,111,217,.08);}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -77,7 +77,7 @@ tr:nth-child(even) td{background:#FAFCFF}
 <div id="loginMask" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#144C9C 0%,#1E6FD9 55%,#3E8BEE 100%);display:flex;align-items:center;justify-content:center;font-family:'Microsoft YaHei','PingFang SC',sans-serif">
   <div style="background:#fff;border-radius:16px;padding:38px 34px;width:344px;max-width:90vw;box-shadow:0 20px 64px rgba(8,40,90,.32);text-align:center">
     <div style="width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,#1E6FD9,#3E8BEE);color:#fff;font-size:24px;font-weight:800;line-height:52px;margin:0 auto 14px">章</div>
-    <div style="font-size:21px;font-weight:800;color:#144C9C;letter-spacing:.5px">章圆学员层级定位工具</div>
+    <div style="font-size:21px;font-weight:800;color:#144C9C;letter-spacing:.5px">章圆学员层级定位系统</div>
     <div style="font-size:12.5px;color:#5B6B7C;margin-top:6px">难度系数校准体系 · 教师登录</div>
     <div style="margin-top:22px;text-align:left">
       <label style="font-size:13px;color:#33445A;font-weight:600" for="pwInput">机构口令</label>
@@ -117,10 +117,10 @@ document.addEventListener('DOMContentLoaded',function(){
   else{if(m)m.style.display='flex';var v=document.getElementById('pwInput');if(v)setTimeout(function(){v.focus();},50);}
 });
 </script>
-<div class="topbar"><h1>章圆学员层级定位工具</h1><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
+<div class="topbar"><h1>章圆学员层级定位系统</h1><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
 <div class="wrap">
   <div class="tabs">
-    <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">① 单人定位</div>
+    <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">① 学员定位</div>
     <div class="tab" data-p="batch" onclick="switchTab('batch',this)">② 批量定位</div>
     <div class="tab" data-p="advice" onclick="switchTab('advice',this)">③ 补短建议</div>
     <div class="tab" data-p="report" onclick="switchTab('report',this)">④ 机构报告</div>
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="tab" data-p="ref" onclick="switchTab('ref',this)">⑥ 口径与参考表</div>
   </div>
 
-  <!-- 单人定位 -->
+  <!-- 学员定位 -->
   <div class="panel on" id="p-locate">
     <div class="card">
       <h2>学员信息</h2>
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded',function(){
         </div>
       </div>
       <div style="margin-top:12px"><label>LOGO 预览</label><div id="logoBox" style="border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:60px;display:flex;align-items:center;justify-content:center;background:#FAFCFF"><span class="muted">暂无 LOGO</span></div></div>
-      <div class="hint" style="margin-top:8px">报告自动使用最近一次「单人定位」的结果与「补短建议」的勾选。请先完成定位。</div>
+      <div class="hint" style="margin-top:8px">报告自动使用最近一次「学员定位」的结果与「补短建议」的勾选。请先完成定位。</div>
       <div class="btns"><button class="btn" onclick="genReport()">📄 生成机构报告</button><button class="btn sec" onclick="exportPDF(event)">⬇ 导出PDF</button><button class="btn sec" onclick="exportWord()">⬇ 导出Word（.doc）</button><button class="btn gho" onclick="clearLogo()">✕ 清除LOGO</button><button class="btn gho" onclick="doLogout()">🚪 退出登录·清除口令缓存</button></div>
       <div class="hint">导出PDF直接生成PDF文件（A4版式、含LOGO，断网可用）；导出Word生成可编辑 .doc。LOGO一经上传自动保存在本机，下次打开仍在。</div>
     </div>
@@ -846,7 +846,7 @@ function applyIron(r,bgot,bfull){
 }
 function linesFor(full){return {ba:ceilPct(0.75,full),linLo:ceilPct(0.72,full),bufHi:ceilPct(0.78,full),stepGg:ceilPct(0.60,full),stepTz:ceilPct(0.70,full),stepBg:ceilPct(0.80,full)};}
 
-/* ============ 单人定位 ============ */
+/* ============ 学员定位 ============ */
 function livePreview(){
   var score=num('l_score'),full=num('l_full'),avg=num('l_avg');
   if(score==null||full==null||full<=0){return;}
@@ -920,7 +920,7 @@ function gotoReport(){var t=document.querySelector('.tab[data-p="report"]');swit
 function gotoLocateTab(){switchTab('locate');}
 function gotoBatchTab(){switchTab('batch');}
 function hasLocateDone(){return !!(ST.lastLocate||(ST.lastBatch&&ST.lastBatch.length));}
-function needLocateTip(){return '<div class="danger">📌 请先完成「单人定位」（①）或「批量定位」（②），再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去单人定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
+function needLocateTip(){return '<div class="danger">📌 请先完成「学员定位」（①）或「批量定位」（②），再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去学员定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
 
 /* ============ 补短建议 ============ */
 var LVName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
@@ -1068,7 +1068,7 @@ function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘�
 /* ============ 机构报告 ============ */
 function genReport(){
   var r=ST.lastLocate;
-  if(!r){$('report').innerHTML='<div class="note">请先完成「单人定位」，报告将自动带入定位结果与补短建议。</div>';return;}
+  if(!r){$('report').innerHTML='<div class="note">请先完成「学员定位」，报告将自动带入定位结果与补短建议。</div>';return;}
   var org=val('r_org')||"章圆智学中心",teacher=val('r_teacher'),logo=logoSrc();
   var a=ST.lastAdvice;
   var L=r.lines||linesFor(r.full);
@@ -1100,7 +1100,7 @@ function genReport(){
   }else{h+='<p class="muted">尚未生成补短建议。可到「补短建议」页勾选失分题型后生成，本报告将自动补全本部分。</p>';}
   h+='<h3>五、升/降层复核条件</h3><ul class="rlist"><li>升层：连续3次校准得分率稳定进入上一档区间，且基础题应得率≥85%。</li><li>降层：连续2次回落原区间，或基础题应得率&lt;85%（铁律立即降层）。</li></ul>';
   h+='<h3>六、后续复测安排</h3><table><tr><th>复测节点</th><th>内容</th><th>观察指标</th></tr><tr><td>本周</td><td>先补清单限时小测</td><td>基础题应得率是否≥85%</td></tr><tr><td>2~3周</td><td>同卷制整卷</td><td>校准得分率是否上移一档</td></tr><tr><td>下次月考</td><td>年级统一考</td><td>用本校均分回算，复核层级</td></tr></table>';
-  h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「章圆学员层级定位工具」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'</p></div>';
+  h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「章圆学员层级定位系统」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'</p></div>';
   $('report').innerHTML=h;ST.lastReport=h;
 }
 var LOGO_KEY='zydb_logo';
@@ -1131,7 +1131,7 @@ function clearLogo(){
 /* 导出PDF：调用浏览器打印，在弹窗中选「另存为PDF」、A4纵向，即可离线生成PDF文件。
    （不依赖任何外部/内嵌重型库，彻底避免组件拖垮整页按钮的问题。） */
 function exportPDF(ev){
-  if(!ST.lastLocate){alert("请先完成单人定位，再生成报告。");return;}
+  if(!ST.lastLocate){alert("请先完成学员定位，再生成报告。");return;}
   if(!ST.lastReport)genReport();
   if(!$('report')||!$('report').innerHTML.trim()){alert("报告为空");return;}
   alert("即将打开打印窗口：请在「目标/打印机」中选【另存为PDF】，纸张选 A4、纵向，点保存即可得到PDF文件。\n（如需可编辑文本，请用旁边的「导出Word」。）");
@@ -1139,7 +1139,7 @@ function exportPDF(ev){
 }
 function exportWord(){
   if(!ST.lastReport)genReport();
-  if(!ST.lastLocate){alert("请先完成单人定位");return;}
+  if(!ST.lastLocate){alert("请先完成学员定位");return;}
   var css="body{font-family:'Microsoft YaHei',sans-serif;color:#1B2733;line-height:1.7} .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1E6FD9;padding-bottom:12px;margin-bottom:16px} .logo{max-width:150px;max-height:66px} .org{font-size:20px;font-weight:800;color:#1657B0} h3{font-size:15px;color:#1657B0;border-left:3px solid #1E6FD9;padding-left:9px;margin:16px 0 8px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px} th,td{border:1px solid #DCE6F2;padding:6px 8px;text-align:center} th{background:#EAF2FC;color:#1657B0} .rlist{margin:4px 0 0 18px} .rlist li{margin:4px 0} .pill{background:#EAF2FC;color:#1657B0;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600} .muted{color:#5B6B7C;font-size:12px} .red{color:#D6433B}";
   var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+$('report').innerHTML+'</body></html>';
   var blob=new Blob(['\ufeff'+html],{type:'application/msword'});
