@@ -210,9 +210,9 @@ function parseCredsCSV(txt){
   for(var i=1;i<lines.length;i++){var ln=lines[i].trim();if(!ln)continue;var c=ln.split(',');if(c[0]&&c[0]!=='phone')m[c[0]]={hash:c[1]||'',updated:c[2]||''};}
   return m;
 }
-function fetchCreds(){ // 读取云端口令库 CSV
+function fetchCreds(){ // 读取云端口令库 CSV（8 秒超时，超时走本地兜底）
   var cfg=getSync();
-  return fetch(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}}).then(function(r){return r.text();}).then(function(txt){return parseCredsCSV(txt);});
+  return fetchWithTimeout(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}},8000).then(function(r){return r.text();}).then(function(txt){return parseCredsCSV(txt);});
 }
 /* ===== 口令同步可靠队列：写云端失败自动入队，后续登录/测试连接时自动重试 ===== */
 var CRED_PENDING_KEY='zydb_cred_pending';
@@ -222,7 +222,7 @@ function removeCredPending(ph){var o=getCredPending();delete o[ph];try{localStor
 function pushCred(ph,hash){ // 写入口令到云端 CSV；先入队，成功后出队，失败保留待重试
   var cfg=getSync();if(!cfg||!ph)return Promise.resolve({ok:false,error:'未配置云端同步'});
   addCredPending(ph,hash||'');
-  return fetch(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})}).then(function(r){return r.json();}).then(function(d){
+  return fetchWithTimeout(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})},8000).then(function(r){return r.json();}).then(function(d){
     if(d&&d.ok){removeCredPending(ph);return {ok:true};}
     return {ok:false,error:(d&&d.error)||'云端响应异常'};
   }).catch(function(){return {ok:false,error:'网络或密钥问题'};});
@@ -265,6 +265,18 @@ function getSync(){
   return {url:((o&&o.url)||DEFAULT_SYNC_URL).replace(/\/+$/,''),key:(o&&o.key)||DEFAULT_SYNC_KEY};
 }
 function saveSyncCfg(url,key){try{localStorage.setItem(SYNC_CFG_KEY,JSON.stringify({url:(url||'').replace(/\/+$/,''),key:key||''}));}catch(e){}}
+function fetchWithTimeout(url,opt,ms){ // 带超时的 fetch：网络被拦/挂起时超时中断，回退本地逻辑
+  ms=ms||8000;
+  if(typeof AbortController!=='undefined'){
+    var c=new AbortController();
+    var o=opt?Object.assign({},opt):{};
+    o.signal=c.signal;
+    var p=fetch(url,o);
+    setTimeout(function(){try{c.abort();}catch(e){}},ms);
+    return p;
+  }
+  return fetch(url,opt);
+}
 function addLog(act,phone){
   var p=phone||getCurPhone()||'—';
   var t=fmtNow();
@@ -274,7 +286,7 @@ function addLog(act,phone){
 }
 function syncPush(entries){
   var cfg=getSync();if(!cfg||!entries||!entries.length)return;
-  try{fetch(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:entries})}).catch(function(){});}catch(e){}
+  try{fetchWithTimeout(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:entries})},10000).catch(function(){});}catch(e){}
 }
 var THEME_KEY='zydb_theme'; // 界面主题：system | light | dark
 function applyTheme(){
@@ -1733,7 +1745,7 @@ function saveSync(){
   u=u.replace(/\/+$/,'');
   saveSyncCfg(u,k);
   setSyncState('已保存，正在测试连接…');
-  fetch(u+'/ping').then(function(r){return r.json();}).then(function(d){
+  fetchWithTimeout(u+'/ping',null,8000).then(function(r){return r.json();}).then(function(d){
     if(d&&d.ok){
       flushCredPending().then(function(f){
         setSyncState('✅ 连接正常 · 自动上传已开启'+(f.left?(' · 待同步口令重试中：成功 '+f.done+' 个，剩余 '+f.left+' 个'):''));
@@ -1747,7 +1759,7 @@ function pushAllLogs(){
   var logs=getLogs();
   if(!logs.length){setSyncState('本机暂无日志可上传');return;}
   setSyncState('正在上传 '+logs.length+' 条本机日志…');
-  fetch(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:logs})}).then(function(r){return r.json();}).then(function(d){
+  fetchWithTimeout(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:logs})},15000).then(function(r){return r.json();}).then(function(d){
     if(d&&d.ok)setSyncState('✅ 上传完成：新增 '+d.added+' 条，云端共 '+(d.total||0)+' 条');
     else setSyncState('❌ 上传失败：'+((d&&d.error)||'未知错误'));
   }).catch(function(){setSyncState('❌ 上传失败：网络或密钥问题');});
@@ -1755,7 +1767,7 @@ function pushAllLogs(){
 function pullLogs(){
   var cfg=getSync();if(!cfg){alert('请先填写并保存 Worker 地址与同步密钥');return;}
   setSyncState('正在拉取全员日志…');
-  fetch(cfg.url+'/logs?limit=500',{headers:{'x-sync-key':cfg.key||''}}).then(function(r){return r.json();}).then(function(d){
+  fetchWithTimeout(cfg.url+'/logs?limit=500',{headers:{'x-sync-key':cfg.key||''}},15000).then(function(r){return r.json();}).then(function(d){
     if(!d||!d.ok){setSyncState('❌ 拉取失败：'+((d&&d.error)||'未知错误'));return;}
     REMOTE_LOGS=d.logs||[];
     setSyncState('✅ 已拉取 '+REMOTE_LOGS.length+' 条（云端共 '+(d.total||0)+' 条）');
@@ -1782,7 +1794,7 @@ var REMOTE_CREDS={};
 function viewCreds(){
   var cfg=getSync();
   setSyncState('正在读取云端口令库…');
-  fetch(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}}).then(function(r){return r.text();}).then(function(txt){
+  fetchWithTimeout(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}},15000).then(function(r){return r.text();}).then(function(txt){
     REMOTE_CREDS=parseCredsCSV(txt);
     var keys=Object.keys(REMOTE_CREDS);
     setSyncState('✅ 口令库已读取：共 '+keys.length+' 个授权账号（CSV 存储于云端）');
