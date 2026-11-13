@@ -16,6 +16,8 @@ body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;backgroun
 .topbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,rgba(143,208,255,0),#8FD0FF 35%,#FFC96B 60%,rgba(255,201,107,0));pointer-events:none}
 .topbar h1{position:relative;text-align:center;font-size:26px;font-weight:800;letter-spacing:3px;margin:0;text-shadow:0 2px 12px rgba(9,37,84,.35)}
 .topbar .subline{position:relative;text-align:center;font-size:13.5px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.92);margin:8px auto 0}
+.topbar .brand{position:relative;text-align:center;font-size:12.5px;font-weight:600;letter-spacing:4px;color:rgba(255,255,255,.85);margin-bottom:7px}
+.topbar .brand b{color:#FFD68C}
 .topbar .slogan{position:relative;text-align:center;font-size:14px;font-weight:600;letter-spacing:6px;color:rgba(255,214,140,.95);margin:6px auto 0;text-shadow:0 1px 8px rgba(120,70,10,.25)}
 .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}
@@ -132,20 +134,24 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
 <div id="loginMask" style="position:fixed;inset:0;z-index:99999;background:linear-gradient(160deg,#144C9C 0%,#1E6FD9 55%,#3E8BEE 100%);display:none;align-items:center;justify-content:center;font-family:'Microsoft YaHei','PingFang SC',sans-serif">
   <div style="background:#fff;border-radius:16px;padding:38px 34px;width:344px;max-width:90vw;box-shadow:0 20px 64px rgba(8,40,90,.32);text-align:center">
     <img src="assets/logo.png" alt="章圆LOGO" style="width:64px;height:64px;object-fit:contain;margin:0 auto 14px;display:block" onerror="var d=document.createElement('div');d.style.cssText='width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,#1E6FD9,#3E8BEE);color:#fff;font-size:24px;font-weight:800;line-height:52px;margin:0 auto 14px;text-align:center';d.textContent='章';this.parentNode.replaceChild(d,this)">
+    <div style="font-size:12px;font-weight:600;color:#8A9AAE;letter-spacing:4px;margin-bottom:7px">章圆 · 天元AI</div>
     <div style="font-size:21px;font-weight:800;color:#144C9C;letter-spacing:.5px">天元AI·学情分层定位系统</div>
     <div style="font-size:13px;font-weight:600;color:#B8860B;letter-spacing:4px;margin-top:7px">智学有章 · 思致圆融</div>
-    <div style="font-size:12.5px;color:#5B6B7C;margin-top:6px">难度系数校准体系 · 教师登录</div>
     <div id="loginForm" style="margin-top:22px;text-align:left">
-      <label style="font-size:13px;color:#33445A;font-weight:600" for="pwInput">机构口令</label>
-      <input id="pwInput" type="password" placeholder="请输入机构口令" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
-      <div id="pwErr" style="color:#D6433B;font-size:12.5px;margin-top:8px;min-height:16px"></div>
+      <label style="font-size:13px;color:#33445A;font-weight:600" for="phoneInput">授权手机号</label>
+      <input id="phoneInput" type="tel" maxlength="11" inputmode="numeric" placeholder="请输入授权手机号" autocomplete="tel" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <label style="font-size:13px;color:#33445A;font-weight:600;display:block;margin-top:12px" for="pwInput">登录口令</label>
+      <input id="pwInput" type="password" placeholder="请输入登录口令" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <div id="phoneErr" style="color:#D6433B;font-size:12.5px;margin-top:8px;min-height:16px"></div>
     </div>
     <button id="loginBtn" onclick="doLogin()" style="width:100%;margin-top:2px;padding:11px;border:none;border-radius:9px;background:#1E6FD9;color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(30,111,217,.35)">登 录</button>
     <div style="margin-top:10px;text-align:right"><a href="javascript:void(0)" onclick="showRecover()" style="font-size:12.5px;color:#1E6FD9">忘记口令？</a></div>
     <div id="recoverForm" style="display:none;margin-top:8px;text-align:left;border-top:1px dashed #DCE6F2;padding-top:16px">
       <div style="font-size:14px;font-weight:700;color:#144C9C;margin-bottom:10px">忘记个人口令找回</div>
-      <label style="font-size:12.5px;color:#33445A;font-weight:600">机构默认口令（验证身份）</label>
-      <input id="pw_r_def" type="password" placeholder="输入默认口令 123456" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <label style="font-size:12.5px;color:#33445A;font-weight:600">授权手机号</label>
+      <input id="pw_r_phone" type="tel" maxlength="11" inputmode="numeric" placeholder="输入授权手机号" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <label style="font-size:12.5px;color:#33445A;font-weight:600;display:block;margin-top:10px">机构代码（验证身份）</label>
+      <input id="pw_r_org" type="password" placeholder="请输入机构代码" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
       <label style="font-size:12.5px;color:#33445A;font-weight:600;display:block;margin-top:10px">新口令（至少4位）</label>
       <input id="pw_r_new" type="password" placeholder="设置新口令" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
       <label style="font-size:12.5px;color:#33445A;font-weight:600;display:block;margin-top:10px">确认新口令</label>
@@ -154,14 +160,64 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
       <button onclick="doRecover()" style="width:100%;margin-top:4px;padding:11px;border:none;border-radius:9px;background:#1E6FD9;color:#fff;font-size:14px;font-weight:700;cursor:pointer">验证并设置新口令</button>
       <div style="text-align:center;margin-top:10px"><a href="javascript:void(0)" onclick="hideRecover()" style="font-size:12.5px;color:#5B6B7C">← 返回登录</a></div>
     </div>
-    <div style="font-size:11px;color:#9AA7B5;margin-top:14px">仅限授权教师使用 · 数据全程不出本机<br>首次使用默认口令 123456，登录后可在「系统设置」设置为个人口令；设置后默认口令登录失效，忘记个人口令可在登录页点「忘记口令？」用默认口令 123456 验证并直接设置新口令</div>
+    <div style="font-size:11px;color:#9AA7B5;margin-top:14px">仅限授权教师使用 · 手机号授权 + 口令登录 · 数据全程不出本机<br>首次登录须立即修改默认口令；忘记口令可通过「忘记口令？」凭机构代码找回，机构代码请向机构内部获取；如需授权请联系系统管理员</div>
+  </div>
+</div>
+<!-- 首次登录强制修改默认口令遮罩（不可跳过） -->
+<div id="forcePwMask" style="position:fixed;inset:0;z-index:100000;background:linear-gradient(160deg,#144C9C 0%,#1E6FD9 55%,#3E8BEE 100%);display:none;align-items:center;justify-content:center;font-family:'Microsoft YaHei','PingFang SC',sans-serif">
+  <div style="background:#fff;border-radius:16px;padding:34px 32px;width:344px;max-width:90vw;box-shadow:0 20px 64px rgba(8,40,90,.32);text-align:center">
+    <div style="font-size:19px;font-weight:800;color:#144C9C">🔐 设置您的个人口令</div>
+    <div style="font-size:12.5px;color:#5B6B7C;margin-top:8px;line-height:1.7">检测到您首次使用默认口令登录。<br>为保障账户安全，请先设置个人口令（至少 4 位）后进入系统。</div>
+    <div style="margin-top:18px;text-align:left">
+      <label style="font-size:13px;color:#33445A;font-weight:600" for="fp_new">新口令（至少4位，不能与默认口令相同）</label>
+      <input id="fp_new" type="password" placeholder="设置新口令" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <label style="font-size:13px;color:#33445A;font-weight:600;display:block;margin-top:12px" for="fp_new2">确认新口令</label>
+      <input id="fp_new2" type="password" placeholder="再次输入新口令" style="width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1.5px solid #DCE6F2;border-radius:9px;font-size:14px;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#1E6FD9'" onblur="this.style.borderColor='#DCE6F2'">
+      <div id="fp_err" style="color:#D6433B;font-size:12.5px;margin-top:8px;min-height:16px"></div>
+    </div>
+    <button onclick="doForcePw()" style="width:100%;margin-top:2px;padding:11px;border:none;border-radius:9px;background:#1E6FD9;color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(30,111,217,.35)">确认设置并进入系统</button>
   </div>
 </div>
 <script>
-var DEFAULT_PW="123456"; // 机构默认口令
-var MY_PW_KEY="zydb_my_pw"; // 教师自定义口令（仅本机生效）
-var PW_KEY="zydb_pwcache";
-function getPw(){try{var s=localStorage.getItem(MY_PW_KEY);if(s)return s;}catch(e){}return DEFAULT_PW;}
+/* ===== 授权登录：手机号授权码 + 个人口令 ===== */
+var ADMIN_PHONE="18602811213"; // 系统管理员
+var DEFAULT_PHONES=["18602811213","13419456314","18383527805"]; // 内置授权名单
+var PHONES_KEY="zydb_auth_phones"; // 管理员新增的授权码（本机生效）
+var CUR_PHONE_KEY="zydb_cur_phone"; // 当前登录手机号
+var DEFAULT_PW="123456"; // 默认口令（仅首次登录使用，登录后强制修改）
+var PW_MAP_KEY="zydb_my_pw_map"; // 各手机号的个人口令（本机生效）：{手机号:口令}
+var ORG_CODE="ZY02801"; // 机构代码（内部代码，仅用于找回口令，页面不得展示）
+var LOG_KEY="zydb_login_log"; // 授权教师登录历史（本机）
+function getPhones(){try{var raw=localStorage.getItem(PHONES_KEY);if(raw){var arr=JSON.parse(raw);if(Array.isArray(arr)&&arr.indexOf(ADMIN_PHONE)>=0)return arr;}}catch(e){}return DEFAULT_PHONES.slice();}
+function savePhones(arr){try{localStorage.setItem(PHONES_KEY,JSON.stringify(arr));}catch(e){}}
+function getCurPhone(){try{return localStorage.getItem(CUR_PHONE_KEY)||'';}catch(e){return '';}}
+function setCurPhone(p){try{if(p)localStorage.setItem(CUR_PHONE_KEY,p);else localStorage.removeItem(CUR_PHONE_KEY);}catch(e){}}
+function validPhone(s){return /^1[3-9]\d{9}$/.test(s);}
+function maskPhone(p){return p&&p.length===11?p.slice(0,3)+'****'+p.slice(7):(p||'');}
+function isAdmin(){return getCurPhone()===ADMIN_PHONE;}
+function getPwMap(){try{var r=JSON.parse(localStorage.getItem(PW_MAP_KEY)||'{}');if(r&&typeof r==='object')return r;}catch(e){}return {};}
+function getPw(ph){var m=getPwMap();return (ph&&m[ph])||DEFAULT_PW;} // 个人口令优先，默认 123456 兜底
+function setMyPw(ph,pw){var m=getPwMap();if(pw)m[ph]=pw;else delete m[ph];try{localStorage.setItem(PW_MAP_KEY,JSON.stringify(m));}catch(e){}}
+function getLogs(){try{var a=JSON.parse(localStorage.getItem(LOG_KEY)||'[]');if(Array.isArray(a))return a;}catch(e){}return [];}
+/* ===== 登录日志云端汇总（Cloudflare Worker + KV） ===== */
+var SYNC_CFG_KEY='zydb_sync'; // {url,key}
+var DEVICE_KEY='zydb_device';
+var REMOTE_LOGS=[];
+function fmtNow(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2);}
+function deviceId(){try{var v=localStorage.getItem(DEVICE_KEY);if(!v){v='DEV-'+Math.random().toString(36).slice(2,8).toUpperCase();localStorage.setItem(DEVICE_KEY,v);}return v;}catch(e){return 'DEV';}}
+function getSync(){try{var o=JSON.parse(localStorage.getItem(SYNC_CFG_KEY)||'{}');return (o&&o.url)?o:null;}catch(e){return null;}}
+function saveSyncCfg(url,key){try{localStorage.setItem(SYNC_CFG_KEY,JSON.stringify({url:(url||'').replace(/\/+$/,''),key:key||''}));}catch(e){}}
+function addLog(act,phone){
+  var p=phone||getCurPhone()||'—';
+  var t=fmtNow();
+  var e={id:t+'|'+p+'|'+act+'|'+Math.random().toString(36).slice(2,8),t:t,phone:p,act:act,device:deviceId()};
+  try{var a=getLogs();a.push(e);while(a.length>500)a.shift();localStorage.setItem(LOG_KEY,JSON.stringify(a));}catch(err){}
+  syncPush([e]); // 已配置云同步则异步上传，不阻塞登录
+}
+function syncPush(entries){
+  var cfg=getSync();if(!cfg||!entries||!entries.length)return;
+  try{fetch(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:entries})}).catch(function(){});}catch(e){}
+}
 var THEME_KEY='zydb_theme'; // 界面主题：system | light | dark
 function applyTheme(){
   var t='system';try{t=localStorage.getItem(THEME_KEY)||'system';}catch(e){}
@@ -179,69 +235,85 @@ if(window.matchMedia){try{window.matchMedia('(prefers-color-scheme: dark)').addE
   if(t==='system')applyTheme();
 });}catch(e){}}
 applyTheme();
-function savePwCache(){try{var r={pw:getPw(),v:1,t:new Date().toISOString()};localStorage.setItem(PW_KEY,JSON.stringify(r));}catch(e){}}
-function loadPwCache(){try{var raw=localStorage.getItem(PW_KEY);if(!raw)return false;var r=JSON.parse(raw);return (r&&r.pw===getPw());}catch(e){return false;}}
-function clearPwCache(){try{localStorage.removeItem(PW_KEY);}catch(e){}}
 function enterTool(){
   var m=document.getElementById('loginMask');if(m)m.style.display='none';
-  try{sessionStorage.setItem('zydb_auth','1');}catch(e){}
 }
 function doLogin(){
-  var v=document.getElementById('pwInput');var val=(v&&v.value||"").replace(/\s/g,"");var err=document.getElementById('pwErr');
-  if(val===getPw()){
-    savePwCache();
-    if(err)err.textContent='';
-    enterTool();
-  }else{
-    if(err)err.textContent='口令错误，请重新输入';
-    if(v){v.value='';v.focus();}
-  }
+  var pv=document.getElementById('phoneInput'),pw=document.getElementById('pwInput');
+  var val=(pv&&pv.value||"").replace(/\s/g,"");var pword=(pw&&pw.value||"").replace(/\s/g,"");
+  var err=document.getElementById('phoneErr');
+  if(!validPhone(val)){if(err)err.textContent='请输入有效的11位手机号';if(pv){pv.value='';pv.focus();}return;}
+  if(getPhones().indexOf(val)<0){if(err)err.textContent='该手机号未获授权，请联系系统管理员开通';if(pv){pv.value='';pv.focus();}return;}
+  if(pword!==getPw(val)){if(err)err.textContent='口令错误，请重新输入';if(pw){pw.value='';pw.focus();}return;}
+  setCurPhone(val);
+  if(err)err.textContent='';
+  if(pword===DEFAULT_PW){showForcePw();} // 首次登录：强制修改默认口令
+  else{addLog('登录');enterTool();}
 }
-/* 登录遮罩立即判定：在页面解析到此处时同步执行，先于首次绘制，避免已登录用户刷新时闪现登录框 */
-(function(){
-  var authed=false;
-  try{authed=loadPwCache() || sessionStorage.getItem('zydb_auth')==='1';}catch(e){}
-  var m=document.getElementById('loginMask');
-  if(m)m.style.display=authed?'none':'flex';
-  if(!authed){var v=document.getElementById('pwInput');if(v)setTimeout(function(){v.focus();},50);}
-})();
-document.addEventListener('DOMContentLoaded',function(){
-  try{var tn=localStorage.getItem('zydb_tab');if(tn){var t2=document.querySelector('.tab[data-p="'+tn+'"]');if(t2)switchTab(tn,t2);}}catch(e){}
-});
+function showForcePw(){
+  var m=document.getElementById('forcePwMask');if(m)m.style.display='flex';
+  var e=document.getElementById('fp_err');if(e)e.textContent='';
+  var f=document.getElementById('fp_new');if(f)setTimeout(function(){f.focus();},50);
+}
+function doForcePw(){
+  var me=getCurPhone();var err=document.getElementById('fp_err');
+  var n1=((document.getElementById('fp_new')||{}).value||'').replace(/\s/g,'');
+  var n2=((document.getElementById('fp_new2')||{}).value||'').replace(/\s/g,'');
+  if(!n1||n1.length<4){if(err)err.textContent='新口令至少 4 位';return;}
+  if(n1===DEFAULT_PW){if(err)err.textContent='新口令不能使用默认口令，请重新设置';return;}
+  if(n1!==n2){if(err)err.textContent='两次输入的新口令不一致';return;}
+  setMyPw(me,n1);addLog('首次设置个人口令');
+  var m=document.getElementById('forcePwMask');if(m)m.style.display='none';
+  var pw=document.getElementById('pwInput');if(pw)pw.value='';
+  var f1=document.getElementById('fp_new'),f2=document.getElementById('fp_new2');if(f1)f1.value='';if(f2)f2.value='';
+  enterTool();
+}
 function showRecover(){
   var lf=document.getElementById('loginForm'),lb=document.getElementById('loginBtn'),rf=document.getElementById('recoverForm');
   if(lf)lf.style.display='none';if(lb)lb.style.display='none';if(rf)rf.style.display='block';
   var e=document.getElementById('pw_r_err');if(e)e.textContent='';
-  var f=document.getElementById('pw_r_def');if(f)setTimeout(function(){f.focus();},50);
+  var f=document.getElementById('pw_r_phone');if(f)setTimeout(function(){f.focus();},50);
 }
 function hideRecover(){
   var lf=document.getElementById('loginForm'),lb=document.getElementById('loginBtn'),rf=document.getElementById('recoverForm');
   if(lf)lf.style.display='block';if(lb)lb.style.display='block';if(rf)rf.style.display='none';
-  ['pw_r_def','pw_r_new','pw_r_new2'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['pw_r_phone','pw_r_org','pw_r_new','pw_r_new2'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   var e=document.getElementById('pw_r_err');if(e)e.textContent='';
-  var v=document.getElementById('pwInput');if(v)setTimeout(function(){v.focus();},50);
+  var v=document.getElementById('phoneInput');if(v)setTimeout(function(){v.focus();},50);
 }
 function doRecover(){
   var err=document.getElementById('pw_r_err');
-  var def=(document.getElementById('pw_r_def')||{}).value||'';
-  def=def.replace(/\s/g,'');
-  if(def!==DEFAULT_PW){if(err)err.textContent='默认口令不正确，请输入机构默认口令 123456';return;}
+  var ph=(document.getElementById('pw_r_phone')||{}).value||'';ph=ph.replace(/\s/g,'');
+  if(!validPhone(ph)){if(err)err.textContent='请输入有效的11位手机号';return;}
+  if(getPhones().indexOf(ph)<0){if(err)err.textContent='该手机号未获授权，请联系系统管理员';return;}
+  var org=((document.getElementById('pw_r_org')||{}).value||'').replace(/\s/g,'').toUpperCase();
+  if(org!==ORG_CODE){if(err)err.textContent='机构代码不正确，请向机构内部获取';return;}
   var n1=((document.getElementById('pw_r_new')||{}).value||'').replace(/\s/g,'');
   var n2=((document.getElementById('pw_r_new2')||{}).value||'').replace(/\s/g,'');
   if(!n1||n1.length<4){if(err)err.textContent='新口令至少 4 位';return;}
+  if(n1===DEFAULT_PW){if(err)err.textContent='新口令不能使用默认口令，请重新设置';return;}
   if(n1!==n2){if(err)err.textContent='两次输入的新口令不一致';return;}
-  try{localStorage.setItem(MY_PW_KEY,n1);}catch(e){}
-  clearPwCache();try{sessionStorage.removeItem('zydb_auth');}catch(e){}
+  setMyPw(ph,n1);addLog('找回口令',ph);
   hideRecover();
-  var pe=document.getElementById('pwErr');if(pe)pe.textContent='';
-  var v=document.getElementById('pwInput');if(v){v.value='';setTimeout(function(){v.focus();},50);}
-  alert('个人口令已设置成功，请使用新口令登录。');
+  alert('个人口令已重置成功，请使用该手机号 + 新口令登录。');
 }
+/* 登录遮罩立即判定：在页面解析到此处时同步执行，先于首次绘制，避免已登录用户刷新时闪现登录框 */
+(function(){
+  var authed=false;
+  /* 已登录仍要求已设置个人口令：未改默认口令的会话（如刷新中断）不得直接进入 */
+  try{var cp=getCurPhone();authed=validPhone(cp)&&getPhones().indexOf(cp)>=0&&!!getPwMap()[cp];}catch(e){}
+  var m=document.getElementById('loginMask');
+  if(m)m.style.display=authed?'none':'flex';
+  if(!authed){var v=document.getElementById('phoneInput');if(v)setTimeout(function(){v.focus();},50);}
+})();
+document.addEventListener('DOMContentLoaded',function(){
+  try{var tn=localStorage.getItem('zydb_tab');if(tn){var t2=document.querySelector('.tab[data-p="'+tn+'"]');if(t2)switchTab(tn,t2);}}catch(e){}
+});
 </script>
-<div class="topbar"><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
+<div class="topbar"><div class="brand"><b>章圆</b> · 天元AI</div><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
 <div class="wrap">
   <div class="tabs">
-    <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">学员定位</div>
+    <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">学情定位</div>
     <div class="tab" data-p="batch" onclick="switchTab('batch',this)">批量定位</div>
     <div class="tab" data-p="advice" onclick="switchTab('advice',this)">补短建议</div>
     <div class="tab" data-p="report" onclick="switchTab('report',this)">机构报告</div>
@@ -250,7 +322,7 @@ function doRecover(){
     <div class="tab" data-p="setting" onclick="switchTab('setting',this)">系统设置</div>
   </div>
 
-  <!-- 学员定位 -->
+  <!-- 学情定位 -->
   <div class="panel on" id="p-locate">
     <div class="card">
       <h2>学员信息</h2>
@@ -355,7 +427,7 @@ function doRecover(){
         </div>
       </div>
       <div style="margin-top:12px"><label>LOGO 预览</label><div id="logoBox" style="border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:60px;display:flex;align-items:center;justify-content:center;background:#FAFCFF"><span class="muted">暂无 LOGO</span></div></div>
-      <div class="hint" style="margin-top:8px">报告自动使用最近一次「学员定位」的结果与「补短建议」的勾选。请先完成定位。</div>
+      <div class="hint" style="margin-top:8px">报告自动使用最近一次「学情定位」的结果与「补短建议」的勾选。请先完成定位。</div>
       <div class="btns"><button class="btn" onclick="genReport()">📄 生成机构报告</button><button class="btn sec" onclick="exportPDF(event)">⬇ 导出PDF</button><button class="btn sec" onclick="exportWord()">⬇ 导出Word（.doc）</button><button class="btn gho" onclick="clearLogo()">✕ 清除LOGO</button></div>
       <div class="hint">导出PDF直接生成PDF文件（A4版式、含LOGO，断网可用）；导出Word生成可编辑 .doc。默认使用章圆LOGO（assets/logo.png）；上传自定义LOGO后自动保存在本机并覆盖默认，「✕ 清除LOGO」可恢复默认。</div>
     </div>
@@ -487,18 +559,20 @@ function doRecover(){
     <div class="set-hero">
       <div>
         <div class="tt">系统设置</div>
-        <div class="sub">机构口令 · 账户安全　｜　每位教师独立设定 · 数据全程不出本机</div>
+        <div class="sub">授权手机号 · 账户安全　｜　手机号即授权码 · 数据全程不出本机</div>
       </div>
-      <div class="badge" id="pwBadge">口令状态</div>
+      <div class="badge" id="pwBadge">登录身份</div>
     </div>
     <div class="set-grid">
       <div class="set-side">
       <div class="card">
         <h2>安全说明</h2>
-        <div class="set-item"><div class="ic">🔐</div><div><b>口令独立</b><span>每位教师在本机设置个人口令，互不影响，不同步至其他设备。</span></div></div>
-        <div class="set-item"><div class="ic">🖥️</div><div><b>本地存储</b><span>口令仅保存在本机浏览器中，不上传服务器，数据全程不出本机。</span></div></div>
-        <div class="set-item"><div class="ic">🛡️</div><div><b>修改需验证</b><span>修改或重置口令需先输入当前口令验证身份，防止误操作与冒用。</span></div></div>
-        <div class="set-item"><div class="ic">↩️</div><div><b>忘记口令</b><span>在登录页点「忘记口令？」，用默认口令 123456 验证后即可直接设置新口令。</span></div></div>
+        <div class="set-item"><div class="ic">📱</div><div><b>手机号授权 + 口令</b><span>仅授权名单内的手机号可登录，登录还需输入口令；首次登录用默认口令，须立即修改。</span></div></div>
+        <div class="set-item"><div class="ic">🔐</div><div><b>口令独立</b><span>每位教师按手机号在本机设置个人口令，互不影响；设置后默认口令对该手机号失效。</span></div></div>
+        <div class="set-item"><div class="ic">🔑</div><div><b>找回需机构代码</b><span>忘记口令须在登录页输入机构代码验证身份后重设；机构代码为内部代码，请向机构内部获取。</span></div></div>
+        <div class="set-item"><div class="ic">🛡️</div><div><b>管理员管理授权</b><span>系统管理员可在右侧添加/移除授权码并查看登录历史；管理员号码不可移除。</span></div></div>
+        <div class="set-item"><div class="ic">🖥️</div><div><b>本地存储</b><span>登录状态与授权码管理记录仅保存在本机浏览器中，不上传服务器，数据全程不出本机。</span></div></div>
+        <div class="set-item"><div class="ic">↩️</div><div><b>退出重置</b><span>退出登录会清除登录状态与当前学员数据（定位、建议、报告），恢复默认状态。</span></div></div>
       </div>
       <div class="card">
         <h2>界面主题</h2>
@@ -510,19 +584,26 @@ function doRecover(){
         <div class="hint" style="margin-top:8px">「跟随系统」自动匹配操作系统的深色/浅色外观；选择后立即生效并保存在本机，刷新不丢。机构报告打印始终为白底样式，不受主题影响。</div>
       </div>
       </div>
+      <div class="set-side">
       <div class="card">
-        <h2>修改机构口令</h2>
-        <div class="hint" style="margin-bottom:14px">默认口令为 <b>123456</b>，建议尽快设置个人口令；<b>设置个人口令后，默认口令登录自动失效</b>（仅本机）。</div>
+        <h2 id="authTitle">授权码管理</h2>
+        <div id="authPanel"></div>
+        <div class="hint" id="authState"></div>
+      </div>
+      <div class="card">
+        <h2>修改登录口令</h2>
+        <div class="hint" style="margin-bottom:14px">当前手机号：<b id="pwPhone">—</b>。默认口令仅用于首次登录，<b>登录后须立即修改</b>；设置个人口令后默认口令即失效（仅本机生效）。忘记口令请在登录页凭<b>机构代码</b>找回。</div>
         <div class="pw-grid">
           <div><label>当前口令（验证身份）</label><input id="pw_cur" type="password" placeholder="输入当前口令"></div>
           <div><label>新口令（至少4位）</label><input id="pw_new" type="password" placeholder="输入新口令"></div>
           <div><label>确认新口令</label><input id="pw_new2" type="password" placeholder="再次输入新口令"></div>
         </div>
         <div class="set-foot">
-          <div class="btns"><button class="btn" onclick="saveMyPw()">🔑 保存新口令</button><button class="btn sec" onclick="resetMyPw()">↺ 重置为默认口令（123456）</button></div>
-          <button class="btn gho" onclick="doLogout()">🚪 退出登录·清除口令缓存</button>
+          <div class="btns"><button class="btn" onclick="saveMyPw()">🔑 保存新口令</button></div>
+          <button class="btn gho" onclick="doLogout()">🚪 退出登录·清除学员数据</button>
         </div>
         <div class="hint" id="pwState"></div>
+      </div>
       </div>
     </div>
   </div>
@@ -895,7 +976,7 @@ function switchTab(name,el){
   el.classList.add('on');$('p-'+name).classList.add('on');
   try{localStorage.setItem('zydb_tab',name);}catch(e){}
   if(name==='advice'&&!hasLocateDone()&&$('advResult'))$('advResult').innerHTML=needLocateTip();
-  if(name==='setting')pwSettingState();
+  if(name==='setting'){renderAuthPanel();pwSettingState();}
   if(name=='city')renderCity();
   if(name=='ref')renderRef();
   if(name=='advice')renderModules();
@@ -1015,7 +1096,7 @@ function applyIron(r,bgot,bfull){
 }
 function linesFor(full){return {ba:ceilPct(0.75,full),linLo:ceilPct(0.72,full),bufHi:ceilPct(0.78,full),stepGg:ceilPct(0.60,full),stepTz:ceilPct(0.70,full),stepBg:ceilPct(0.80,full)};}
 
-/* ============ 学员定位 ============ */
+/* ============ 学情定位 ============ */
 function livePreview(){
   var score=num('l_score'),full=num('l_full'),avg=num('l_avg');
   if(score==null||full==null||full<=0){return;}
@@ -1089,7 +1170,7 @@ function gotoReport(){var t=document.querySelector('.tab[data-p="report"]');swit
 function gotoLocateTab(){switchTab('locate');}
 function gotoBatchTab(){switchTab('batch');}
 function hasLocateDone(){return !!(ST.lastLocate||(ST.lastBatch&&ST.lastBatch.length));}
-function needLocateTip(){return '<div class="danger">📌 请先完成「学员定位」或「批量定位」，再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去学员定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
+function needLocateTip(){return '<div class="danger">📌 请先完成「学情定位」或「批量定位」，再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去学情定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
 
 /* ============ 补短建议 ============ */
 var LVName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
@@ -1237,7 +1318,7 @@ function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘�
 /* ============ 机构报告 ============ */
 function genReport(){
   var r=ST.lastLocate;
-  if(!r){$('report').innerHTML='<div class="note">请先完成「学员定位」，报告将自动带入定位结果与补短建议。</div>';return;}
+  if(!r){$('report').innerHTML='<div class="note">请先完成「学情定位」，报告将自动带入定位结果与补短建议。</div>';return;}
   var org=val('r_org')||"章圆智学中心",teacher=val('r_teacher'),logo=logoSrc();
   var a=ST.lastAdvice;
   var L=r.lines||linesFor(r.full);
@@ -1269,7 +1350,7 @@ function genReport(){
   }else{h+='<p class="muted">尚未生成补短建议。可到「补短建议」页勾选失分题型后生成，本报告将自动补全本部分。</p>';}
   h+='<h3>五、升/降层复核条件</h3><ul class="rlist"><li>升层：连续3次校准得分率稳定进入上一档区间，且基础题应得率≥85%。</li><li>降层：连续2次回落原区间，或基础题应得率&lt;85%（铁律立即降层）。</li></ul>';
   h+='<h3>六、后续复测安排</h3><table><tr><th>复测节点</th><th>内容</th><th>观察指标</th></tr><tr><td>本周</td><td>先补清单限时小测</td><td>基础题应得率是否≥85%</td></tr><tr><td>2~3周</td><td>同卷制整卷</td><td>校准得分率是否上移一档</td></tr><tr><td>下次月考</td><td>年级统一考</td><td>用本校均分回算，复核层级</td></tr></table>';
-  h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「天元AI·学情分层定位系统」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'<br><span style="display:inline-block;margin-top:4px;letter-spacing:3px;color:#8A9AAE">章圆 · 智学有章 · 思致圆融</span></p></div>';
+  h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「天元AI·学情分层定位系统」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'<br><span style="display:inline-block;margin-top:4px;letter-spacing:3px;color:#8A9AAE">章圆 · 天元AI ｜ 智学有章 · 思致圆融</span></p></div>';
   $('report').innerHTML=h;ST.lastReport=h;
 }
 var LOGO_KEY='zydb_logo';
@@ -1301,7 +1382,7 @@ function clearLogo(){
 /* 导出PDF：调用浏览器打印，在弹窗中选「另存为PDF」、A4纵向，即可离线生成PDF文件。
    （不依赖任何外部/内嵌重型库，彻底避免组件拖垮整页按钮的问题。） */
 function exportPDF(ev){
-  if(!ST.lastLocate){alert("请先完成学员定位，再生成报告。");return;}
+  if(!ST.lastLocate){alert("请先完成学情定位，再生成报告。");return;}
   if(!ST.lastReport)genReport();
   if(!$('report')||!$('report').innerHTML.trim()){alert("报告为空");return;}
   alert("即将打开打印窗口：请在「目标/打印机」中选【另存为PDF】，纸张选 A4、纵向，点保存即可得到PDF文件。\n（如需可编辑文本，请用旁边的「导出Word」。）");
@@ -1309,7 +1390,7 @@ function exportPDF(ev){
 }
 function exportWord(){
   if(!ST.lastReport)genReport();
-  if(!ST.lastLocate){alert("请先完成学员定位");return;}
+  if(!ST.lastLocate){alert("请先完成学情定位");return;}
   var css="body{font-family:'Microsoft YaHei',sans-serif;color:#1B2733;line-height:1.7} .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1E6FD9;padding-bottom:12px;margin-bottom:16px} .logo{max-width:150px;max-height:66px} .org{font-size:20px;font-weight:800;color:#1657B0} h3{font-size:15px;color:#1657B0;border-left:3px solid #1E6FD9;padding-left:9px;margin:16px 0 8px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px} th,td{border:1px solid #DCE6F2;padding:6px 8px;text-align:center} th{background:#EAF2FC;color:#1657B0} .rlist{margin:4px 0 0 18px} .rlist li{margin:4px 0} .pill{background:#EAF2FC;color:#1657B0;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600} .muted{color:#5B6B7C;font-size:12px} .red{color:#D6433B}";
   var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+$('report').innerHTML+'</body></html>';
   var blob=new Blob(['\ufeff'+html],{type:'application/msword'});
@@ -1533,30 +1614,136 @@ function init(){
 document.addEventListener('DOMContentLoaded',init);
 /* Node 测试环境导出 */
 if(typeof module!=='undefined'&&module.exports){module.exports={compute:compute,applyIron:applyIron,exportPDF:exportPDF,exportWord:exportWord,onLogoFile:onLogoFile,clearLogo:clearLogo,aiCfg:aiCfg,onCityChange:onCityChange,fillCitySel:fillCitySel,downloadCSV:downloadCSV,layerOf:layerOf,stepOf:stepOf,linesFor:linesFor,ruleAdviceData:ruleAdvice,gradeTermCap:gradeTermCap,inScope:inScope,qBook:qBook,capLabel:capLabel,buildFlags:buildFlags,renderModules:renderModules,onAdvTermChange:onAdvTermChange,EXAM_SCOPES:EXAM_SCOPES,DATA_VERSION:DATA_VERSION};}
-function doLogout(){if(confirm('确定退出登录？此设备将清除口令缓存，下次打开需重新输入口令。')){clearPwCache();try{sessionStorage.removeItem('zydb_auth');}catch(e){}location.reload();}}
-function pwSettingState(){var h=$('pwState'),bg=$('pwBadge');if(!h&&!bg)return;var custom=false;try{custom=!!localStorage.getItem(MY_PW_KEY);}catch(e){}
-  if(bg)bg.textContent=custom?'🔒 已设置个人口令':'🔓 当前使用默认口令 123456';
-  if(h)h.innerHTML=custom?'当前状态：<span class="tag t-ba">已设置个人口令</span>（仅本机生效）。修改或重置需先输入当前口令验证。':'当前状态：<span class="tag t-lin">使用默认口令 123456</span>，建议尽快设置个人口令。';}
+function clearStudentData(){
+  ST.lastLocate=null;ST.lastBatch=null;ST.lastAdvice=null;ST.lastReport=null;ST.lastAIText='';ST.lastAISig='';
+  BATCH_ROWS=[];
+  try{clearChips();}catch(e){}
+  var ids=['locResult','batchResult','advResult'];for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el)el.innerHTML='';}
+  var rp=$('report');if(rp)rp.innerHTML='<div class="muted">点击「生成机构报告」后，此处显示完整报告。</div>';
+  try{localStorage.removeItem('zydb_tab');}catch(e){}
+}
+function doLogout(){if(confirm('确定退出登录？将清除登录状态与当前学员数据（定位结果、补短建议、报告），恢复默认状态。')){try{addLog('退出登录');}catch(e){}try{clearStudentData();}catch(e){}setCurPhone('');location.reload();}}
+function renderAuthPanel(){
+  var wrap=$('authPanel'),badge=$('pwBadge'),ttl=$('authTitle'),st=$('authState');if(!wrap)return;
+  var me=getCurPhone();
+  var custom=false;try{custom=!!getPwMap()[me];}catch(e){}
+  if(badge)badge.textContent=(me===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+' · '+maskPhone(me)+(custom?' · 已设个人口令':' · 默认口令');
+  if(st)st.textContent='';
+  if(me!==ADMIN_PHONE){
+    if(ttl)ttl.textContent='账户信息';
+    wrap.innerHTML='<div class="note" style="margin-top:0"><b>当前身份：</b>授权教师（'+maskPhone(me)+'）。<br>授权码的添加与移除、口令重置等操作由系统管理员处理，如需帮助请联系系统管理员。</div>';
+    return;
+  }
+  if(ttl)ttl.textContent='授权码管理（系统管理员）';
+  var arr=getPhones();
+  var h='<div class="hint" style="margin-bottom:8px">您是系统管理员，可添加/移除授权手机号并查看登录历史。名单与历史保存在<b>本机</b>，管理员号码不可移除。</div><div style="overflow:auto"><table><tr><th>授权手机号</th><th>身份</th><th>操作</th></tr>';
+  for(var i=0;i<arr.length;i++){var p=arr[i];
+    h+='<tr><td>'+p+'</td><td>'+(p===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+'</td><td>'+(p===ADMIN_PHONE?'—':'<button class="btn sm gho" onclick="delPhone(\''+p+'\')">移除</button>')+'</td></tr>';
+  }
+  h+='</table></div><div class="grid g2" style="margin-top:12px"><div><label>新增授权手机号</label><input id="np_input" type="tel" maxlength="11" inputmode="numeric" placeholder="输入11位手机号"></div><div style="display:flex;align-items:flex-end"><button class="btn" onclick="addPhone()">➕ 添加授权码</button></div></div><div class="hint" id="np_err"></div>';
+  /* 登录历史 */
+  var logs=getLogs().slice(-20).reverse();
+  h+='<div style="margin-top:18px;border-top:1px solid var(--line);padding-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px"><b style="font-size:14px;color:var(--pri-d)">📜 授权教师登录历史</b><button class="btn sec sm" onclick="exportLoginLog()">⬇ 导出登录历史CSV</button></div>';
+  if(!logs.length){h+='<div class="hint">暂无登录记录（本机记录，最多保留最近 500 条）。</div>';}
+  else{
+    h+='<div style="overflow:auto;max-height:260px"><table><tr><th>时间</th><th>手机号</th><th>事件</th></tr>';
+    for(var j=0;j<logs.length;j++){var g=logs[j];h+='<tr><td style="white-space:nowrap">'+esc(g.t||'')+'</td><td>'+esc(g.phone||'')+'</td><td>'+esc(g.act||'')+'</td></tr>';}
+    h+='</table></div><div class="hint" style="margin-top:6px">显示最近 20 条，导出 CSV 含全部记录。</div>';
+  }
+  h+='</div>';
+  /* 云端汇总配置 */
+  var cfg=getSync()||{url:'',key:''};
+  h+='<div style="margin-top:18px;border-top:1px solid var(--line);padding-top:14px"><b style="font-size:14px;color:var(--pri-d)">☁️ 登录日志云端汇总（跨设备）</b><div class="hint" style="margin:4px 0 10px">填写 Cloudflare Worker 地址与同步密钥后，各设备登录事件自动上传，可拉取全员日志并导出。部署脚本：<b>01_定位工具/cloudflare-worker/login-log-worker.js</b></div><div class="grid g2"><div><label>Worker 地址</label><input id="sync_url" placeholder="https://xxx.你的账号.workers.dev" value="'+esc(cfg.url||'')+'"></div><div><label>同步密钥（与 Worker 的 SYNC_KEY 一致）</label><input id="sync_key" type="password" placeholder="同步密钥" value="'+esc(cfg.key||'')+'"></div></div><div class="btns" style="margin-top:10px"><button class="btn sm" onclick="saveSync()">💾 保存并测试</button><button class="btn sec sm" onclick="pushAllLogs()">⬆ 上传本机日志</button><button class="btn sec sm" onclick="pullLogs()">⬇ 拉取全员日志</button></div><div class="hint" id="sync_state"></div><div id="sync_table"></div></div>';
+  wrap.innerHTML=h;
+  if(cfg.url)setSyncState('☁️ 已配置云端汇总（自动上传已开启）：'+esc(cfg.url));
+}
+function setSyncState(t){var el=$('sync_state');if(el)el.innerHTML=t||'';}
+function saveSync(){
+  var u=val('sync_url'),k=val('sync_key');
+  if(!u){alert('请填写 Worker 地址');return;}
+  u=u.replace(/\/+$/,'');
+  saveSyncCfg(u,k);
+  setSyncState('已保存，正在测试连接…');
+  fetch(u+'/ping').then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok)setSyncState('✅ 连接正常 · 自动上传已开启（之后每次登录/退出等事件都会上传）');
+    else setSyncState('⚠️ 地址可达但响应异常，请检查 Worker 是否部署成功');
+  }).catch(function(){setSyncState('❌ 连接失败：请检查地址是否正确、Worker 是否已 Deploy');});
+}
+function pushAllLogs(){
+  var cfg=getSync();if(!cfg){alert('请先填写并保存 Worker 地址与同步密钥');return;}
+  var logs=getLogs();
+  if(!logs.length){setSyncState('本机暂无日志可上传');return;}
+  setSyncState('正在上传 '+logs.length+' 条本机日志…');
+  fetch(cfg.url+'/log',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({logs:logs})}).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.ok)setSyncState('✅ 上传完成：新增 '+d.added+' 条，云端共 '+(d.total||0)+' 条');
+    else setSyncState('❌ 上传失败：'+((d&&d.error)||'未知错误'));
+  }).catch(function(){setSyncState('❌ 上传失败：网络或密钥问题');});
+}
+function pullLogs(){
+  var cfg=getSync();if(!cfg){alert('请先填写并保存 Worker 地址与同步密钥');return;}
+  setSyncState('正在拉取全员日志…');
+  fetch(cfg.url+'/logs?limit=500',{headers:{'x-sync-key':cfg.key||''}}).then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.ok){setSyncState('❌ 拉取失败：'+((d&&d.error)||'未知错误'));return;}
+    REMOTE_LOGS=d.logs||[];
+    setSyncState('✅ 已拉取 '+REMOTE_LOGS.length+' 条（云端共 '+(d.total||0)+' 条）');
+    renderRemoteLogs();
+  }).catch(function(){setSyncState('❌ 拉取失败：网络或密钥问题');});
+}
+function renderRemoteLogs(){
+  var box=$('sync_table');if(!box)return;
+  if(!REMOTE_LOGS.length){box.innerHTML='<div class="hint">云端暂无日志</div>';return;}
+  var h='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin:10px 0 6px"><b style="font-size:13.5px;color:var(--pri-d)">全员日志（按时间倒序）</b><button class="btn sec sm" onclick="exportRemoteLogs()">⬇ 导出全员日志CSV</button></div><div style="overflow:auto;max-height:280px"><table><tr><th>时间</th><th>手机号</th><th>事件</th><th>设备</th></tr>';
+  for(var i=0;i<REMOTE_LOGS.length;i++){var g=REMOTE_LOGS[i];h+='<tr><td style="white-space:nowrap">'+esc(g.t||'')+'</td><td>'+esc(g.phone||'')+'</td><td>'+esc(g.act||'')+'</td><td>'+esc(g.device||'')+'</td></tr>';}
+  h+='</table></div>';
+  box.innerHTML=h;
+}
+function exportRemoteLogs(){
+  if(!REMOTE_LOGS.length){alert('请先拉取全员日志');return;}
+  var rows=[['时间','手机号','事件','设备']];
+  for(var i=0;i<REMOTE_LOGS.length;i++)rows.push([REMOTE_LOGS[i].t||'',REMOTE_LOGS[i].phone||'',REMOTE_LOGS[i].act||'',REMOTE_LOGS[i].device||'']);
+  var d=new Date();var tag=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);
+  downloadCSV(rows,'全员登录日志_'+tag+'.csv');
+}
+function exportLoginLog(){
+  var logs=getLogs();
+  if(!logs.length){alert('暂无登录历史记录');return;}
+  var rows=[['时间','手机号','事件']];
+  for(var i=0;i<logs.length;i++)rows.push([logs[i].t||'',logs[i].phone||'',logs[i].act||'']);
+  var d=new Date();var tag=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);
+  downloadCSV(rows,'授权教师登录历史_'+tag+'.csv');
+}
+function pwSettingState(){
+  var me=getCurPhone(),h=$('pwState'),ph=$('pwPhone');if(!h&&!ph)return;
+  var custom=false;try{custom=!!getPwMap()[me];}catch(e){}
+  if(ph)ph.textContent=maskPhone(me);
+  if(h)h.innerHTML=custom?'当前状态：<span class="tag t-ba">已设置个人口令</span>（仅本机、仅本手机号生效）。修改需先输入当前口令验证。':'当前状态：<span class="tag t-lin">使用默认口令</span>（首次登录须立即修改，否则无法进入系统）。';
+}
 function saveMyPw(){
-  if($('pw_cur')&&$('pw_cur').offsetParent===null){switchTab('setting');}
+  var me=getCurPhone();
+  if(!me){alert('请先登录');return;}
   var cur=val('pw_cur'),n1=val('pw_new'),n2=val('pw_new2');
-  if(cur!==getPw()){alert('当前口令不正确，请重新输入');return;}
+  if(cur!==getPw(me)){alert('当前口令不正确，请重新输入');return;}
   if(!n1||n1.length<4){alert('新口令至少 4 位');return;}
+  if(n1===DEFAULT_PW){alert('新口令不能使用默认口令，请重新设置');return;}
   if(n1!==n2){alert('两次输入的新口令不一致');return;}
   if(n1===cur){alert('新口令不能与当前口令相同');return;}
-  try{localStorage.setItem(MY_PW_KEY,n1);}catch(e){}
-  clearPwCache();try{$('pw_cur').value='';$('pw_new').value='';$('pw_new2').value='';}catch(e){}
-  alert('口令已保存，本机下次登录请使用新口令。');pwSettingState();
+  setMyPw(me,n1);addLog('修改口令');
+  try{$('pw_cur').value='';$('pw_new').value='';$('pw_new2').value='';}catch(e){}
+  alert('口令已保存，本机下次登录请使用该手机号 + 新口令。');pwSettingState();renderAuthPanel();
 }
-function resetMyPw(){
-  var cur=val('pw_cur');
-  if(cur!==getPw()){alert('当前口令不正确，请重新输入');return;}
-  if(!confirm('确定重置为默认口令 123456？'))return;
-  try{localStorage.removeItem(MY_PW_KEY);}catch(e){}
-  clearPwCache();try{$('pw_cur').value='';$('pw_new').value='';$('pw_new2').value='';}catch(e){}
-  alert('已重置为默认口令 123456。');pwSettingState();
+function addPhone(){
+  var inp=$('np_input');var v=((inp&&inp.value)||'').replace(/\s/g,'');var err=$('np_err');
+  if(!validPhone(v)){if(err)err.textContent='请输入有效的11位手机号';return;}
+  var arr=getPhones();
+  if(arr.indexOf(v)>=0){if(err)err.textContent='该手机号已在授权名单中';return;}
+  arr.push(v);savePhones(arr);renderAuthPanel();
+  alert('已添加授权手机号 '+v+'。');
 }
-function forgotMyPw(){/* 找回功能已移至登录页（showRecover/doRecover） */}
+function delPhone(p){
+  if(p===ADMIN_PHONE)return;
+  if(!confirm('确定移除授权手机号 '+p+'？移除后该号码将无法登录（本机名单即时生效）。'))return;
+  savePhones(getPhones().filter(function(x){return x!==p;}));renderAuthPanel();
+}
 </script>
 </body>
 </html>
