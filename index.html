@@ -128,6 +128,20 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
 .set-foot .btns{margin-top:0}
 ::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#C3D4E8;border-radius:6px}
 @media print{.topbar,.tabs,.noprint{display:none!important}.wrap{max-width:100%;padding:0}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}}
+/* AI 建议模块卡片 */
+.ai-mod{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;box-shadow:0 1px 6px rgba(30,111,217,.05)}
+.ai-mod-t{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--pri-d);font-size:13.5px;border-bottom:1px dashed var(--line);padding-bottom:6px;margin-bottom:6px}
+.ai-mod-b{white-space:pre-wrap;font-size:13px;line-height:1.7;color:var(--ink)}
+.ai-mod-b ul{list-style:none}
+.ai-mod-b li{padding:2px 0 2px 2px}
+.ai-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--pri-l);padding-bottom:8px;margin-bottom:4px}
+.ai-head b{font-size:15px;color:var(--pri-d)}
+/* AI Loading */
+.ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:42px 20px;text-align:center}
+.spin{width:34px;height:34px;border:3px solid var(--pri-l);border-top-color:var(--pri);border-radius:50%;animation:zyrot .8s linear infinite}
+@keyframes zyrot{to{transform:rotate(360deg)}}
+.ai-steps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ai-steps span{font-size:12px;color:var(--sub);background:var(--pri-l);border-radius:99px;padding:3px 10px}
 </style>
 </head>
 <body>
@@ -160,7 +174,7 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
       <button onclick="doRecover()" style="width:100%;margin-top:4px;padding:11px;border:none;border-radius:9px;background:#1E6FD9;color:#fff;font-size:14px;font-weight:700;cursor:pointer">验证并设置新口令</button>
       <div style="text-align:center;margin-top:10px"><a href="javascript:void(0)" onclick="hideRecover()" style="font-size:12.5px;color:#5B6B7C">← 返回登录</a></div>
     </div>
-    <div style="font-size:11px;color:#9AA7B5;margin-top:14px">仅限授权教师使用 · 手机号授权 + 口令登录 · 数据全程不出本机<br>首次登录须立即修改默认口令；忘记口令可通过「忘记口令？」凭机构代码找回，机构代码请向机构内部获取；如需授权请联系系统管理员</div>
+    <div style="font-size:11px;color:#9AA7B5;margin-top:14px">仅限授权教师使用<br>首次登录须立即修改默认口令；忘记口令可通过「忘记口令？」凭机构代码找回，机构代码请向机构内部获取；如需授权请联系系统管理员</div>
   </div>
 </div>
 <!-- 首次登录强制修改默认口令遮罩（不可跳过） -->
@@ -521,7 +535,6 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="grid g4" style="margin-top:12px">
         <div id="poolWrap"><label>考试名称 / 卷别（比较群体）</label><select id="l_pool" onchange="onPoolChange()"></select></div>
         <div><label>考试范围 / 卷型</label><select id="l_scope" onchange="livePreview()"></select></div>
-        <div><label>参考人数（置信度）</label><input id="l_refn" type="number" placeholder="选填，如 48" oninput="livePreview()"></div>
         <div class="hint" id="poolHint2" style="grid-column:span 4;align-self:end"></div>
       </div>
     </div>
@@ -585,11 +598,11 @@ document.addEventListener('DOMContentLoaded',function(){
       <div style="margin-top:14px"><label>勾选本次实际丢分的题型（可多选，展开板块查看）：</label></div>
       <div id="modList" style="margin-top:8px"></div>
       <div class="btns">
-        <button class="btn" onclick="genAdvice()">✨ 生成补短建议</button>
-        <button class="btn sec" onclick="aiAdvice()">🤖 AI 生成建议</button>
+        <button class="btn" onclick="genAdvice()">🤖 AI 生成补短建议（联网优先）</button>
+        <button class="btn sec" onclick="genAdvice(true)">🔄 重新生成</button>
         <button class="btn gho" onclick="clearChips()">清空勾选</button>
       </div>
-      <div class="hint">AI 建议在「城市与基准P → AI接口设置」配置后可用；未配置时自动改用内置规则库，结果同样可用。</div>
+      <div class="hint">点击后<b>优先联网生成 AI 针对性建议</b>（云端 Worker 中转，教师零配置），按模块卡片展示；AI 不可用时自动改用内置规则库，结果同样完整可用。</div>
     </div>
     <div id="advResult"></div>
   </div>
@@ -632,40 +645,6 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="hint">导入配置：把对方「导出配置」复制的文本，粘贴到下方框后点确认导入。</div>
       <div style="margin-top:8px"><textarea id="impCityText" rows="3" placeholder="在此粘贴配置JSON，然后点右侧按钮"></textarea>
       <button class="btn sm sec" style="margin-top:6px" onclick="importCityJSON()">确认导入</button></div>
-    </div>
-    <div class="card">
-      <h2>AI 接口设置（可选 · 已预置免费AI产品）</h2>
-      <div class="grid g3">
-        <div><label>免费AI产品（预置，选后自动带出地址与模型）</label>
-          <select id="ai_preset" onchange="onAIPreset()">
-            <option value="tokenhub" selected>腾讯云 TokenHub · 元宝AI（默认）</option>
-            <option value="siliconflow">硅基流动 SiliconFlow（Qwen 免费模型）</option>
-            <option value="glm">智谱AI · GLM-4-Flash（免费）</option>
-            <option value="cfworker">Cloudflare Worker 中转（推荐，本地可用）</option>
-            <option value="custom">自定义（自建 / 其他兼容接口）</option>
-          </select>
-        </div>
-        <div><label>接口地址（兼容 OpenAI /chat/completions）</label><input id="ai_url" placeholder="https://api.xxx.com/v1/chat/completions"></div>
-        <div><label>模型名（可下拉选择预置，也可手动输入）</label>
-          <select id="ai_model_preset" onchange="onModelPreset()" style="margin-bottom:4px">
-            <option value="">— 手动输入 / 从下方选择 —</option>
-            <option value="DeepSeek-V4.1-Flash-1017">DeepSeek-V4.1-Flash-1017</option>
-            <option value="DeepSeek-V4-Pro-0813">DeepSeek-V4-Pro 0813 正式版</option>
-            <option value="hy3">hy3</option>
-            <option value="DeepSeek-V4-Pro">DeepSeek-V4-Pro</option>
-            <option value="hy4">hy4</option>
-            <option value="Qwen/Qwen2.5-7B-Instruct">Qwen/Qwen2.5-7B-Instruct（硅基流动）</option>
-            <option value="glm-4-flash">glm-4-flash（智谱）</option>
-          </select>
-          <input id="ai_model" placeholder="选择预置自动填入，或直接手动输入模型名">
-        </div>
-      </div>
-      <div class="grid g3" style="margin-top:8px">
-        <div><label>API Key（到对应官网免费领取）</label><input id="ai_key" type="password" placeholder="粘贴免费领取的 Key，未填则自动用内置规则库"></div>
-        <div style="grid-column:span 2"><label>免费 Key 领取指引</label><div class="hint" id="aiGuide" style="margin-top:4px"></div></div>
-      </div>
-      <div class="btns"><button class="btn sm" onclick="saveAI()">保存AI设置</button><button class="btn sm gho" onclick="clearAI()">恢复默认</button></div>
-      <div class="hint" id="aiState"></div>
     </div>
   </div>
 
@@ -718,7 +697,6 @@ document.addEventListener('DOMContentLoaded',function(){
         <tr><td>学期 / 教学进度</td><td>年级×上下学期 → 教材册次上限；补短只在已学知识点配题，未学册次灰显暂缓，不超纲</td></tr>
         <tr><td>教材版本</td><td>四川高中全省同教材，池内自动抵消；初中数学北师大/人教/西南师大跨市不同，跨市须本校均分回算</td></tr>
         <tr><td>考试范围 / 卷型</td><td>新增范围选择；半卷考套全卷锚时警告并引导自锚</td></tr>
-        <tr><td>样本量 / 置信度</td><td>参考人数 &lt;30 低置信、30~100 谨慎定档，报告中标注</td></tr>
         <tr><td>评分宽严（主观题）</td><td>语文/英语标"评分宽严敏感"，建议以本校历次均分纵向自比</td></tr>
         <tr><td>群体构成（班型）</td><td>实验班/尖子班须按班型分池或用班均分自锚</td></tr>
         <tr><td>建议个性化</td><td>补短建议融入校准得分率、基础题应得率、勾选题型、本学期进度四要素</td></tr>
@@ -783,6 +761,41 @@ document.addEventListener('DOMContentLoaded',function(){
           <button class="btn gho" onclick="doLogout()">🚪 退出登录·清除学员数据</button>
         </div>
         <div class="hint" id="pwState"></div>
+      </div>
+      <div class="card">
+        <h2>AI 接口设置（可选 · 已预置免费AI产品）</h2>
+        <div class="hint" style="margin-bottom:10px">补短建议「🤖 AI 生成建议」优先走<b>云端 Worker 中转</b>（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用）；此处为本机直连配置，二者都不通时自动回退内置规则库。</div>
+        <div class="grid g3">
+          <div><label>免费AI产品（预置，选后自动带出地址与模型）</label>
+            <select id="ai_preset" onchange="onAIPreset()">
+              <option value="tokenhub" selected>腾讯云 TokenHub · 元宝AI（默认）</option>
+              <option value="siliconflow">硅基流动 SiliconFlow（Qwen 免费模型）</option>
+              <option value="glm">智谱AI · GLM-4-Flash（免费）</option>
+              <option value="cfworker">Cloudflare Worker 中转（推荐，本地可用）</option>
+              <option value="custom">自定义（自建 / 其他兼容接口）</option>
+            </select>
+          </div>
+          <div><label>接口地址（兼容 OpenAI /chat/completions）</label><input id="ai_url" placeholder="https://api.xxx.com/v1/chat/completions"></div>
+          <div><label>模型名（可下拉选择预置，也可手动输入）</label>
+            <select id="ai_model_preset" onchange="onModelPreset()" style="margin-bottom:4px">
+              <option value="">— 手动输入 / 从下方选择 —</option>
+              <option value="DeepSeek-V4.1-Flash-1017">DeepSeek-V4.1-Flash-1017</option>
+              <option value="DeepSeek-V4-Pro-0813">DeepSeek-V4-Pro 0813 正式版</option>
+              <option value="hy3">hy3</option>
+              <option value="DeepSeek-V4-Pro">DeepSeek-V4-Pro</option>
+              <option value="hy4">hy4</option>
+              <option value="Qwen/Qwen2.5-7B-Instruct">Qwen/Qwen2.5-7B-Instruct（硅基流动）</option>
+              <option value="glm-4-flash">glm-4-flash（智谱）</option>
+            </select>
+            <input id="ai_model" placeholder="选择预置自动填入，或直接手动输入模型名">
+          </div>
+        </div>
+        <div class="grid g3" style="margin-top:8px">
+          <div><label>API Key（到对应官网免费领取）</label><input id="ai_key" type="password" placeholder="粘贴免费领取的 Key，未填则自动用内置规则库"></div>
+          <div style="grid-column:span 2"><label>免费 Key 领取指引</label><div class="hint" id="aiGuide" style="margin-top:4px"></div></div>
+        </div>
+        <div class="btns"><button class="btn sm" onclick="saveAI()">保存AI设置</button><button class="btn sm gho" onclick="clearAI()">恢复默认</button></div>
+        <div class="hint" id="aiState"></div>
       </div>
       </div>
     </div>
@@ -1054,7 +1067,7 @@ var BANK={
 }
 };
 
-/* ============ V7.2 新增：教材册次·学期进度·范围锚点匹配·置信度 ============ */
+/* ============ V7.2 新增：教材册次·学期进度·范围锚点匹配 ============ */
 (function(){var s=document.createElement('style');s.textContent='.chip.lazy{opacity:.42;cursor:not-allowed;filter:grayscale(.45)}.chip.lazy:hover{opacity:.42}.bk{font-size:11px;color:#8A97A5;margin-left:3px}.scopeWarn{border-left:4px solid #D6433B}';document.head.appendChild(s);})();
 
 /* 册次代码 → 通用学期槽位（跨科目统一轴，1=初一上/高一上 … 6=初三下/高三下总复习） */
@@ -1111,7 +1124,7 @@ function fillTermSel(id,def){var s=$(id);if(!s)return;s.innerHTML="";
   for(var i=0;i<a.length;i++){var o=document.createElement('option');o.value=a[i].v;o.text=a[i].t;if(def==a[i].v)o.selected=true;s.add(o);}
 }
 
-/* 置信度 / 口径 / 范围-锚点 提示（科学优化第2、3条） */
+/* 口径 / 范围-锚点 提示（科学优化第2、3条） */
 function buildFlags(r){
   var h="";
   var isSelf=(r.poolVal=="__auto"||r.poolVal=="__none");
@@ -1122,15 +1135,10 @@ function buildFlags(r){
   if(isSelf&&r.avg==null){
     h+='<div class="danger">⛔ 选了「本校均分实测」但未填本校年级均分，无法校准，下方显示的是<b>卷面原始得分率</b>。请补填均分。</div>';
   }
-  if(r.refN!=null&&r.refN>0&&r.refN<30){
-    h+='<div class="danger">⚠ 参考人数仅 '+r.refN+' 人，样本过小、均分抖动大，校准值<b>低置信</b>，仅作本校纵向参考，不建议跨班定档。</div>';
-  }else if(r.refN!=null&&r.refN>=30&&r.refN<100){
-    h+='<div class="note">⚠ 参考人数 '+r.refN+' 人偏小（建议≥100），定档谨慎，优先看连续趋势。</div>';
-  }
   if(SUBJ_SUBJECTIVE[r.subject]){
     h+='<div class="note">🖊 <b>评分宽严敏感</b>：'+esc(r.subject)+'作文/主观题跨师评分尺度差异大，常模平移无法自测此项，建议以<b>本校历次均分纵向自比</b>为主，跨校横比降为参考。</div>';
   }
-  h+='<div class="hint">口径标签：基准P '+esc(r.basePSrc||(r.usedAvg?"本校实测":"机构预估"))+' · '+(isSelf?"自锚(本校均分)":"常模锚")+' · 范围「'+esc(r.scopeName||"未标注")+'」'+(r.refN!=null?" · 样本"+r.refN+"人":"")+'。教材/进度/群体因子在"同池+同范围"时自动抵消，错配时才产生偏差。</div>';
+  h+='<div class="hint">口径标签：基准P '+esc(r.basePSrc||(r.usedAvg?"本校实测":"机构预估"))+' · '+(isSelf?"自锚(本校均分)":"常模锚")+' · 范围「'+esc(r.scopeName||"未标注")+'」。教材/进度/群体因子在"同池+同范围"时自动抵消，错配时才产生偏差。</div>';
   return h;
 }
 
@@ -1156,7 +1164,7 @@ function switchTab(name,el){
   el.classList.add('on');$('p-'+name).classList.add('on');
   try{localStorage.setItem('zydb_tab',name);}catch(e){}
   if(name==='advice'&&!hasLocateDone()&&$('advResult'))$('advResult').innerHTML=needLocateTip();
-  if(name==='setting'){renderAuthPanel();pwSettingState();}
+  if(name==='setting'){renderAuthPanel();pwSettingState();aiState();}
   if(name=='city')renderCity();
   if(name=='ref')renderRef();
   if(name=='advice')renderModules();
@@ -1251,7 +1259,7 @@ function updatePoolHint(selId,hintId){
 }
 
 /* ============ 核心计算 ============ */
-function compute(score,full,avg,poolVal,scope,refN){
+function compute(score,full,avg,poolVal,scope){
   var sr=score/full;
   var baseP,basePSrc="机构预估";
   var sc=scope||{v:"final",t:"期末考试（整册全卷）",span:"full"};
@@ -1264,7 +1272,7 @@ function compute(score,full,avg,poolVal,scope,refN){
   var cal=sr-((avg!=null?avg/full:baseP)-baseP); // = sr - (avgRate - baseP)
   var layer=layerOf(cal),step=stepOf(cal),iron=false,ironNote="";
   return {sr:sr,baseP:baseP,basePSrc:basePSrc,usedAvg:usedAvg,cal:cal,layer:layer,step:step,iron:iron,ironNote:ironNote,full:full,score:score,avg:avg,poolVal:poolVal,
-    scopeV:sc.v,scopeName:sc.t,scopeSpan:sc.span,refN:(refN==null||refN===""?null:refN)};
+    scopeV:sc.v,scopeName:sc.t,scopeSpan:sc.span};
 }
 function applyIron(r,bgot,bfull){
   r.bgot=(bgot==null?'':bgot);r.bfull=(bfull==null?'':bfull);
@@ -1281,7 +1289,7 @@ function livePreview(){
   var score=num('l_score'),full=num('l_full'),avg=num('l_avg');
   if(score==null||full==null||full<=0){return;}
   var poolVal=$('l_pool')?$('l_pool').value:'__auto';
-  var r=compute(score,full,avg,poolVal,scopeSpan(val('l_scope')),num('l_refn'));r.subject=val('l_subject');
+  var r=compute(score,full,avg,poolVal,scopeSpan(val('l_scope')));r.subject=val('l_subject');
   var bg=num('l_bgot'),bf=num('l_bfull');applyIron(r,bg,bf);
   var L=linesFor(full);
   var html='<div class="result"><div class="kv"><span>校准得分率</span><span class="big">'+(r.cal*100).toFixed(1)+'%</span><span>'+layerTag(r.layer)+'</span><span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div>'
@@ -1299,9 +1307,9 @@ function doLocate(){
   if(!name){alert("请填写学员姓名");return;}
   if(score==null||full==null||full<=0){alert("请填写有效的卷面得分和满分");return;}
   var subject=val('l_subject'),poolVal=$('l_pool').value;
-  var sc=scopeSpan(val('l_scope')),refN=num('l_refn'),tm=val('a_term')||autoTerm();
-  var r=applyIron(compute(score,full,avg,poolVal,sc,refN),bg,bf);
-  r.name=name;r.stage=stage;r.grade=grade;r.school=school;r.campus=val('l_campus');r.clazz=val('l_class');r.term=tm;r.refN=refN;
+  var sc=scopeSpan(val('l_scope')),tm=val('a_term')||autoTerm();
+  var r=applyIron(compute(score,full,avg,poolVal,sc),bg,bf);
+  r.name=name;r.stage=stage;r.grade=grade;r.school=school;r.campus=val('l_campus');r.clazz=val('l_class');r.term=tm;
   r.subject=subject;r.poolVal=poolVal;r.examLabel=((poolVal=="__auto"||poolVal=="__none")?"本校平日卷(均分实测)":poolVal.replace('|',' · '))+' · '+sc.t;
   var L=linesFor(full);r.lines=L;
   ST.lastLocate=r;ST.lastAdvice=null;ST.lastReport=null;
@@ -1337,7 +1345,7 @@ function fillDemo(){
   $('l_subject').value="数学";onSubjectChange();
   // 选天府新区中考数学A卷? 用高考物理类
   fillSelSimple('l_scope',EXAM_SCOPES,'final');$('l_scope').value="midterm";onSubjectChange();fillPools();$('l_pool').value="__auto";
-  $('l_score').value=118;$('l_full').value=150;$('l_avg').value=96;$('l_bfull').value=90;$('l_bgot').value=74;$('l_refn').value=48;
+  $('l_score').value=118;$('l_full').value=150;$('l_avg').value=96;$('l_bfull').value=90;$('l_bgot').value=74;
   fillTermSel('a_term',autoTerm());
   livePreview();
 }
@@ -1469,32 +1477,80 @@ function renderAdvice(a){
   h+='<div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button></div></div>';
   return h;
 }
-function genAdvice(){
-  if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
-  var a=ruleAdvice();ST.lastAdvice=a;
-  $('advResult').innerHTML=renderAdvice(a);
-}
-function aiAdvice(force){
-  if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
-  var cfg=aiCfg();var pn=(AI_PRESETS[cfg.preset]||{}).name||"免费AI";
-  if(!cfg.key){var ra=ruleAdvice();ST.lastAdvice=ra;$('advResult').innerHTML='<div class="note">已预置免费AI（'+esc(pn)+'），但尚未填入 API Key，已自动改用内置规则库生成建议。<br>启用AI：到「城市与基准P → AI接口设置」选好免费产品、到其官网免费领取 Key 粘贴保存即可。免配置用法：点下方按钮复制提示词，粘到'+esc(pn)+'网页/App，再把答案粘回。</div>'+renderAdvice(ra)+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div>';return;}
-  var sig=copyPromptText();
-  if(!force&&ST.lastAIText&&ST.lastAISig===sig){
-    $('advResult').innerHTML='<div class="note">📌 学生信息与勾选未变更，已保留上次 AI 生成建议（未重复调用接口）。如需更新请点「🔄 重新生成建议」。</div><div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · '+esc(val('a_subject'))+' · '+esc(ruleAdvice().layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(ST.lastAIText)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';
-    return;
+/* ============ AI 建议模块化渲染 ============ */
+var AI_MOD_ICONS=['🔍','🎯','🧩','🔁','🚀','⏸️','📋'];
+function aiParseSections(txt){ // 把 AI 文本按 ①~⑦/一~七/1~7 标记拆分为模块
+  var lines=String(txt||'').split(/\r?\n/);
+  var secs=[],cur=null;
+  var re=/^\s*(①|②|③|④|⑤|⑥|⑦|[一二三四五六七]、|[1-7][\.、．])/;
+  for(var i=0;i<lines.length;i++){
+    var ln=lines[i];
+    if(re.test(ln)){
+      var title=ln.replace(re,'').trim();
+      cur={t:(title||ln.trim()),b:[]};secs.push(cur);continue;
+    }
+    if(!cur){cur={t:'',b:[]};secs.push(cur);}
+    cur.b.push(ln);
   }
-  var a=ruleAdvice();var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
-  var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员层级："+a.layer+"。本次失分题型："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
-  $('advResult').innerHTML='<div class="note">🤖 AI 生成中…</div>';
+  return secs;
+}
+function aiModulesHtml(a,txt,note){ // 按模块卡片渲染 AI 建议（note：补充说明，如缓存提示；通道/模型名不对外展示）
+  var secs=aiParseSections(txt);
+  var h='<div class="result"><div class="ai-head"><div><b>🤖 AI 补短建议</b>'+((note&&note.trim())?(' · '+esc(note)):'')+' · '+esc(val('a_subject'))+' · '+esc(a.layer)+'</div><div class="btns" style="margin:0"><button class="btn sec sm" onclick="exportAdviceCSV()">⬇ 导出CSV</button><button class="btn sm" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho sm" onclick="genAdvice(true)">🔄 重新生成</button></div></div>';
+  if(secs.length>=2){
+    for(var i=0;i<secs.length;i++){
+      var s=secs[i];var body=s.b.join('\n').replace(/\n{3,}/g,'\n\n').trim()||'—';
+      var ic=(i<AI_MOD_ICONS.length)?AI_MOD_ICONS[i]:'📌';
+      h+='<div class="ai-mod">'+(s.t?('<div class="ai-mod-t">'+ic+' '+esc(s.t)+'</div>'):'')+'<div class="ai-mod-b">'+esc(body)+'</div></div>';
+    }
+  }else{ // 未能识别模块标记时整体呈现
+    h+='<div class="ai-mod"><div class="ai-mod-b">'+esc(txt)+'</div></div>';
+  }
+  h+='</div>';
+  return h;
+}
+function aiExtract(d){ // 从 OpenAI 兼容响应中提取文本
+  try{return (d&&d.choices&&d.choices[0]&&(d.choices[0].message?d.choices[0].message.content:d.choices[0].text))||'';}catch(e){return '';}
+}
+function aiLoadingHtml(){ // Loading 界面
+  return '<div class="result"><div class="ai-loading"><div class="spin"></div><div style="font-weight:700;color:var(--pri-d);font-size:15px">🤖 AI 正在联网生成针对性补短建议…</div><div class="ai-steps"><span>基于层级判定</span><span>结合失分题型</span><span>七段结构输出</span></div><div style="font-size:12px;color:var(--sub)">约需 10~30 秒 · 请勿关闭页面 · 失败将自动改用内置规则库</div></div></div>';
+}
+function aiRuleFallback(a,msg){ // 最终兜底：内置规则库（AI 全部通道失败时）
+  ST.lastAdvice=a;ST.lastAIText='';ST.lastAISig='';
+  $('advResult').innerHTML='<div class="danger">🤖 AI 联网建议未能生成：'+esc(msg)+'。已改用<b>内置规则库</b>建议（结构完整可用）；也可点下方按钮复制提示词去元宝，把回答粘回。</div>'+renderAdvice(a)+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div><div class="card" style="margin-top:8px"><label>把元宝的回答粘到这里，再点【导入AI建议】，即可进入报告</label><textarea id="aiPaste" rows="6" style="width:100%"></textarea><div class="btns"><button class="btn" onclick="applyAIText()">📥 导入AI建议</button></div></div>';
+}
+function aiDirect(a,prompt,sig,cfg){ // 通道2：本机配置 Key 直连（可能被 CORS 拦截）
+  if(!cfg.key){aiRuleFallback(a,'本机未配置 AI Key，且云端中转不可用（管理员在 Worker 变量中配置 AI_URL/AI_KEY/AI_MODEL 后，全体教师即可零配置联网生成）');return;}
   fetch(cfg.url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"hy4",messages:[{role:"user",content:prompt}],temperature:0.4})})
   .then(function(r){return r.json();})
-  .then(function(d){var txt=(d.choices&&d.choices[0]&&(d.choices[0].message?d.choices[0].message.content:d.choices[0].text))||JSON.stringify(d);ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · '+esc(val('a_subject'))+' · '+esc(a.layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(txt)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';})
-  .catch(function(e){var m=(e&&e.message)||'网络错误';var tip=/HTTP 403/.test(m)?'<br>→ 403：TokenHub 网关策略拒绝（非 Key 问题），本地网页直连不可用。':(/Failed to fetch|NetworkError|Load failed/i.test(m)?'<br>→ 多半是浏览器 CORS 拦截：本地 HTML 直连 AI 接口会被浏览器禁止，单文件工具内无法绕过。':'<br>');$('advResult').innerHTML='<div class="danger">🤖 AI 未能调用成功：'+esc(m)+tip+'<br><b>免配置替代：</b>点下方「复制提示词去元宝」，把提示词粘到元宝网页/App，再把答案粘回下方；已先用内置规则库生成：</div>'+renderAdvice(ruleAdvice())+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div><div class="card" style="margin-top:8px"><label>把元宝的回答粘到这里，再点【导入AI建议】，即可进入报告</label><textarea id="aiPaste" rows="6" style="width:100%"></textarea><div class="btns"><button class="btn" onclick="applyAIText()">📥 导入AI建议</button></div></div>';ST.lastAdvice=a;ST.lastAIText='';ST.lastAISig='';});
+  .then(function(d){var txt=aiExtract(d);if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}else aiRuleFallback(a,'AI 响应解析失败');})
+  .catch(function(e){aiRuleFallback(a,(e&&e.message)||'网络错误');});
 }
+/* ============ 生成入口：AI 联网优先，失败回退规则库 ============ */
+function genAdvice(force){
+  if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
+  var a=ruleAdvice();ST.lastAdvice=a;
+  var cfg=aiCfg();
+  var sig=copyPromptText();
+  if(!force&&ST.lastAIText&&ST.lastAISig===sig){
+    $('advResult').innerHTML=aiModulesHtml(a,ST.lastAIText,'上次生成 · 学生信息与勾选未变更（未重复调用接口）');
+    return;
+  }
+  var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
+  var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员层级："+a.layer+"。本次失分题型："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
+  $('advResult').innerHTML=aiLoadingHtml(); // Loading
+  // 通道1：云端 Worker 中转（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用，天然绕过 CORS）
+  var scfg=getSync();
+  fetchWithTimeout(scfg.url+'/ai',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':scfg.key||''},body:JSON.stringify({prompt:prompt,temperature:0.4,max_tokens:900})},30000)
+  .then(function(r){return r.json();})
+  .then(function(d){var txt=aiExtract(d);if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}else aiDirect(a,prompt,sig,cfg);})
+  .catch(function(){aiDirect(a,prompt,sig,cfg);});
+}
+function aiAdvice(force){genAdvice(force);} // 兼容旧调用
 
 function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){var pp=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),pp[0],+pp[1]);if(q)picked.push(pp[0]+'-'+q.n);});var L=ST.lastLocate||{};var nm=L.name||'';var sc=L.score?(L.score+'/'+L.full):'';var cal=L.cal!=null?(L.cal*100).toFixed(1)+'%':'';return '你是资深K12'+val('a_stage')+val('a_subject')+'教研老师。学员'+nm+'，'+val('a_grade')+'，卷面'+sc+'，校准得分率'+cal+'，层级判定：'+ruleAdvice().layer+'。本次失分题型：'+(picked.join('、')||'未指定')+'。请按①先核对卷面痕迹②培养方向③先补题型(含易错点与补法)④再练⑤压轴策略⑥暂缓清单⑦复核条件与本周动作，给出专业、可执行的补短方案，500字内，分点清晰。';}
 function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
-function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">🤖 AI 补短建议 · 元宝 · '+esc(val('a_grade'))+' · '+esc(val('a_subject'))+' · '+esc(ruleAdvice().layer)+'</div><div style="white-space:pre-wrap;font-size:13.5px;line-height:1.75">'+esc(t)+'</div><div class="btns noprint"><button class="btn sec" onclick="exportAdviceCSV()">⬇ 导出补短CSV</button><button class="btn" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="aiAdvice(true)">🔄 重新生成建议</button></div></div>';}
+function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}var a=ruleAdvice();ST.lastAdvice=a;ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML=aiModulesHtml(a,t,'元宝粘贴导入');}
 /* ============ 机构报告 ============ */
 function genReport(){
   var r=ST.lastLocate;
@@ -1509,7 +1565,7 @@ function genReport(){
   h+='<h3>一、定位结论</h3><table><tr><th>考试/卷别</th><th>卷面</th><th>满分</th><th>年级均分</th><th>常模池基准P</th><th>校准得分率</th><th>校准折算分</th></tr><tr><td>'+esc(r.examLabel)+'</td><td>'+r.score+'</td><td>'+r.full+'</td><td>'+(r.avg==null?'—':r.avg)+'</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td><b>'+(r.cal*100).toFixed(1)+'%</b></td><td>'+Math.round(r.cal*r.full)+'</td></tr></table>';
   h+='<p style="margin-top:8px">综合判定：<b>'+esc(r.layer)+'</b>　四层台阶（初筛）：<b>'+esc(r.step)+'</b>　'+r.full+'分制划线：拔高≥'+L.ba+'，临界 '+L.linLo+'~'+(L.ba-1)+'，缓冲 '+L.ba+'~'+L.bufHi+'</p>';
   if(r.baseRate!=null)h+='<p>基础题应得率：<b>'+(r.baseRate*100).toFixed(1)+'%</b>（'+r.bgot+'/'+r.bfull+'）'+(r.iron?'　<span class="red">⛔ 低于85%，已触发铁律强制降层，待复核</span>':'　达标')+'</p>';
-  h+='<p><b>教学进度：</b>'+esc(r.grade)+(r.term=="下"?"下学期":"上学期")+' · 默认已学到 '+esc(capLabel(r.stage,r.grade,r.term))+'；<b>本次考试范围：</b>'+esc(r.scopeName||"未标注")+(r.refN!=null?'；<b>参考人数：</b>'+r.refN+' 人':'')+'</p>';
+  h+='<p><b>教学进度：</b>'+esc(r.grade)+(r.term=="下"?"下学期":"上学期")+' · 默认已学到 '+esc(capLabel(r.stage,r.grade,r.term))+'；<b>本次考试范围：</b>'+esc(r.scopeName||"未标注")+'</p>';
   h+=buildFlags(r);
   h+='<h3>二、需说明的事项</h3><ul class="rlist">';
   if(r.iron)h+='<li>⛔ 铁律触发：总分达标但基础题应得率不足85%，属"压轴赌分、地基有洞"型，已强制降为基础巩固层并标待复核，须先补基础概念闭环。</li>';
