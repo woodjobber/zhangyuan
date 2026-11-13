@@ -218,15 +218,20 @@ function pushCred(ph,hash){ // 写入口令到云端 CSV（异步，不阻塞）
   var cfg=getSync();if(!cfg||!ph)return;
   try{fetch(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})}).catch(function(){});}catch(e){}
 }
-function verifyPwRemote(ph,pw){ // 校验口令：云端 CSV 优先，云端不可达时回退本机缓存
+function isHash(s){return /^[0-9a-f]{16}$/.test(s||'');} // 16位十六进制=新版哈希；否则视为旧版明文缓存
+function verifyPwRemote(ph,pw){ // 校验口令：云端 CSV 优先，本机缓存兜底（任一匹配即可，防改密写云端失败后被锁）
+  var lh=getPwMap()[ph]||'';
+  var okLocal=lh?(isHash(lh)?(lh===pwHash(pw)):(lh===pw)):false; // 旧版明文缓存兼容
   return fetchCreds().then(function(creds){
     var row=creds[ph]||{hash:''};
-    var ok=row.hash?(row.hash===pwHash(pw)):(pw===DEFAULT_PW);
-    return {ok:ok,hash:row.hash||''};
-  }).catch(function(){
-    var lh=getPwMap()[ph]||'';
-    var ok=lh?(lh===pwHash(pw)):(pw===DEFAULT_PW);
-    return {ok:ok,hash:lh};
+    var ch=row.hash||'';
+    var okCloud=ch?(ch===pwHash(pw)):(pw===DEFAULT_PW);
+    var ok=okCloud||okLocal;
+    var hash=okCloud?ch:(okLocal&&isHash(lh)?lh:'');
+    return {ok:ok,hash:hash,heal:okLocal&&!okCloud}; // 本机命中而云端未同步 → 登录后回推自愈
+  }).catch(function(){ // 云端不可达：完全回退本机
+    var ok=lh?(isHash(lh)?(lh===pwHash(pw)):(lh===pw)):(pw===DEFAULT_PW);
+    return {ok:ok,hash:(ok&&isHash(lh))?lh:'',heal:ok&&!!lh&&!isHash(lh)};
   });
 }
 function getLogs(){try{var a=JSON.parse(localStorage.getItem(LOG_KEY)||'[]');if(Array.isArray(a))return a;}catch(e){}return [];}
@@ -284,7 +289,10 @@ function doLogin(){
   verifyPwRemote(val,pword).then(function(res){
     if(!res||!res.ok){if(err)err.textContent='口令错误，请重新输入';if(pw){pw.value='';pw.focus();}return;}
     setCurPhone(val);
-    if(res.hash)setMyPw(val,res.hash); // 缓存云端口令哈希，刷新免登录
+    var lh=getPwMap()[val]||'';
+    if(res.hash){setMyPw(val,res.hash);} // 缓存云端哈希，刷新免登录
+    else if(lh&&!isHash(lh)){var hh=pwHash(pword);setMyPw(val,hh);pushCred(val,hh);} // 旧版明文缓存自动迁移为哈希
+    if(res.heal)pushCred(val,res.hash||pwHash(pword)); // 云端缺失/滞后 → 回推自愈
     if(err)err.textContent='';
     if(!res.hash&&pword===DEFAULT_PW){showForcePw();} // 首次登录：强制修改默认口令
     else{addLog('登录');enterTool();}
@@ -1791,7 +1799,7 @@ function saveMyPw(){
   if(!me){alert('请先登录');return;}
   var cur=val('pw_cur'),n1=val('pw_new'),n2=val('pw_new2');
   var stored=getPwMap()[me]||'';
-  var okCur=stored?(stored===pwHash(cur)):(cur===DEFAULT_PW);
+  var okCur=!stored?(cur===DEFAULT_PW):(isHash(stored)?(stored===pwHash(cur)):(stored===cur)); // 兼容旧版明文缓存
   if(!okCur){alert('当前口令不正确，请重新输入');return;}
   if(!n1||n1.length<4){alert('新口令至少 4 位');return;}
   if(n1===DEFAULT_PW){alert('新口令不能使用默认口令，请重新设置');return;}
