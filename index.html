@@ -190,6 +190,73 @@ var ORG_CODE="ZY02801"; // 机构代码（内部代码，仅用于找回口令�
 var LOG_KEY="zydb_login_log"; // 授权教师登录历史（本机）
 function getPhones(){try{var raw=localStorage.getItem(PHONES_KEY);if(raw){var arr=JSON.parse(raw);if(Array.isArray(arr)&&arr.indexOf(ADMIN_PHONE)>=0)return arr;}}catch(e){}return DEFAULT_PHONES.slice();}
 function savePhones(arr){try{localStorage.setItem(PHONES_KEY,JSON.stringify(arr));}catch(e){}}
+/* ===== 授权名单云端同步（CSV：phone,updated；本机缓存+待同步队列） ===== */
+var PHONES_PENDING_KEY='zydb_phone_pending';
+function getPhonePending(){try{var o=JSON.parse(localStorage.getItem(PHONES_PENDING_KEY)||'{}');if(o&&typeof o==='object')return o;}catch(e){}return {};}
+function setPhonePending(ph,op){var o=getPhonePending();if(op)o[ph]=op;else delete o[ph];try{localStorage.setItem(PHONES_PENDING_KEY,JSON.stringify(o));}catch(e){}}
+function parsePhonesCSV(txt){
+  var a=[];var lines=String(txt||'').split(/\r?\n/);
+  for(var i=1;i<lines.length;i++){var ln=lines[i].trim();if(!ln)continue;var c=ln.split(',');if(c[0]&&validPhone(c[0]))a.push(c[0]);}
+  return a;
+}
+function fetchPhones(){ // 读取云端授权名单 CSV（8 秒超时）
+  var cfg=getSync();
+  return fetchWithTimeout(cfg.url+'/phones',{headers:{'x-sync-key':cfg.key||''}},8000).then(function(r){
+    if(!r.ok)throw new Error('http '+r.status);
+    return r.text();
+  }).then(parsePhonesCSV);
+}
+function parsePhonesFull(txt){ // 解析含更新时间的名单
+  var a=[];var lines=String(txt||'').split(/\r?\n/);
+  for(var i=1;i<lines.length;i++){var ln=lines[i].trim();if(!ln)continue;var c=ln.split(',');if(c[0]&&validPhone(c[0]))a.push({phone:c[0],updated:c[1]||''});}
+  return a;
+}
+function fetchPhonesFull(){ // 读取云端名单（含时间戳，供管理员查看）
+  var cfg=getSync();
+  return fetchWithTimeout(cfg.url+'/phones',{headers:{'x-sync-key':cfg.key||''}},8000).then(function(r){
+    if(!r.ok)throw new Error('http '+r.status);
+    return r.text();
+  }).then(parsePhonesFull);
+}
+function pushPhone(ph,op){ // 添加/移除授权码到云端；先入队，成功出队，失败待重试
+  var cfg=getSync();if(!cfg||!ph)return Promise.resolve({ok:false,error:'未配置云端同步'});
+  setPhonePending(ph,op);
+  return fetchWithTimeout(cfg.url+'/phone',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,op:op})},8000).then(function(r){
+    if(r.status===404)return {ok:false,error:'接口不存在——Worker 未部署最新代码（缺少 /phone 接口），请重新覆盖部署 login-log-worker.js'};
+    if(r.status===401||r.status===403)return r.json().then(function(d){return {ok:false,error:(d&&d.error)==='admin'?'管理员号码不可移除':'同步密钥不正确'};});
+    return r.json();
+  }).then(function(d){
+    if(d&&d.ok){setPhonePending(ph,null);return {ok:true};}
+    return {ok:false,error:(d&&d.error)||'云端响应异常'};
+  }).catch(function(){return {ok:false,error:'网络问题（8 秒超时或域名被拦截）'};});
+}
+function flushPhonePending(){ // 重试未同步的增删操作
+  var o=getPhonePending();var ps=Object.keys(o);
+  if(!ps.length)return Promise.resolve({done:0,left:0});
+  var done=0;
+  return Promise.all(ps.map(function(p){return pushPhone(p,o[p]).then(function(r){if(r.ok)done++;});})).then(function(){
+    return {done:done,left:Object.keys(getPhonePending()).length};
+  });
+}
+function applyCloudPhones(cloud){ // 云端名单为准 + 本机未同步的增删合并（保证删除能传播、新增不丢失）
+  if(!Array.isArray(cloud))return;
+  var pend=getPhonePending();var set={};
+  for(var i=0;i<cloud.length;i++){if(validPhone(cloud[i]))set[cloud[i]]=1;}
+  Object.keys(pend).forEach(function(p){if(pend[p]==='add')set[p]=1;else delete set[p];});
+  set[ADMIN_PHONE]=1; // 管理员号码始终保留
+  var before=getPhones();
+  savePhones(Object.keys(set));
+  for(var j=0;j<before.length;j++){ // 被移除号码的本机口令缓存一并清除
+    if(!set[before[j]]){try{setMyPw(before[j],'');}catch(e){}}
+  }
+}
+function syncPhones(cb){ // 拉取云端名单并合并到本机（云端不可达时本机保持不变）
+  var before=getPhones().join(',');
+  return fetchPhones().then(function(cloud){
+    applyCloudPhones(cloud);flushPhonePending();
+    if(cb)cb(cloud,getPhones().join(',')!==before);
+  }).catch(function(){if(cb)cb(null,false);});
+}
 function getCurPhone(){try{return localStorage.getItem(CUR_PHONE_KEY)||'';}catch(e){return '';}}
 function setCurPhone(p){try{if(p)localStorage.setItem(CUR_PHONE_KEY,p);else localStorage.removeItem(CUR_PHONE_KEY);}catch(e){}}
 function validPhone(s){return /^1[3-9]\d{9}$/.test(s);}
@@ -212,7 +279,10 @@ function parseCredsCSV(txt){
 }
 function fetchCreds(){ // 读取云端口令库 CSV（8 秒超时，超时走本地兜底）
   var cfg=getSync();
-  return fetchWithTimeout(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}},8000).then(function(r){return r.text();}).then(function(txt){return parseCredsCSV(txt);});
+  return fetchWithTimeout(cfg.url+'/creds',{headers:{'x-sync-key':cfg.key||''}},8000).then(function(r){
+    if(!r.ok)throw new Error('http '+r.status);
+    return r.text();
+  }).then(function(txt){return parseCredsCSV(txt);});
 }
 /* ===== 口令同步可靠队列：写云端失败自动入队，后续登录/测试连接时自动重试 ===== */
 var CRED_PENDING_KEY='zydb_cred_pending';
@@ -222,7 +292,11 @@ function removeCredPending(ph){var o=getCredPending();delete o[ph];try{localStor
 function pushCred(ph,hash){ // 写入口令到云端 CSV；先入队，成功后出队，失败保留待重试
   var cfg=getSync();if(!cfg||!ph)return Promise.resolve({ok:false,error:'未配置云端同步'});
   addCredPending(ph,hash||'');
-  return fetchWithTimeout(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})},8000).then(function(r){return r.json();}).then(function(d){
+  return fetchWithTimeout(cfg.url+'/cred',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({phone:ph,hash:hash||''})},8000).then(function(r){
+    if(r.status===404)return {ok:false,error:'接口不存在——Worker 未部署最新代码（缺少 /cred 接口）'};
+    if(r.status===401)return {ok:false,error:'同步密钥不正确'};
+    return r.json();
+  }).then(function(d){
     if(d&&d.ok){removeCredPending(ph);return {ok:true};}
     return {ok:false,error:(d&&d.error)||'云端响应异常'};
   }).catch(function(){return {ok:false,error:'网络或密钥问题'};});
@@ -281,7 +355,7 @@ function addLog(act,phone){
   var p=phone||getCurPhone()||'—';
   var t=fmtNow();
   var e={id:t+'|'+p+'|'+act+'|'+Math.random().toString(36).slice(2,8),t:t,phone:p,act:act,device:deviceId()};
-  try{var a=getLogs();a.push(e);while(a.length>500)a.shift();localStorage.setItem(LOG_KEY,JSON.stringify(a));}catch(err){}
+  try{var a=getLogs();a.push(e);while(a.length>100)a.shift();localStorage.setItem(LOG_KEY,JSON.stringify(a));}catch(err){} // 本机最多保留最近 100 条
   syncPush([e]); // 已配置云同步则异步上传，不阻塞登录
 }
 function syncPush(entries){
@@ -313,9 +387,9 @@ function doLogin(){
   var val=(pv&&pv.value||"").replace(/\s/g,"");var pword=(pw&&pw.value||"").replace(/\s/g,"");
   var err=document.getElementById('phoneErr');
   if(!validPhone(val)){if(err)err.textContent='请输入有效的11位手机号';if(pv){pv.value='';pv.focus();}return;}
-  if(getPhones().indexOf(val)<0){if(err)err.textContent='该手机号未获授权，请联系系统管理员开通';if(pv){pv.value='';pv.focus();}return;}
-  if(err)err.textContent='正在验证口令…';
-  verifyPwRemote(val,pword).then(function(res){
+  function proceed(){
+    if(err)err.textContent='正在验证口令…';
+    verifyPwRemote(val,pword).then(function(res){
     if(!res||!res.ok){if(err)err.textContent='口令错误，请重新输入';if(pw){pw.value='';pw.focus();}return;}
     setCurPhone(val);
     var lh=getPwMap()[val]||'';
@@ -323,9 +397,21 @@ function doLogin(){
     else if(lh&&!isHash(lh)){var hh=pwHash(pword);setMyPw(val,hh);pushCred(val,hh);} // 旧版明文缓存自动迁移为哈希
     if(res.heal)pushCred(val,res.hash||pwHash(pword)); // 云端缺失/滞后 → 回推自愈
     flushCredPending(); // 重试此前未同步成功的口令
+    flushPhonePending(); // 重试此前未同步成功的授权码增删
     if(err)err.textContent='';
     if(!res.hash&&pword===DEFAULT_PW){showForcePw();} // 首次登录：强制修改默认口令
     else{addLog('登录');enterTool();}
+    });
+  }
+  // 每次登录都先拉取云端授权名单核对（本机名单只是缓存，管理员随时可能增删）
+  if(err)err.textContent='正在核对授权…';
+  syncPhones(function(cloud){
+    if(cloud&&getPhones().indexOf(val)<0){ // 云端明确无此授权码（云端不可达时用本机名单兜底）
+      if(err)err.textContent='该手机号未获授权，请联系系统管理员开通';
+      if(pv){pv.value='';pv.focus();}
+      return;
+    }
+    proceed();
   });
 }
 function showForcePw(){
@@ -386,6 +472,19 @@ function doRecover(){
   var m=document.getElementById('loginMask');
   if(m)m.style.display=authed?'none':'flex';
   if(!authed){var v=document.getElementById('phoneInput');if(v)setTimeout(function(){v.focus();},50);}
+  if(authed){
+    /* 已登录会话后台复核云端授权名单：授权码被管理员移除后，该设备立即被踢出 */
+    var cp2=getCurPhone();
+    syncPhones(function(cloud){
+      if(cloud&&getPhones().indexOf(cp2)<0){
+        try{clearStudentData();}catch(e){}
+        try{setMyPw(cp2,'');}catch(e){} // 清除本机口令缓存
+        setCurPhone('');
+        alert('该授权码已被系统管理员移除，您已被退出登录。');
+        location.reload();
+      }
+    });
+  }
 })();
 document.addEventListener('DOMContentLoaded',function(){
   try{var tn=localStorage.getItem('zydb_tab');if(tn){var t2=document.querySelector('.tab[data-p="'+tn+'"]');if(t2)switchTab(tn,t2);}}catch(e){}
@@ -651,7 +750,7 @@ document.addEventListener('DOMContentLoaded',function(){
         <div class="set-item"><div class="ic">📱</div><div><b>手机号授权 + 口令</b><span>仅授权名单内的手机号可登录，登录还需输入口令；首次登录用默认口令，须立即修改。</span></div></div>
         <div class="set-item"><div class="ic">🔐</div><div><b>口令云端同步</b><span>口令库以 CSV 存于云端 Worker（手机号,哈希,更新时间），任一设备改密、全部设备立即生效。</span></div></div>
         <div class="set-item"><div class="ic">🔑</div><div><b>找回需机构代码</b><span>忘记口令须在登录页输入机构代码验证身份后重设；机构代码为内部代码，请向机构内部获取。</span></div></div>
-        <div class="set-item"><div class="ic">🛡️</div><div><b>管理员管理授权</b><span>系统管理员可在右侧添加/移除授权码并查看登录历史；管理员号码不可移除。</span></div></div>
+        <div class="set-item"><div class="ic">🛡️</div><div><b>管理员管理授权</b><span>系统管理员可在右侧添加/移除授权码（云端同步，全设备生效）并查看登录历史；管理员号码不可移除。</span></div></div>
         <div class="set-item"><div class="ic">🖥️</div><div><b>本地存储</b><span>登录状态与授权码名单保存在本机；云端仅存放口令库与登录日志，学员数据全程不出本机。</span></div></div>
         <div class="set-item"><div class="ic">↩️</div><div><b>退出重置</b><span>退出登录会清除登录状态与当前学员数据（定位、建议、报告），恢复默认状态。</span></div></div>
       </div>
@@ -1717,15 +1816,18 @@ function renderAuthPanel(){
   }
   if(ttl)ttl.textContent='授权码管理（系统管理员）';
   var arr=getPhones();
-  var h='<div class="hint" style="margin-bottom:8px">您是系统管理员，可添加/移除授权手机号并查看登录历史。名单与历史保存在<b>本机</b>，管理员号码不可移除。</div><div style="overflow:auto"><table><tr><th>授权手机号</th><th>身份</th><th>操作</th></tr>';
+  var h='<div class="hint" style="margin-bottom:8px">您是系统管理员，可添加/移除授权手机号并查看登录历史。<b>名单云端同步</b>：任一设备增删，全部设备立即生效；管理员号码不可移除。</div><div style="overflow:auto"><table><tr><th>授权手机号</th><th>身份</th><th>云端状态</th><th>操作</th></tr>';
+  var pend=getPhonePending();
   for(var i=0;i<arr.length;i++){var p=arr[i];
-    h+='<tr><td>'+p+'</td><td>'+(p===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+'</td><td>'+(p===ADMIN_PHONE?'—':'<button class="btn sm gho" onclick="delPhone(\''+p+'\')">移除</button>')+'</td></tr>';
+    var st=pend[p]==='add'?'<span class="tag t-lin">⏳ 待同步(新增)</span>':(pend[p]==='del'?'<span class="tag t-jc">⏳ 待同步(移除)</span>':'<span class="tag t-ba">已同步</span>');
+    h+='<tr><td>'+p+'</td><td>'+(p===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+'</td><td>'+st+'</td><td>'+(p===ADMIN_PHONE?'—':'<button class="btn sm gho" onclick="delPhone(\''+p+'\')">移除</button>')+'</td></tr>';
   }
-  h+='</table></div><div class="grid g2" style="margin-top:12px"><div><label>新增授权手机号</label><input id="np_input" type="tel" maxlength="11" inputmode="numeric" placeholder="输入11位手机号"></div><div style="display:flex;align-items:flex-end"><button class="btn" onclick="addPhone()">➕ 添加授权码</button></div></div><div class="hint" id="np_err"></div>';
+  h+='</table></div><div class="grid g2" style="margin-top:12px"><div><label>新增授权手机号</label><input id="np_input" type="tel" maxlength="11" inputmode="numeric" placeholder="输入11位手机号"></div><div style="display:flex;align-items:flex-end"><button class="btn" onclick="addPhone()">➕ 添加授权码</button></div></div><div class="btns" style="margin-top:10px"><button class="btn sec sm" onclick="pushAllPhones()">⬆ 推送本机名单到云端</button><button class="btn sec sm" onclick="viewCloudPhones()">☁️ 查看云端授权名单</button></div><div class="hint" id="np_err"></div><div id="cloud_phones"></div>';
+  syncPhones(function(cloud,changed){if(changed)renderAuthPanel();}); // 打开管理页时同步云端名单
   /* 登录历史 */
   var logs=getLogs().slice(-20).reverse();
   h+='<div style="margin-top:18px;border-top:1px solid var(--line);padding-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px"><b style="font-size:14px;color:var(--pri-d)">📜 授权教师登录历史</b><button class="btn sec sm" onclick="exportLoginLog()">⬇ 导出登录历史CSV</button></div>';
-  if(!logs.length){h+='<div class="hint">暂无登录记录（本机记录，最多保留最近 500 条）。</div>';}
+  if(!logs.length){h+='<div class="hint">暂无登录记录（本机记录，最多保留最近 100 条）。</div>';}
   else{
     h+='<div style="overflow:auto;max-height:260px"><table><tr><th>时间</th><th>手机号</th><th>事件</th></tr>';
     for(var j=0;j<logs.length;j++){var g=logs[j];h+='<tr><td style="white-space:nowrap">'+esc(g.t||'')+'</td><td>'+esc(g.phone||'')+'</td><td>'+esc(g.act||'')+'</td></tr>';}
@@ -1747,8 +1849,11 @@ function saveSync(){
   setSyncState('已保存，正在测试连接…');
   fetchWithTimeout(u+'/ping',null,8000).then(function(r){return r.json();}).then(function(d){
     if(d&&d.ok){
-      flushCredPending().then(function(f){
-        setSyncState('✅ 连接正常 · 自动上传已开启'+(f.left?(' · 待同步口令重试中：成功 '+f.done+' 个，剩余 '+f.left+' 个'):''));
+      Promise.all([flushCredPending(),flushPhonePending()]).then(function(rs){
+        var left=(rs[0].left||0)+(rs[1].left||0);
+        var msg='✅ 连接正常 · 自动上传已开启';
+        if(left)msg+=' · 待同步重试中：口令剩余 '+rs[0].left+' 个，授权码剩余 '+rs[1].left+' 个';
+        setSyncState(msg);
       });
     }
     else setSyncState('⚠️ 地址可达但响应异常，请检查 Worker 是否部署成功');
@@ -1767,7 +1872,7 @@ function pushAllLogs(){
 function pullLogs(){
   var cfg=getSync();if(!cfg){alert('请先填写并保存 Worker 地址与同步密钥');return;}
   setSyncState('正在拉取全员日志…');
-  fetchWithTimeout(cfg.url+'/logs?limit=500',{headers:{'x-sync-key':cfg.key||''}},15000).then(function(r){return r.json();}).then(function(d){
+  fetchWithTimeout(cfg.url+'/logs?limit=100',{headers:{'x-sync-key':cfg.key||''}},15000).then(function(r){return r.json();}).then(function(d){
     if(!d||!d.ok){setSyncState('❌ 拉取失败：'+((d&&d.error)||'未知错误'));return;}
     REMOTE_LOGS=d.logs||[];
     setSyncState('✅ 已拉取 '+REMOTE_LOGS.length+' 条（云端共 '+(d.total||0)+' 条）');
@@ -1855,12 +1960,47 @@ function addPhone(){
   var arr=getPhones();
   if(arr.indexOf(v)>=0){if(err)err.textContent='该手机号已在授权名单中';return;}
   arr.push(v);savePhones(arr);renderAuthPanel();
-  alert('已添加授权手机号 '+v+'。');
+  pushPhone(v,'add').then(function(r){ // 同步云端，全设备生效
+    if(r.ok)alert('已添加授权手机号 '+v+'（已同步云端，全设备生效）。');
+    else{alert('已在本机添加 '+v+'，但同步云端失败（'+r.error+'）；将在下次登录成功或打开管理页时自动重试。');renderAuthPanel();}
+  });
 }
 function delPhone(p){
   if(p===ADMIN_PHONE)return;
-  if(!confirm('确定移除授权手机号 '+p+'？移除后该号码将无法登录（本机名单即时生效）。'))return;
+  if(!confirm('确定移除授权手机号 '+p+'？移除后该号码将在所有设备上无法登录。'))return;
   savePhones(getPhones().filter(function(x){return x!==p;}));renderAuthPanel();
+  pushPhone(p,'del').then(function(r){ // 同步云端，全设备生效
+    if(r.ok)alert('已移除授权手机号 '+p+'（已同步云端，全设备生效）。');
+    else{alert('已在本机移除 '+p+'，但同步云端失败（'+r.error+'）；将在下次登录成功或打开管理页时自动重试。');renderAuthPanel();}
+  });
+}
+/* ===== 预置/本机名单推送云端 + 云端名单查看 ===== */
+function pushAllPhones(){ // 把本机全部授权码（含预置 3 个）推送/补推到云端
+  var arr=getPhones();
+  if(!arr.length){alert('本机名单为空');return;}
+  var errEl=$('np_err');if(errEl)errEl.textContent='正在推送 '+arr.length+' 个授权码到云端…';
+  var done=0,fail=0;
+  Promise.all(arr.map(function(p){return pushPhone(p,'add').then(function(r){if(r.ok)done++;else fail++;});})).then(function(){
+    renderAuthPanel();
+    var msg='推送完成：成功 '+done+' 个，云端现有 '+done+' 个授权码。';
+    if(fail)msg+='\n失败 '+fail+' 个（已进入待同步队列，登录成功或打开本页时自动重试）。';
+    alert(msg);
+  });
+}
+function viewCloudPhones(){ // 管理员查看云端授权名单（CSV 原始数据）
+  var box=$('cloud_phones');
+  if(box)box.innerHTML='<div class="hint">正在读取云端授权名单…</div>';
+  fetchPhonesFull().then(function(rows){
+    if(!box)return;
+    var h='<div style="margin-top:10px;border-top:1px solid var(--line);padding-top:10px"><b style="font-size:13.5px;color:var(--pri-d)">☁️ 云端授权名单（'+rows.length+' 个 · CSV 存储）</b><div style="overflow:auto;max-height:220px;margin-top:6px"><table><tr><th>手机号</th><th>身份</th><th>加入/更新时间</th></tr>';
+    for(var i=0;i<rows.length;i++){var r=rows[i];
+      h+='<tr><td>'+esc(r.phone)+'</td><td>'+(r.phone===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+'</td><td style="white-space:nowrap">'+esc(r.updated||'预置（未更新过）')+'</td></tr>';
+    }
+    h+='</table></div></div>';
+    box.innerHTML=h;
+  }).catch(function(){
+    if(box)box.innerHTML='<div class="hint">❌ 读取失败：请确认 Worker 已部署最新代码（含 /phones 接口），且地址/密钥正确。</div>';
+  });
 }
 </script>
 </body>
