@@ -953,8 +953,13 @@ var DEFAULT_CITY=[
   {city:"成都高三诊断",subject:"数学",pool:"三诊",p:0.60,src:"校准卡V3.7区间中值",stage:"高中"},
   {city:"成都高三诊断",subject:"英语",pool:"一诊",p:0.60,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"英语",pool:"二诊",p:0.61,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"英语",pool:"三诊",p:0.62,src:"机构预估",stage:"高中"},
   {city:"成都高三诊断",subject:"物理",pool:"一诊",p:0.56,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"物理",pool:"二诊",p:0.545,src:"校准卡V3.7·预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"物理",pool:"三诊",p:0.55,src:"机构预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"化学",pool:"一诊",p:0.55,src:"机构预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"化学",pool:"二诊",p:0.54,src:"机构预估",stage:"高中"},
+  {city:"成都高三诊断",subject:"化学",pool:"三诊",p:0.55,src:"机构预估",stage:"高中"},
   {city:"四川高考",subject:"化学",pool:"通用",p:0.55,src:"机构预估",stage:"高中"},
   // 其他城市（非成都）：高中高考通用
   {city:"其他城市(通用)",subject:"数学",pool:"高考",p:0.55,src:"机构预估·非官方",stage:"高中"},
@@ -1581,7 +1586,8 @@ function fillCitySel(selId,stage,keep){
 function poolsOf(stage,subject,city,selId){
   var d=cityData(),out=[];
   if(!city){var cs=document.getElementById(selId==='b_pool'?'b_city':'l_city');city=cs?cs.value:"__all";}
-  for(var i=0;i<d.length;i++){var r=d[i];if(r.subject!=subject)continue;
+  for(var i=0;i<d.length;i++){var r=d[i];var isGen=(r.subject=="通用"); // 通用=平日卷兜底（各科目均展示）
+    if(!isGen&&r.subject!=subject)continue;
     var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;
     if(city&&city!="__all"&&r.city!=city)continue;out.push(r);}
   // 平日卷兜底排在最后（本校均分实测为首项）
@@ -1644,6 +1650,9 @@ function applyIron(r,bgot,bfull){
   return r;
 }
 function linesFor(full){return {ba:ceilPct(0.75,full),linLo:ceilPct(0.72,full),bufHi:ceilPct(0.78,full),stepGg:ceilPct(0.60,full),stepTz:ceilPct(0.70,full),stepBg:ceilPct(0.80,full)};}
+function calCorr(r){ // 校准修正项 = 年级均分率 − 常模池基准P（为0表示本次无校准：基准即本校均分或未填均分）
+  return (r.avg!=null?r.avg/r.full:r.baseP)-r.baseP;
+}
 
 /* ============ 学情定位 ============ */
 function validateScoreLogic(score,full,avg,bgot,bfull){ // 校验成绩录入字段间的逻辑关系，返回错误文案或空串
@@ -1671,6 +1680,7 @@ function livePreview(){
    +'<div class="m"><i>校准折算分</i><b>'+Math.round(r.cal*full)+'/'+full+'</b></div>'
    +'<div class="m wide"><i>'+full+'分制划线</i><b>拔高≥'+L.ba+' · 临界 '+L.linLo+'~'+(L.ba-1)+' · 缓冲 '+L.ba+'~'+L.bufHi+'</b></div>'
    +'</div></div>';
+  if(Math.abs(calCorr(r))<1e-9)html+='<div class="note" style="margin-top:8px">ℹ️ 校准修正 = 0（本校平日卷模式下基准P即本校均分，或未填年级均分）：故校准得分率 = 卷面得分率、校准折算分 = 卷面得分，属正常现象。如需跨校/跨区校准，请在「考试名称/卷别」选择常模池卷别并填写本校年级均分。</div>';
   html+=buildFlags(r);
   if(r.iron)html+='<div class="danger">⛔ '+esc(r.ironNote)+'</div>';
   else if(r.layer=="临界观察")html+='<div class="note">🔎 落在临界观察带（72%~75%），建议连续追踪3次再定层，勿单次下结论。</div>';
@@ -1708,6 +1718,7 @@ function renderLocate(r){
   var h='<div class="result"><div style="font-size:15px;font-weight:700;color:var(--pri-d);margin-bottom:6px">'+esc(r.name)+' · '+esc(r.grade)+(r.school?' · '+esc(r.school):'')+'</div>'
    +'<div class="cal-hero" style="margin:6px 0 12px"><div><div class="cal-label">校准得分率</div><div class="big">'+(r.cal*100).toFixed(1)+'%</div></div><div class="cal-hero-r">'+layerTag(r.layer)+'<span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div></div>'
    +'<table><tr><th>卷面得分率</th><th>常模池基准P</th><th>校准折算分</th><th>考试/卷别</th></tr><tr><td>'+(r.sr*100).toFixed(1)+'%</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td>'+Math.round(r.cal*r.full)+'/'+r.full+'</td><td>'+esc(r.examLabel)+'</td></tr></table>'
+   +(Math.abs(calCorr(r))<1e-9?'<div class="note" style="margin-top:8px">ℹ️ 校准修正 = 0：本次为「本校平日卷（均分实测）」口径'+(r.avg==null?'且未填年级均分':'')+'，基准P即本校均分，故校准得分率 = 卷面得分率、校准折算分 = 卷面得分，属正常现象。如需跨校/跨区校准，请在「考试名称/卷别」选择常模池卷别并填写本校年级均分。</div>':'')
    +'<div class="kv" style="margin-top:8px"><span>'+r.full+'分制划线 → 拔高冲刺层 ≥<b>'+L.ba+'</b>；临界观察 '+L.linLo+'~'+(L.ba-1)+'；缓冲带 '+L.ba+'~'+L.bufHi+'；基础巩固层 &lt;'+L.linLo+'</span></div>'
    +'<div class="kv"><span>四层台阶 → 筑基&lt;'+L.stepGg+' · 巩固 '+L.stepGg+'~'+(L.stepTz-1)+' · 拓展 '+L.stepTz+'~'+(L.stepBg-1)+' · 拔高≥'+L.stepBg+'</span></div></div>';
   if(r.baseRate!=null)h+='<div class="note">基础题应得率 = '+r.bgot+' ÷ '+r.bfull+' = <b>'+(r.baseRate*100).toFixed(1)+'%</b>'+(r.iron?'（<span class="red">低于85%，已触发铁律</span>）':'（达标，地基扎实）')+'</div>';
@@ -2050,6 +2061,7 @@ function genReport(fromExport){
   h+='<table><tr><th>姓名</th><th>年级</th><th>学校</th><th>科目</th></tr><tr><td>'+esc(r.name)+'</td><td>'+esc(r.grade)+'</td><td>'+esc(r.school||'—')+'</td><td>'+esc(r.subject)+'</td></tr></table>';
   if(r.campus||r.clazz||teacher)h+='<table style="margin-top:6px"><tr><th>校区</th><th>班级</th><th>报告教师</th></tr><tr><td>'+esc(r.campus||'—')+'</td><td>'+esc(r.clazz||'—')+'</td><td>'+esc(teacher||'—')+'</td></tr></table>';
   h+='<h3>一、定位结论</h3><table><tr><th>考试/卷别</th><th>卷面</th><th>满分</th><th>年级均分</th><th>常模池基准P</th><th>校准得分率</th><th>校准折算分</th></tr><tr><td>'+esc(r.examLabel)+'</td><td>'+r.score+'</td><td>'+r.full+'</td><td>'+(r.avg==null?'—':r.avg)+'</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td><b>'+(r.cal*100).toFixed(1)+'%</b></td><td>'+Math.round(r.cal*r.full)+'</td></tr></table>';
+  if(Math.abs(calCorr(r))<1e-9)h+='<p class="muted" style="margin-top:6px;font-size:12.5px">注：本次为「本校平日卷（均分实测）」口径'+(r.avg==null?'且未填年级均分':'')+'，常模池基准P即本校均分，校准修正=0，故校准得分率=卷面得分率、校准折算分=卷面得分，属正常现象，非计算错误。</p>';
   h+='<p style="margin-top:8px">综合判定：<b>'+esc(r.layer)+'</b>　四层台阶（初筛）：<b>'+esc(r.step)+'</b>　'+r.full+'分制划线：拔高≥'+L.ba+'，临界 '+L.linLo+'~'+(L.ba-1)+'，缓冲 '+L.ba+'~'+L.bufHi+'</p>';
   if(r.baseRate!=null)h+='<p>基础题应得率：<b>'+(r.baseRate*100).toFixed(1)+'%</b>（'+r.bgot+'/'+r.bfull+'）'+(r.iron?'　<span class="red">⛔ 低于85%，已触发铁律强制降层，待复核</span>':'　达标')+'</p>';
   h+='<p><b>教学进度：</b>'+esc(r.grade)+(r.term=="下"?"下学期":"上学期")+' · 默认已学到 '+esc(capLabel(r.stage,r.grade,r.term))+'；<b>本次考试范围：</b>'+esc(r.scopeName||"未标注")+'</p>';
