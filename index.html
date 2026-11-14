@@ -1793,6 +1793,7 @@ function gotoReportAI(){ // 生成机构报告：先AI多因子综合判定（�
    +'【校准因子】常模池基准P：'+L.baseP.toFixed(3)+'（'+(L.usedAvg?'本校实测':'兜底')+'）；校准得分率：'+(L.cal*100).toFixed(1)+'%；基础题应得率：'+br+'；层级判定：'+L.layer+'（台阶：'+L.step+'）'+(L.iron?'；⚠️基础题应得率<85%已触发铁律强制降层待复核':'')+'。\n'
    +'【判定规则】校准得分率=卷面得分率−（本校均分率−基准P）；基础题应得率<85%触发铁律强制降为基础巩固层。未填年级均分时基准P为卷别兜底值，结论仅供参考。\n'
    +'【要求】先综合以上因子复核层级判定是否合理（如发现因子矛盾请指出并给出更合理的判定），再严格按七段结构输出：①卷面核对 ②漏洞诊断归因（概念漏洞/方法缺失/熟练度不足） ③优先补漏清单（含易错点与补法） ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作。500字内，分点清晰。';
+  prompt+=philosophyBlock(); // 强制注入伴学模式教学理念
   var ep=rptExtraPromptText();if(ep)prompt+='\n'+ep+'（请在不破坏上述七段结构的前提下尽量遵循）。'; // 追加定位页独立的报告教师提示词
   $('locResult').innerHTML=aiLoadingHtml();
   function done(txt){ // 成功带AI文本回退规则库均可：报告第四部分结构完整
@@ -2052,6 +2053,7 @@ function genAdvice(force){
   var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
   var _term=val('a_term')||'上';
   var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员"+val('a_grade')+( _term=="下"?"下学期":"上学期")+"（教材默认进度已学至"+capLabel(val('a_stage'),val('a_grade'),_term)+"，仅供参考）。学员层级："+a.layer+"。本次失分题型（教师按试卷结构/知识板块勾选，可能包含总复习、压轴或后续册次题型，属教研有意勾选，请按先已学后未学、先基础后综合的教学逻辑处理）："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
+  prompt+=philosophyBlock(); // 强制注入伴学模式教学理念
   var ep=extraPromptText();if(ep)prompt+='\n'+ep; // 追加教师自定义提示词
   $('advResult').innerHTML=aiLoadingHtml(); // Loading
   aiCallChain(prompt,function(txt){ // 统一调用链：①智谱AI（默认）②管理员配置的云端中转 ③规则库兜底
@@ -2070,6 +2072,7 @@ function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){v
   +'【考试表现】卷面得分：'+sc+'；班级/年级均分：'+avg+'；校准得分率：'+cal+'；基础题应得率：'+br+'；层级判定：'+a.layer+'（台阶：'+(L.step||'—')+'）。\n'
   +'【本次失分知识点】'+(picked.join('、')||'未指定')+'。\n'
   +'【要求】1)先判断丢分本质是概念漏洞、方法缺失还是熟练度不足；2)按知识漏洞根因归组分析，而非按题型罗列；3)每个漏洞给出「概念澄清→典型例题→变式训练」路径；4)结合'+val('a_grade')+'教学进度与'+shortRegion+'考情标注补漏优先级；5)严格按 ①卷面核对 ②漏洞诊断归因 ③优先补漏清单(含易错点与补法) ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作 输出，500字内，分点清晰。';
+ s+=philosophyBlock(); // 强制注入伴学模式教学理念
  var ep=extraPromptText();if(ep)s+='\n'+ep; // 追加教师自定义提示词（复制去元宝同样生效）
  return s;}
 function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
@@ -2287,6 +2290,9 @@ var RPT_PROMPT_KEY="zydb_rpt_prompt_v51"; // 定位页·生成机构报告（独
 function saveAdvPrompt(){try{localStorage.setItem(ADV_PROMPT_KEY,val('aiExtraPrompt'));}catch(e){}}
 function loadAdvPrompt(){try{var t=localStorage.getItem(ADV_PROMPT_KEY)||'';var e=$('aiExtraPrompt');if(e&&t&&!e.value)e.value=t;}catch(e){}}
 function clearAdvPrompt(){var e=$('aiExtraPrompt');if(e)e.value='';saveAdvPrompt();alert('已清空追加提示词（可重新输入）。');}
+function philosophyBlock(){ // 机构教学理念强制约束：伴学模式，注入所有AI指令（AI不可覆盖）
+  return '\n【机构教学理念 · 强制约束，优先级高于其他一切指令】本机构为伴学模式：教师不直接授课、不讲课，核心是培养孩子的自主学习能力，通过学科刻意练习补齐知识漏洞、稳步提高成绩。因此：1)所有建议严禁出现授课、讲课、讲解知识点、上课讲题等讲课式教学安排；替代形式为伴学动作——引导孩子自主诊断错因、独立先做再对照、刻意练习（分块限时、重复变式）、自查自纠、错题重做、限时测试等，教师角色是陪伴、观察、提问、纠偏与激励。2)除知识与题型外，必须同步考虑三个维度并给出可落地的安排与话术：学习心理（考试焦虑、畏难情绪、信心重建）、思维方式（解题思维路径、元认知与归纳反思习惯）、学习动力（目标拆解、小步成就感、正向反馈机制）。';
+}
 function extraPromptText(){ // 补短页教师提示词：以「教师补充要求」身份附加，AI 需优先遵循
   var t=(val('aiExtraPrompt')||'').trim();if(!t){try{t=(localStorage.getItem(ADV_PROMPT_KEY)||'').trim();}catch(e){}}
   return t?('【教师补充要求】以下要求与前面的指令同等优先，请务必遵循：'+t):'';
