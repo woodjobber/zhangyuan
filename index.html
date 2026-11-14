@@ -740,8 +740,9 @@ document.addEventListener('DOMContentLoaded',function(){
   <!-- 城市与基准P -->
   <div class="panel" id="p-city">
     <div class="card">
-      <h2>城市与基准P（可编辑 · 自动保存）</h2>
-      <div class="hint" style="margin-bottom:10px">下表为成都现行默认口径（机构预估·非官方）。可增删改；改动自动存本机，刷新不丢。点「恢复默认」回到内置口径，「检查更新」在检测到新版内置口径时提示合并。</div>
+      <h2>城市与基准P（云端同步 · 增删改查）</h2>
+      <div class="hint" style="margin-bottom:10px">下表为成都现行默认口径（机构预估·非官方）。<b>增删改由系统管理员维护</b>：改动自动保存并<b>同步云端</b>，全体教师设备自动拉取生效；教师端仅查看与搜索。点「恢复默认」回到内置口径并同步云端。</div>
+      <div class="hint" id="citySync" style="margin-bottom:10px">—</div>
       <div class="srch"><input id="citySearch" placeholder="🔎 搜索城市 / 卷别 / 科目" oninput="renderCity()"></div>
       <div style="overflow:auto"><table id="cityTable"></table></div>
       <div class="btns">
@@ -1529,7 +1530,7 @@ function switchTab(name,el){
   try{localStorage.setItem('zydb_tab',name);}catch(e){}
   if(name==='advice'&&!hasLocateDone()&&$('advResult'))$('advResult').innerHTML=needLocateTip();
   if(name==='setting'){renderAuthPanel();pwSettingState();syncAICard();}
-  if(name=='city')renderCity();
+  if(name=='city'){renderCity();pullCityCloud().then(function(ch){if(ch)renderCity();});} // 打开口径页时拉取云端口径
   if(name=='ref')renderRef();
   if(name=='advice')renderModules();
   if(name=='map')renderMap();
@@ -1572,7 +1573,9 @@ function fillSubjects(selId,stage){
 }
 function citiesOf(stage){
   var d=cityData(),out=[],seen={};
-  for(var i=0;i<d.length;i++){var r=d[i];var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;if(seen[r.city])continue;seen[r.city]=1;out.push(r.city);}
+  for(var i=0;i<d.length;i++){var r=d[i];
+    if(r.city=="本校平日卷")continue; // 兜底数据不是考区，不在城市下拉展示（首项「本校平日卷」已覆盖）
+    var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;if(seen[r.city])continue;seen[r.city]=1;out.push(r.city);}
   return out;
 }
 function fillCitySel(selId,stage,keep){
@@ -1595,10 +1598,26 @@ function poolsOf(stage,subject,city,selId){
 }
 function fillPools(selId,stage,subject){
   var s=$(selId);if(!s)return;s.innerHTML="";
-  var arr=poolsOf(stage,subject,undefined,selId);
-  if(arr.length==0){var o0=document.createElement('option');o0.value="__none";o0.text="（该考区无预置，将用本校均分实测）";s.add(o0);return;}
+  var cs=document.getElementById(selId==='b_pool'?'b_city':'l_city');var city=cs?cs.value:"__all";
+  var arr=poolsOf(stage,subject,city,selId);
   // "全部/推荐"首项：本校平日卷（按本校均分实测），默认选中
   var all=document.createElement('option');all.value="__auto";all.text="➤ 本校平日卷（按本校均分实测 · 推荐）";s.add(all);
+  if(arr.length==0){ // 该考区未预置本科目：说明该考区已预置的科目，并追加平日卷兜底供选择
+    var d=cityData(),seen={},has=[];
+    for(var i=0;i<d.length;i++){var r=d[i];
+      if(city&&city!="__all"&&r.city!=city)continue;
+      var st=r.stage||"全部";if(st!="全部"&&st!=stage)continue;
+      if(r.subject=="通用"||seen[r.subject])continue;seen[r.subject]=1;has.push(r.subject);}
+    var o0=document.createElement('option');o0.value="__none";
+    o0.text="（该考区暂无「"+subject+"」预置基准P"+(has.length?"；已预置科目："+has.join("/"):"")+"，将用本校均分实测）";
+    s.add(o0);
+    for(var i=0;i<d.length;i++){var r2=d[i]; // 平日卷兜底仍可选
+      if(r2.subject!="通用")continue;
+      var st2=r2.stage||"全部";if(st2!="全部"&&st2!=stage)continue;
+      var o2=document.createElement('option');o2.value=r2.city+"|"+r2.pool;o2.text=r2.city+" · "+r2.pool+"（P="+r2.p+"）";
+      s.add(o2);}
+    s.value="__auto";return;
+  }
   for(var i=0;i<arr.length;i++){
     var d=arr[i];var o=document.createElement('option');
     o.value=d.city+"|"+d.pool;o.text=d.city+" · "+d.pool+"（P="+d.p+"）";
@@ -2269,16 +2288,63 @@ function renderCity(){
   refreshSelectsKeep();
 }
 var CITY_CACHE_KEY="zydb_city_v51";
-function saveCity(d){try{localStorage.setItem(CITY_KEY,JSON.stringify(d));}catch(e){}}
+function saveCityLocal(d){try{localStorage.setItem(CITY_KEY,JSON.stringify(d));}catch(e){}}
+function setCitySync(t){var h=$('citySync');if(h)h.innerHTML=t;}
+function pushCityCloud(d){ // 口径推送云端（管理员增删改后触发，全设备生效）
+  var cfg=getSync();setCitySync('⏳ 正在同步云端…');
+  return fetchWithTimeout(cfg.url+'/city',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify({rows:d})},10000)
+  .then(function(r){return r.json();})
+  .then(function(dd){
+    if(dd&&dd.ok){setCitySync('✅ 口径已同步云端（共 '+dd.total+' 条，全设备生效）');return true;}
+    setCitySync('❌ 云端同步失败：'+esc((dd&&dd.error)||'未知错误')+'——改动暂存本机，请检查网络后重新编辑任一条目触发重试。');
+    return false;
+  }).catch(function(){setCitySync('❌ 云端同步失败（网络问题）——改动暂存本机，恢复网络后重新编辑触发重试。');return false;});
+}
+function pullCityCloud(){ // 拉取云端口径（云端为准）：启动/打开口径页时自动同步
+  var cfg=getSync();
+  return fetchWithTimeout(cfg.url+'/city',{headers:{'x-sync-key':cfg.key||''}},8000)
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d&&d.ok&&Array.isArray(d.rows)&&d.rows.length){
+      if(JSON.stringify(cityData())!==JSON.stringify(d.rows)){
+        saveCityLocal(d.rows);refreshAllSelects();setCitySync('✅ 已从云端同步口径（共 '+d.rows.length+' 条）');
+        return true;
+      }
+    }
+    return false;
+  }).catch(function(){return false;});
+}
+function saveCity(d){
+  saveCityLocal(d);
+  if(isAdmin())pushCityCloud(d); // 管理员的增删改自动同步云端
+}
+function onlyAdminCity(){
+  alert("城市与基准P的增删改由【系统管理员】统一维护（改动云端同步，全设备生效）。如需修改请联系系统管理员。");
+  renderCity();return false;
+}
 function editCity(i,field,v){
+  if(!isAdmin()){onlyAdminCity();return;}
   var d=cityData();
   if(field=="p"){v=parseFloat(v);if(isNaN(v)||v<0||v>1){alert("基准P需为0~1之间");renderCity();return;}}
   d[i][field]=v;saveCity(d);
   if(field=="p"||field=="pool"||field=="city")refreshSelectsKeep();
 }
-function delCity(i){var d=cityData();d.splice(i,1);saveCity(d);renderCity();}
-function addCityRow(){var d=cityData();d.push({city:"本校平日卷",subject:"数学",pool:"自定义卷",p:0.60,src:"本校实测",stage:"全部"});saveCity(d);renderCity();}
-function resetCity(){if(confirm("恢复为内置默认口径？你自定义的条目将被清除。")){try{localStorage.removeItem(CITY_KEY);}catch(e){}refreshAllSelects();renderCity();alert("已恢复默认口径");}}
+function delCity(i){
+  if(!isAdmin()){onlyAdminCity();return;}
+  if(!confirm("确定删除该条基准P口径？删除后将同步云端，全设备生效。"))return;
+  var d=cityData();d.splice(i,1);saveCity(d);renderCity();
+}
+function addCityRow(){
+  if(!isAdmin()){onlyAdminCity();return;}
+  var d=cityData();d.push({city:"本校平日卷",subject:"数学",pool:"自定义卷",p:0.60,src:"本校实测",stage:"全部"});saveCity(d);renderCity();
+}
+function resetCity(){
+  if(!isAdmin()){onlyAdminCity();return;}
+  if(confirm("恢复为内置默认口径？你自定义的条目将被清除，并同步云端（全设备生效）。")){
+    saveCity(DEFAULT_CITY.slice());try{localStorage.setItem("zydb_city_ver",DATA_VERSION);}catch(e){}
+    refreshAllSelects();renderCity();
+  }
+}
 function checkUpdate(){
   // 与内置默认比较版本
   var stored=null;try{stored=localStorage.getItem("zydb_city_ver");}catch(e){}
@@ -2293,7 +2359,7 @@ function exportCityJSON(){var d=cityData();var txt=JSON.stringify({v:DATA_VERSIO
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="章圆基准P配置_"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);
   prompt("配置已下载。也可全选复制下方文本发给同事：",txt);
 }
-function importCityJSON(){var t=$('impCityText').value.trim();if(!t){alert("请先粘贴配置JSON");return;}
+function importCityJSON(){if(!isAdmin()){onlyAdminCity();return;}var t=$('impCityText').value.trim();if(!t){alert("请先粘贴配置JSON");return;}
   try{var o=JSON.parse(t);var arr=o.data||o;if(!(arr instanceof Array))throw"格式错误";
     saveCity(arr);try{localStorage.setItem("zydb_city_ver",o.v||DATA_VERSION);}catch(e){}
     refreshAllSelects();renderCity();$('impCityText').value="";alert("导入成功，共 "+arr.length+" 条。");
@@ -2635,6 +2701,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var lg=$('topLogo');if(lg){var src='assets/logo.png';try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d)src=d;}catch(e){}lg.src=src;}
   var fy=$('ftYear');if(fy)fy.textContent=new Date().getFullYear(); // 版权年份自动更新
   pullAICloud().then(function(ch){if(ch){try{aiState();}catch(e){}}}); // 启动时同步云端AI配置（管理员保存后全设备生效）
+  pullCityCloud().then(function(ch){if(ch){try{renderCity();}catch(e){}}}); // 启动时同步云端城市基准P口径
 });
 /* ===== 统一美化提示弹窗（接管原生 alert，全站提示自动美化） ===== */
 (function(){
