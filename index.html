@@ -11,15 +11,22 @@
 :root{--pri:#1E6FD9;--pri-d:#1657B0;--pri-l:#EAF2FC;--bg:#F4F7FB;--ink:#1B2733;--sub:#5B6B7C;--line:#DCE6F2;--ok:#1F9D6B;--warn:#E08A1E;--bad:#D6433B;--card:#fff;--sh:0 2px 14px rgba(30,111,217,.08);}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:radial-gradient(1100px 520px at 88% -8%,rgba(30,111,217,.09),transparent 60%),radial-gradient(900px 480px at -8% 30%,rgba(244,168,66,.06),transparent 55%),radial-gradient(760px 420px at 55% 112%,rgba(74,160,240,.07),transparent 55%),linear-gradient(180deg,#F2F6FC 0%,#F8F7F2 100%);background-attachment:fixed;color:var(--ink);font-size:14px;line-height:1.6}
-.topbar{position:relative;overflow:hidden;background:linear-gradient(120deg,#15488F 0%,#1E6FD9 55%,#3E8BEE 100%);color:#fff;padding:28px 20px 24px;box-shadow:0 6px 24px rgba(21,72,143,.26)}
+.topbar{position:relative;overflow:hidden;background:linear-gradient(120deg,#12306E 0%,#1B4396 28%,#2458C8 68%,#3E7BE8 100%);color:#fff;padding:34px 34px 30px;box-shadow:0 8px 30px rgba(21,72,143,.30);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .topbar::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:38px 38px;pointer-events:none}
 .topbar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,rgba(143,208,255,0),#8FD0FF 35%,#FFC96B 60%,rgba(255,201,107,0));pointer-events:none}
-.topbar h1{position:relative;text-align:center;font-size:26px;font-weight:800;letter-spacing:3px;margin:0;text-shadow:0 2px 12px rgba(9,37,84,.35)}
-.topbar .subline{position:relative;text-align:center;font-size:13.5px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.92);margin:8px auto 0}
-.topbar .brand{position:relative;text-align:center;font-size:12.5px;font-weight:600;letter-spacing:4px;color:rgba(255,255,255,.85);margin-bottom:7px}
-.topbar .brand b{color:#FFD68C}
-.topbar .slogan{position:relative;text-align:center;font-size:14px;font-weight:600;letter-spacing:6px;color:rgba(255,214,140,.95);margin:6px auto 0;text-shadow:0 1px 8px rgba(120,70,10,.25)}
-.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+.tb-left{position:relative;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.tb-logo{width:64px;height:64px;object-fit:contain;object-position:center;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.45);padding:6px;box-shadow:0 6px 18px rgba(9,37,84,.35)}
+.tb-brand{font-size:21px;font-weight:800;letter-spacing:4px;line-height:1.2}
+.tb-brand b{color:#FFD68C}
+.tb-brand span{display:block;font-size:10.5px;font-weight:600;letter-spacing:2.5px;color:rgba(255,255,255,.78);margin-top:3px}
+.topbar h1{position:relative;text-align:center;font-size:30px;font-weight:800;letter-spacing:4px;margin:0;text-shadow:0 2px 14px rgba(9,37,84,.4)}
+.topbar .subline{position:relative;text-align:center;font-size:13.5px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.92);margin:9px auto 0}
+.topbar .slogan{position:relative;text-align:center;font-size:14.5px;font-weight:600;letter-spacing:7px;color:rgba(255,214,140,.95);margin:7px auto 0;text-shadow:0 1px 8px rgba(120,70,10,.25)}
+.tb-right{position:relative;flex-shrink:0}
+.tb-badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);padding:8px 18px;border-radius:22px;font-size:12.5px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+@media(max-width:860px){.topbar{flex-direction:column;padding:26px 18px 24px;text-align:center}.tb-left{justify-content:center}.tb-center{min-width:100%}}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px}
+.footer{text-align:center;font-size:12px;color:var(--sub);padding:6px 0 26px;letter-spacing:.5px}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}
 .tab{padding:10px 18px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--sub);cursor:pointer;font-weight:600;font-size:14px;transition:.15s}
 .tab:hover{border-color:var(--pri);color:var(--pri);transform:translateY(-1px)}
@@ -50,8 +57,20 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pri);box
 .t-zhu{background:#EEF1F5;color:#5B6B7C}.t-gg{background:#E7F0FB;color:var(--pri)}.t-tz{background:#EFEAFB;color:#7A5BD0}.t-bg{background:#FBEAF6;color:#C0469A}
 .result{background:linear-gradient(135deg,var(--pri-l),#F4F9FF);border:1px solid #C7DCF5;border-radius:12px;padding:18px 20px;margin-top:16px}
 .big{font-size:34px;font-weight:800;color:var(--pri-d)}
-.kv{display:flex;flex-wrap:wrap;gap:8px 22px;margin:10px 0;font-size:13.5px}
+.kv{display:flex;flex-wrap:wrap;gap:8px 22px;margin:10px 0;font-size:13.5px;align-items:center}
 .kv b{color:var(--pri-d)}
+/* 校准得分率模块 */
+.cal-hero{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.cal-label{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--sub)}
+.cal-hero .big{margin-top:2px;line-height:1.15}
+.cal-hero-r{display:flex;gap:8px;flex-wrap:wrap;padding-top:16px}
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.cal-grid .m{background:rgba(30,111,217,.05);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:0}
+.cal-grid .m i{display:block;font-style:normal;font-size:11px;color:var(--sub);font-weight:600;margin-bottom:2px;white-space:nowrap}
+.cal-grid .m b{font-size:14px;color:var(--pri-d);word-break:break-word}
+.cal-grid .m em{font-style:normal;font-size:11px;color:var(--sub);margin-left:5px}
+.cal-grid .m.wide{grid-column:1/-1}
+html.dark .cal-grid .m{background:rgba(30,111,217,.10)}
 .note{background:#FFF9EE;border:1px solid #F3E0B5;border-radius:10px;padding:11px 14px;font-size:13px;color:#8A6D2E;margin-top:12px}
 .danger{background:#FDEEED;border:1px solid #F3C9C6;color:#B0231C;border-radius:10px;padding:11px 14px;font-size:13px;margin-top:12px}
 table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
@@ -67,10 +86,19 @@ tr:nth-child(even) td{background:#FAFCFF}
 .chip:hover{border-color:var(--pri)}
 .chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
 .chip .lv{font-size:10px;opacity:.8}
+.chip .bk{font-size:10px;font-weight:600;color:#5b7bd5;background:#eef3fd;border-radius:6px;padding:1px 6px;white-space:nowrap}
+html.dark .chip .bk{color:#9db8ee;background:#26314d}
+/* 考点地图 */
+.map-stat{font-size:12px;color:var(--sub);margin-bottom:8px}
+.map-item{border:1px dashed var(--line);border-radius:8px;padding:7px 10px;margin-bottom:7px;background:rgba(30,111,217,.04)}
+.map-item>b{font-size:13px;margin-left:6px}
+.map-f{font-size:12px;color:var(--sub);margin-top:3px}
+.map-x{font-size:12px;color:var(--ok);margin-top:2px}
+.map-cd{font-size:11px;color:var(--warn);margin-top:2px;font-weight:600}
 #report{background:#fff}
 .rpt{background:#fff;padding:0;color:#1B2733}
 .rpt .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--pri);padding-bottom:14px;margin-bottom:18px}
-.rpt .rhead .logo{max-width:150px;max-height:66px;object-fit:contain}
+.rpt .rhead .logo{max-width:150px;max-height:66px;object-fit:contain;object-position:left center}
 .rpt .rhead .org{font-size:20px;font-weight:800;color:var(--pri-d)}
 .rpt h3{font-size:15px;color:var(--pri-d);margin:18px 0 8px;padding-left:9px;border-left:3px solid var(--pri)}
 .rpt table{font-size:12.5px}
@@ -83,7 +111,7 @@ tr:nth-child(even) td{background:#FAFCFF}
 #loginMask::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,rgba(143,208,255,0),#8FD0FF 35%,#FFC96B 60%,rgba(255,201,107,0));pointer-events:none}
 #loginMask>div{position:relative}
 /* 深色模式 */
-html.dark{--pri-d:#7FB3F0;--pri-l:#1C2B45;--bg:#0F1520;--ink:#E7EDF5;--sub:#8DA0B8;--line:#2A3850;--card:#18202F;--sh:0 2px 14px rgba(0,0,0,.4)}
+html.dark{--pri-d:#7FB3F0;--pri-l:#1C2B45;--bg:#0F1520;--ink:#E7EDF5;--sub:#8DA0B8;--line:#2A3850;--card:#18202F;--sh:0 2px 14px rgba(0,0,0,.4);color-scheme:dark}
 html.dark body{background:radial-gradient(1100px 520px at 88% -8%,rgba(30,111,217,.18),transparent 60%),radial-gradient(900px 480px at -8% 28%,rgba(46,134,232,.12),transparent 55%),linear-gradient(180deg,#0B1019,#0F1520);background-attachment:fixed}
 html.dark .card{border-color:#243147}
 html.dark .card:hover{box-shadow:0 8px 26px rgba(0,0,0,.35)}
@@ -99,7 +127,13 @@ html.dark .note{background:#2A2416;border-color:#4A3F1E;color:#D9B96A}
 html.dark .danger{background:#2E1917;border-color:#5A2C28;color:#F0968F}
 html.dark .ed{background:#1E2839;color:var(--ink)}
 html.dark .muted{color:var(--sub)}
-html.dark #report,html.dark .rpt{background:#fff;color:#1B2733}
+html.dark #report,html.dark .rpt{background:var(--card);color:var(--ink)}
+html.dark #report table tr:nth-child(even) td{background:#1A2434}
+html.dark #report .muted{color:var(--sub)}
+html.dark #report .pill{background:#223352;color:#9CC4F5}
+html.dark #report .rhead{border-bottom-color:#2E86E8}
+html.dark #report .note{color:#D9B96A}
+html.dark #report .danger{color:#F0968F}
 html.dark .t-ba{background:rgba(31,157,107,.18);color:#5BD1A0}
 html.dark .t-lin{background:rgba(224,138,30,.16);color:#F0B060}
 html.dark .t-jc{background:rgba(214,67,59,.16);color:#F0968F}
@@ -127,7 +161,7 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
 .set-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap;gap:10px}
 .set-foot .btns{margin-top:0}
 ::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#C3D4E8;border-radius:6px}
-@media print{.topbar,.tabs,.noprint{display:none!important}.wrap{max-width:100%;padding:0}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}}
+@media print{.topbar,.tabs,.footer,.noprint{display:none!important}.wrap{max-width:100%;padding:0}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}html.dark #report,html.dark .rpt{background:#fff!important;color:#1B2733!important}html.dark #report table tr:nth-child(even) td{background:#FAFCFF!important}html.dark #report th{background:#EAF2FC!important;color:#1657B0!important}html.dark #report .muted{color:#5B6B7C!important}html.dark #report .pill{background:#EAF2FC!important;color:#1657B0!important}}
 /* AI 建议模块卡片 */
 .ai-mod{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;box-shadow:0 1px 6px rgba(30,111,217,.05)}
 .ai-mod-t{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--pri-d);font-size:13.5px;border-bottom:1px dashed var(--line);padding-bottom:6px;margin-bottom:6px}
@@ -504,12 +538,13 @@ document.addEventListener('DOMContentLoaded',function(){
   try{var tn=localStorage.getItem('zydb_tab');if(tn){var t2=document.querySelector('.tab[data-p="'+tn+'"]');if(t2)switchTab(tn,t2);}}catch(e){}
 });
 </script>
-<div class="topbar"><div class="brand"><b>章圆</b> · 天元AI</div><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline"> 双轨判定（大分层航道 × 四层台阶）</div></div>
+<div class="topbar"><div class="tb-left"><img class="tb-logo" id="topLogo" alt="章圆LOGO" onerror="this.style.display='none'"><div class="tb-brand"><b>章圆</b><span></span></div></div><div class="tb-center"><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline">双轨判定（大分层航道 × 四层台阶）｜ 授权教师专用</div></div><div class="tb-right"><div class="tb-badge" id="tbVer">V7.5</div></div></div>
 <div class="wrap">
   <div class="tabs">
     <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">学情定位</div>
     <div class="tab" data-p="batch" onclick="switchTab('batch',this)">批量定位</div>
-    <div class="tab" data-p="advice" onclick="switchTab('advice',this)">补短建议</div>
+    <div class="tab" data-p="advice" onclick="switchTab('advice',this)">智能补短建议</div>
+    <div class="tab" data-p="map" onclick="switchTab('map',this)">考点地图</div>
     <div class="tab" data-p="report" onclick="switchTab('report',this)">机构报告</div>
     <div class="tab" data-p="city" onclick="switchTab('city',this)">城市与基准P</div>
     <div class="tab" data-p="ref" onclick="switchTab('ref',this)">口径与参考表</div>
@@ -523,7 +558,7 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="grid g4">
         <div><label>姓名</label><input id="l_name" placeholder="如 张明"></div>
         <div><label>学段</label><select id="l_stage" onchange="onStageChange()"><option value="初中">初中</option><option value="高中" selected>高中</option></select></div>
-        <div><label>年级</label><select id="l_grade"></select></div>
+        <div><label>年级</label><select id="l_grade" onchange="onGradeChange()"></select></div>
         <div><label>学校</label><input id="l_school" placeholder="如 成都七中"></div>
       </div>
       <div class="grid g4" style="margin-top:12px">
@@ -583,11 +618,12 @@ document.addEventListener('DOMContentLoaded',function(){
     <div id="batchResult"></div>
   </div>
 
-  <!-- 补短建议 -->
+  <!-- 智能补短建议 -->
   <div class="panel" id="p-advice">
     <div class="card">
-      <h2>知识点与题型补短建议</h2>
+      <h2>智能补短建议 · 知识点与题型</h2>
       <div class="grid g4">
+        <div><label>知识体系（教材版本）</label><select id="a_region" onchange="onRegionChange()"><option value="cd" selected>成都地区教材（考频导向）</option><option value="ty">通用地区教材（全国通用）</option></select></div>
         <div><label>学段</label><select id="a_stage" onchange="onAdvStageChange()"><option value="初中">初中</option><option value="高中" selected>高中</option></select></div>
         <div><label>年级</label><select id="a_grade" onchange="onAdvGradeChange()"></select></div>
         <div><label>学期（对应教材册次）</label><select id="a_term" onchange="onAdvTermChange()"></select></div>
@@ -598,29 +634,43 @@ document.addEventListener('DOMContentLoaded',function(){
       <div style="margin-top:14px"><label>勾选本次实际丢分的题型（可多选，展开板块查看）：</label></div>
       <div id="modList" style="margin-top:8px"></div>
       <div class="btns">
-        <button class="btn" onclick="genAdvice()">🤖 AI 生成补短建议（联网优先）</button>
+        <button class="btn" onclick="genAdvice()">🤖 AI 生成建议</button>
         <button class="btn sec" onclick="genAdvice(true)">🔄 重新生成</button>
         <button class="btn gho" onclick="clearChips()">清空勾选</button>
       </div>
-      <div class="hint">点击后<b>优先联网生成 AI 针对性建议</b>（云端 Worker 中转，教师零配置），按模块卡片展示；AI 不可用时自动改用内置规则库，结果同样完整可用。</div>
+      <div class="hint">点击后<b>生成AI 针对性建议</b>（云端 Worker 中转，教师零配置），按模块卡片展示；AI 不可用时自动改用内置规则库，结果同样完整可用。</div>
     </div>
     <div id="advResult"></div>
   </div>
 
+  <!-- 考点地图 -->
+  <div class="panel" id="p-map">
+    <div class="card">
+      <h2>考点地图 · 知识点考频分布</h2>
+      <div class="grid g3">
+        <div><label>知识体系</label><select id="m_region" onchange="renderMap()"><option value="cd" selected>成都地区教材（考频导向）</option><option value="ty">通用地区教材（全国通用）</option></select></div>
+        <div><label>学段</label><select id="m_stage" onchange="renderMap()"><option value="初中">初中</option><option value="高中" selected>高中</option></select></div>
+        <div><label>科目</label><select id="m_subject" onchange="renderMap()"><option value="数学">数学</option><option value="物理">物理</option><option value="化学">化学</option><option value="英语">英语</option></select></div>
+      </div>
+      <div class="hint" style="margin-top:8px">数据来源《成都初高中数理化英知识点考频地图》：按教材册次/试卷题型组织，展示各知识板块的<b>卷位次·分值权重</b>、难度分层（筑基/巩固/拓展/拔高）与<b>考法易错点</b>；与「智能补短建议」同一套题库口径，可与勾选互补使用。</div>
+    </div>
+    <div id="mapList"></div>
+  </div>
+
   <!-- 机构报告 -->
   <div class="panel" id="p-report">
-    <div class="card">
+    <div class="card noprint">
       <h2>机构报告设置</h2>
       <div class="grid g3">
         <div><label>机构名称</label><input id="r_org" placeholder="如 章圆智学中心"></div>
         <div><label>报告教师 / 顾问</label><input id="r_teacher" placeholder="选填"></div>
         <div><label>机构LOGO（本地上传，存本机）</label>
-          <input id="r_logoFile" type="file" accept="image/*" onchange="onLogoFile()" style="padding:6px;border:1px dashed var(--line);background:#FAFCFF">
+          <input id="r_logoFile" type="file" accept="image/*" onchange="onLogoFile()" style="padding:6px;border:1px dashed var(--line);background:var(--pri-l);color:var(--ink)">
           <input id="r_logo" placeholder="或粘贴图片URL（可选）" oninput="previewLogo()" style="margin-top:6px">
         </div>
       </div>
-      <div style="margin-top:12px"><label>LOGO 预览</label><div id="logoBox" style="border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:60px;display:flex;align-items:center;justify-content:center;background:#FAFCFF"><span class="muted">暂无 LOGO</span></div></div>
-      <div class="hint" style="margin-top:8px">报告自动使用最近一次「学情定位」的结果与「补短建议」的勾选。请先完成定位。</div>
+      <div style="margin-top:12px"><label>LOGO 预览</label><div id="logoBox" style="border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:60px;display:flex;align-items:center;justify-content:center;background:var(--pri-l)"><span class="muted">暂无 LOGO</span></div></div>
+      <div class="hint" style="margin-top:8px">报告自动使用最近一次「学情定位」的结果与「智能补短建议」的勾选。请先完成定位。</div>
       <div class="btns"><button class="btn" onclick="genReport()">📄 生成机构报告</button><button class="btn sec" onclick="exportPDF(event)">⬇ 导出PDF</button><button class="btn sec" onclick="exportWord()">⬇ 导出Word（.doc）</button><button class="btn gho" onclick="clearLogo()">✕ 清除LOGO</button></div>
       <div class="hint">导出PDF直接生成PDF文件（A4版式、含LOGO，断网可用）；导出Word生成可编辑 .doc。默认使用章圆LOGO（assets/logo.png）；上传自定义LOGO后自动保存在本机并覆盖默认，「✕ 清除LOGO」可恢复默认。</div>
     </div>
@@ -699,7 +749,7 @@ document.addEventListener('DOMContentLoaded',function(){
         <tr><td>考试范围 / 卷型</td><td>新增范围选择；半卷考套全卷锚时警告并引导自锚</td></tr>
         <tr><td>评分宽严（主观题）</td><td>语文/英语标"评分宽严敏感"，建议以本校历次均分纵向自比</td></tr>
         <tr><td>群体构成（班型）</td><td>实验班/尖子班须按班型分池或用班均分自锚</td></tr>
-        <tr><td>建议个性化</td><td>补短建议融入校准得分率、基础题应得率、勾选题型、本学期进度四要素</td></tr>
+        <tr><td>建议个性化</td><td>智能补短建议融入校准得分率、基础题应得率、勾选题型、本学期进度四要素</td></tr>
       </table>
       <div class="hint">2026 春起八下数学、九下物理启用新教材（内容变多变难），同年级跨届基准P不可混用，口径表建议加"教材届次"备注。</div>
     </div>
@@ -762,15 +812,17 @@ document.addEventListener('DOMContentLoaded',function(){
         </div>
         <div class="hint" id="pwState"></div>
       </div>
-      <div class="card">
+      <div class="card" id="aiCard">
         <h2>AI 接口设置（可选 · 已预置免费AI产品）</h2>
-        <div class="hint" style="margin-bottom:10px">补短建议「🤖 AI 生成建议」优先走<b>云端 Worker 中转</b>（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用）；此处为本机直连配置，二者都不通时自动回退内置规则库。</div>
+        <div class="hint" style="margin-bottom:10px">智能补短建议「🤖 AI 生成建议」优先走<b>云端 Worker 中转</b>（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用）；此处为本机直连配置，二者都不通时自动回退内置规则库。</div>
         <div class="grid g3">
           <div><label>免费AI产品（预置，选后自动带出地址与模型）</label>
             <select id="ai_preset" onchange="onAIPreset()">
               <option value="tokenhub" selected>腾讯云 TokenHub · 元宝AI（默认）</option>
               <option value="siliconflow">硅基流动 SiliconFlow（Qwen 免费模型）</option>
               <option value="glm">智谱AI · GLM-4-Flash（免费）</option>
+              <option value="xfyun">讯飞星火 Spark Lite（教育 · 永久免费）</option>
+              <option value="bailian">阿里云百炼 · 通义千问（送7000万Token）</option>
               <option value="cfworker">Cloudflare Worker 中转（推荐，本地可用）</option>
               <option value="custom">自定义（自建 / 其他兼容接口）</option>
             </select>
@@ -786,6 +838,9 @@ document.addEventListener('DOMContentLoaded',function(){
               <option value="hy4">hy4</option>
               <option value="Qwen/Qwen2.5-7B-Instruct">Qwen/Qwen2.5-7B-Instruct（硅基流动）</option>
               <option value="glm-4-flash">glm-4-flash（智谱）</option>
+              <option value="generalv3.5">generalv3.5（星火 Spark Lite）</option>
+              <option value="qwen-turbo">qwen-turbo（百炼）</option>
+              <option value="qwen-plus">qwen-plus（百炼）</option>
             </select>
             <input id="ai_model" placeholder="选择预置自动填入，或直接手动输入模型名">
           </div>
@@ -803,6 +858,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
 </div>
 
+<div class="footer">© <span id="ftYear">2026</span> 成都章圆智学中学 版权所有</div>
+
 <script>
 /* ============ 默认数据（内置口径，版本 5.1.0） ============ */
 var DATA_VERSION="7.4.0";
@@ -810,11 +867,8 @@ var DEFAULT_CITY=[
   // 高中：四川高考
   {city:"四川高考",subject:"数学",pool:"物理类",p:0.54,src:"机构预估",stage:"高中"},
   {city:"四川高考",subject:"数学",pool:"历史类",p:0.46,src:"机构预估",stage:"高中"},
-  {city:"四川高考",subject:"语文",pool:"物理类",p:0.64,src:"机构预估",stage:"高中"},
-  {city:"四川高考",subject:"语文",pool:"历史类",p:0.63,src:"机构预估",stage:"高中"},
   {city:"四川高考",subject:"英语",pool:"通用",p:0.62,src:"机构预估",stage:"高中"},
   {city:"四川高考",subject:"物理",pool:"通用",p:0.52,src:"机构预估",stage:"高中"},
-  {city:"四川高考",subject:"历史",pool:"通用",p:0.58,src:"机构预估",stage:"高中"},
   // 初中：成都各区中考（数学，分区取值）
   {city:"成都·青羊",subject:"数学",pool:"中考",p:0.52,src:"机构预估",stage:"初中"},
   {city:"成都·天府新区",subject:"数学",pool:"中考",p:0.59,src:"机构预估",stage:"初中"},
@@ -826,7 +880,6 @@ var DEFAULT_CITY=[
   {city:"成都·二三圈层",subject:"数学",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
   {city:"成都·远郊",subject:"数学",pool:"中考",p:0.72,src:"机构预估",stage:"初中"},
   // 初中：中考其他科目（无分科公布值，用中考整体难度近似，须以本校均分回算替换）
-  {city:"成都·中考通用",subject:"语文",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
   {city:"成都·中考通用",subject:"英语",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
   {city:"成都·中考通用",subject:"物理",pool:"中考",p:0.62,src:"机构预估",stage:"初中"},
   {city:"成都·中考通用",subject:"化学",pool:"中考",p:0.65,src:"机构预估",stage:"初中"},
@@ -834,33 +887,21 @@ var DEFAULT_CITY=[
   {city:"成都高三诊断",subject:"数学",pool:"一诊",p:0.56,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"数学",pool:"二诊",p:0.587,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"数学",pool:"三诊",p:0.60,src:"校准卡V3.7区间中值",stage:"高中"},
-  {city:"成都高三诊断",subject:"语文",pool:"一诊",p:0.65,src:"校准卡V3.7·预估",stage:"高中"},
-  {city:"成都高三诊断",subject:"语文",pool:"二诊",p:0.585,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"英语",pool:"一诊",p:0.60,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"英语",pool:"二诊",p:0.61,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"物理",pool:"一诊",p:0.56,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"成都高三诊断",subject:"物理",pool:"二诊",p:0.545,src:"校准卡V3.7·预估",stage:"高中"},
-  {city:"成都高三诊断",subject:"历史",pool:"一诊",p:0.59,src:"校准卡V3.7·预估",stage:"高中"},
-  {city:"成都高三诊断",subject:"历史",pool:"二诊",p:0.565,src:"校准卡V3.7·预估",stage:"高中"},
   {city:"四川高考",subject:"化学",pool:"通用",p:0.55,src:"机构预估",stage:"高中"},
   // 其他城市（非成都）：高中高考通用
   {city:"其他城市(通用)",subject:"数学",pool:"高考",p:0.55,src:"机构预估·非官方",stage:"高中"},
-  {city:"其他城市(通用)",subject:"语文",pool:"高考",p:0.63,src:"机构预估·非官方",stage:"高中"},
   {city:"其他城市(通用)",subject:"英语",pool:"高考",p:0.62,src:"机构预估·非官方",stage:"高中"},
   {city:"其他城市(通用)",subject:"物理",pool:"高考",p:0.52,src:"机构预估·非官方",stage:"高中"},
   {city:"其他城市(通用)",subject:"化学",pool:"高考",p:0.55,src:"机构预估·非官方",stage:"高中"},
-  {city:"其他城市(通用)",subject:"历史",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
-  {city:"其他城市(通用)",subject:"地理",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
-  {city:"其他城市(通用)",subject:"政治",pool:"高考",p:0.60,src:"机构预估·非官方",stage:"高中"},
-  {city:"其他城市(通用)",subject:"生物",pool:"高考",p:0.58,src:"机构预估·非官方",stage:"高中"},
   // 其他城市（非成都）：初中中考通用
   {city:"其他城市(通用)",subject:"数学",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
-  {city:"其他城市(通用)",subject:"语文",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
   {city:"其他城市(通用)",subject:"英语",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
   {city:"其他城市(通用)",subject:"物理",pool:"中考",p:0.62,src:"机构预估·非官方",stage:"初中"},
   {city:"其他城市(通用)",subject:"化学",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
-  {city:"其他城市(通用)",subject:"历史",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
-  {city:"其他城市(通用)",subject:"政治",pool:"中考",p:0.65,src:"机构预估·非官方",stage:"初中"},
   // 初高中通用：平日卷兜底（优先本校均分实测，与城市无关）
   {city:"本校平日卷",subject:"通用",pool:"兜底(标准卷)",p:0.60,src:"兜底值",stage:"全部"},
   {city:"本校平日卷",subject:"通用",pool:"兜底(偏难卷)",p:0.54,src:"兜底值",stage:"全部"},
@@ -869,240 +910,494 @@ var DEFAULT_CITY=[
 
 /* ============ 题型库（初中/高中 × 语数物化英，分板块） ============ */
 /* level: zhu筑基 gg巩固 tz拓展 bg拔高 */
-var BANK={
+/* ============================================================
+   知识点/题型库 V7.5（重构 · 依据《成都初高中数理化英知识点考频地图》）
+   · BANK_CD：成都地区教材视图——数理化按教材册次顺序组织（模块名=年级册·板块（卷位次·分值）），
+     英语按成都中考/四川新高考试卷题型组织
+   · BANK_TY：通用地区教材视图——运行时生成：去掉卷位次标注、剔除成都卷专属题型
+   · cd:1 = 成都卷专属题型（通用库剔除）；pre:"vocab" = 英语词汇地基（提分顺序门槛）
+   · lv 仅作难度分层（教学逻辑），不限制勾选；所有题型均可勾选
+   ============================================================ */
+var BANK_CD={
 "初中":{
  "数学":{
-  "数与代数":[
-   {n:"有理数混合运算",lv:"zhu",f:"符号错、运算顺序乱",x:"重练符号法则与优先级，每日10道纯运算"},
-   {n:"整式与因式分解",lv:"zhu",f:"公式套错、提不净",x:"背熟乘法公式，练提取公因式+公式法两步"},
-   {n:"分式运算与化简求值",lv:"gg",f:"通分错、约分漏条件",x:"规范通分步骤，标定义域限制"},
-   {n:"一元二次方程",lv:"gg",f:"判别式/韦达用不熟",x:"练判别式分类、韦达定理求根关系"},
-   {n:"二次函数综合",lv:"tz",f:"含参最值、图像平移卡壳",x:"练配方求顶点、含参区间最值分类"},
-   {n:"规律探索与代数推理",lv:"bg",f:"不会归纳通项",x:"练从特殊到一般，写通项并验证"}],
-  "图形与几何":[
-   {n:"三角形全等证明",lv:"gg",f:"条件找不全、书写不规范",x:"练四种判定，规范三步书写"},
-   {n:"相似三角形",lv:"tz",f:"对应边找错、比例式列错",x:"练A字/X字模型，标对应顶点"},
-   {n:"圆（垂径/圆周角/切线）",lv:"tz",f:"辅助线不会添",x:"练连半径、作弦心距两类辅助线"},
-   {n:"几何压轴（动点/存在性）",lv:"bg",f:"分类讨论漏情形",x:"练动点分段、存在性先假设再验证"}],
-  "函数":[
-   {n:"一次函数与图像",lv:"zhu",f:"k/b意义不清",x:"练k正负与增减性、截距读图"},
-   {n:"反比例函数",lv:"gg",f:"k几何意义、与一次交点",x:"练k的几何意义、联立求交点"},
-   {n:"函数与几何综合",lv:"bg",f:"不会建坐标建模",x:"练建系设点、用函数表达几何量"}],
-  "统计与概率":[
-   {n:"统计图表分析",lv:"zhu",f:"读图错、平均数/中位数混",x:"练条形/扇形/折线读图，区分三数"},
-   {n:"概率计算（列表/树状图）",lv:"gg",f:"有放回无放回混、漏情形",x:"规范画树状图，标清放回与否"}],
-  "综合与实践":[
-   {n:"实际应用题（方程/不等式）",lv:"gg",f:"不会设未知、审错题",x:"练圈关键量、列等量/不等关系"},
-   {n:"方案优化与最值",lv:"tz",f:"不会建函数求最值",x:"练设变量→列函数→定范围求最值"},
-   {n:"跨学科情境题",lv:"bg",f:"读不懂陌生情境",x:"练提取数学模型，忽略干扰信息"}]
+  "七上～八下 · 数与式（A卷·约15分）":[
+   {n:"有理数运算与科学记数法",lv:"zhu",f:"符号法则、混合运算顺序、大数表示与近似数；√a非负等概念陷阱",x:"符号与运算每日限时练，规范科学记数法书写"},
+   {n:"实数与二次根式",lv:"gg",f:"平方根算术平方根、√a非负、二次根式化简运算",x:"二次根式化简专项，√a非负判断集中突破"},
+   {n:"整式运算与乘法公式",lv:"gg",f:"幂的运算、平方差、完全平方；化简求值符号错误高发",x:"乘法公式变形每日5题，化简求值规范书写"},
+   {n:"因式分解",lv:"gg",f:"提公因式+公式+十字相乘；方法选择不当导致分解不彻底",x:"三法顺序训练：先提公再公式再十字相乘"},
+   {n:"分式化简与求值",lv:"gg",f:"约分通分、有意义条件、化简后代值；漏'分母≠0'条件",x:"先化简后代值规范流程，有意义条件陷阱题集中练"}
+  ],
+  "七上～九上 · 方程与不等式（A卷·约20分）":[
+   {n:"一元一次方程与二元一次方程组",lv:"gg",f:"解法与应用建模；古文/生活情境审题转化",x:"应用题建模训练：先翻译情境再设元列式"},
+   {n:"一元二次方程",lv:"tz",f:"四种解法、判别式、根与系数、增长率/利润应用",x:"四种解法对照选优，增长率/利润应用专项"},
+   {n:"分式方程",lv:"gg",f:"解法、增根检验、工程/行程应用；漏验增根",x:"解后必验根习惯养成，工程行程建模练"},
+   {n:"一元一次不等式(组)",lv:"gg",f:"解集数轴表示、方案设计型应用",x:"数轴表示解集规范，方案设计最优选择题型"}
+  ],
+  "七上～九上 · 统计与概率（A卷必考·约16分）":[
+   {n:"统计图表与数据分析",lv:"gg",f:"频数分布、平均/中位/众数、加权平均数、方差；评委打分等情境审题陷阱",x:"读图读表定位→转译→代入训练，加权平均情境题"},
+   {n:"概率(列表/树状图)",lv:"gg",f:"列表/树状图求概率；列举不重不漏",x:"规范列举格式训练，与统计综合题联练"}
+  ],
+  "七下～八下 · 三角形与证明（几何·约20分）":[
+   {n:"几何基础(线/角/平行线)",lv:"zhu",f:"平行线判定性质、多边形内角和、命题证明",x:"平行线三线八角识图专项"},
+   {n:"全等三角形证明",lv:"tz",f:"SSS/SAS/ASA/AAS判定与证明；条件书写不全",x:"判定条件规范书写，几何证明步骤分训练"},
+   {n:"等腰直角三角形与勾股定理",lv:"tz",f:"三线合一、勾股及逆定理、解直角三角形测量应用",x:"等腰三线合一应用，勾股实际测量题"},
+   {n:"垂直平分线与角平分线",lv:"gg",f:"性质判定、尺规作图",x:"性质+作图规范，中点条件联想训练"}
+  ],
+  "七下～八下 · 图形变换与视图（约8分）":[
+   {n:"平移·轴对称·旋转",lv:"zhu",f:"变换作图、中心对称、与坐标系结合",x:"三种变换作图规范"},
+   {n:"三视图与投影·展开图",lv:"gg",f:"三视图还原、立方体展开图",x:"展开图折叠想象训练，三视图还原小题"}
+  ],
+  "八上～九下 · 函数（A+B卷·约38分）":[
+   {n:"平面直角坐标系与函数基础",lv:"zhu",f:"点的坐标、对称平移、自变量取值范围",x:"坐标对称规律记忆，取值范围求法"},
+   {n:"一次函数",lv:"tz",f:"图象性质、与方程不等式综合、实际应用（路线/计费）——B24高频位",x:"从图象读信息建模，方案比较应用题专项"},
+   {n:"反比例函数",lv:"gg",f:"图象性质、k的几何意义、与一次函数交点及线段比",x:"k几何意义图形题，联立求交点练"},
+   {n:"二次函数",lv:"bg",f:"图象性质、最值、与方程综合；B26固定压轴：抛物线交点、含参化简、参数范围，重代数本质",x:"含参二次函数分类讨论专训，交点关系与参数范围"}
+  ],
+  "八下～九上 · 四边形（几何·约16分）":[
+   {n:"平行四边形",lv:"gg",f:"性质判定、三角形中位线",x:"判定定理对照表记忆"},
+   {n:"矩形·菱形·正方形",lv:"tz",f:"性质判定与相互转化，A卷证明题高频",x:"特殊平行四边形判定链梳理，证明题规范"},
+   {n:"梯形与多边形",lv:"zhu",f:"内角和、等腰梯形，权重趋弱",x:"内角和公式基础练"}
+  ],
+  "九上～九下 · 相似与锐角三角函数（几何核心·约20分）":[
+   {n:"相似三角形",lv:"bg",f:"判定性质、位似、与函数综合；B25几何探究常以等腰+相似为基底层层递进",x:"等腰+相似基底题模练，前一问结论供后一问的递进训练"},
+   {n:"锐角三角函数与解直角三角形",lv:"tz",f:"特殊角值、仰俯角/坡度应用，A卷解答常客",x:"特殊角值熟记，测高测距建模题"},
+   {n:"几何压轴拓展(辅助线/倒角)",lv:"bg",f:"梅涅劳斯雏形、和差角、旋转构造等视野；B22填空压轴强调一题多解灵活倒角",x:"辅助线添加套路归纳，倒角技巧专项"}
+  ],
+  "九下 · 圆（几何最重·约16分）":[
+   {n:"圆的基本性质",lv:"tz",f:"垂径定理、圆周角定理、弧弦圆心角关系；A卷第17题简单计算常考",x:"垂径定理模型图熟记，圆周角转换练"},
+   {n:"点线圆位置与切线",lv:"tz",f:"切线判定与性质，证明题高频",x:"切线证明两套路（连半径证垂直/作垂直证半径）"},
+   {n:"圆的计算",lv:"gg",f:"弧长、扇形面积、圆锥侧面积、阴影面积",x:"弧长扇形公式应用，阴影面积转化技巧"}
+  ],
+  "全学段 · 综合与实践（课标第四领域）":[
+   {n:"项目式/课题学习",lv:"tz",f:"测高、方案设计、最优选择、规律探究等真实问题；情境化应用题落点",x:"真实情境建模题：剥离文字冗余、建立数学模型"}
+  ]
  },
  "物理":{
-  "声光热":[
-   {n:"声现象",lv:"zhu",f:"音调响度音色混",x:"辨三特性，联系生活实例"},
-   {n:"光现象（反射/折射/成像）",lv:"gg",f:"作图不规范、成像规律乱",x:"练光路图，记平面镜/凸透镜成像"},
-   {n:"物态变化与热学",lv:"zhu",f:"六种变化辨不清",x:"列表辨吸放热，练温度计读数"}],
-  "力学":[
-   {n:"力与运动（受力分析）",lv:"gg",f:"漏力、多力",x:"练隔离法画受力图，先重力再接触力"},
-   {n:"压强（固/液/大气）",lv:"gg",f:"公式选错、深度理解错",x:"辨固液压强公式，练液体深度取值"},
-   {n:"浮力",lv:"tz",f:"多解法不会选、受力漏",x:"练称重法/阿基米德/平衡三法"},
-   {n:"简单机械与功/功率/效率",lv:"tz",f:"机械效率算错",x:"练有用功/总功辨析，滑轮组绕线"}],
-  "电学":[
-   {n:"电路识别与电表",lv:"zhu",f:"串并联判断错、电表接错",x:"练去表法判电路，电流表串电压表并"},
-   {n:"欧姆定律",lv:"gg",f:"动态电路分析乱",x:"练滑变引起的I/U变化链"},
-   {n:"电功电功率与电热",lv:"tz",f:"额定实际混、公式乱套",x:"辨额定/实际，练P=UI及变形选用"},
-   {n:"电学综合计算",lv:"bg",f:"多状态电路列不出方程",x:"练分状态画等效电路列方程"}],
-  "实验探究":[
-   {n:"测量类实验（长度/密度/电阻）",lv:"zhu",f:"读数/步骤不规范",x:"练量筒天平电表读数，规范步骤"},
-   {n:"探究类实验（控制变量）",lv:"gg",f:"变量控制表述不清",x:"练写'控制…不变，改变…'句式"},
-   {n:"电学/力学设计性实验",lv:"bg",f:"不会设计方案",x:"练画电路图+写步骤+表达式"}]
+  "八上 · 机械运动与声现象（约14分）":[
+   {n:"长度时间测量·误差",lv:"zhu",f:"刻度尺读数、多次测量求平均；估读位规范",x:"刻度尺读数规范训练"},
+   {n:"机械运动与速度",lv:"gg",f:"参照物、v=s/t、s-t与v-t图象",x:"图象信息提取专项"},
+   {n:"声音的产生传播与特性",lv:"gg",f:"振动发声、音调响度音色辨析",x:"三特性对照表区分训练"},
+   {n:"噪声控制与超声次声",lv:"zhu",f:"防治三途径、超声次声应用",x:"概念辨析基础练"}
+  ],
+  "八上 · 光现象与透镜（约20分）":[
+   {n:"光的反射与平面镜成像",lv:"gg",f:"反射定律、成像特点与作图、潜望镜原理",x:"光的反射作图规范，成像特点题"},
+   {n:"光的折射",lv:"gg",f:"折射规律、视深变浅",x:"折射光路图与生活现象对应"},
+   {n:"直线传播·色散",lv:"zhu",f:"小孔成像、三原色",x:"现象归类基础练"},
+   {n:"凸透镜成像规律",lv:"tz",f:"物距像距关系、动态变化；实验必考，常与近视矫正情境结合",x:"成像规律表熟记，动态变化题专训"},
+   {n:"眼睛与光学仪器",lv:"gg",f:"视力矫正、照相机/投影仪/放大镜原理",x:"四种光学仪器成像对照"}
+  ],
+  "八上 · 物态变化（约8分）":[
+   {n:"六种物态变化",lv:"gg",f:"熔化/凝固/汽化/液化/升华/凝华吸放热判断",x:"六变化名称+吸放热表记忆"},
+   {n:"熔化与沸腾规律",lv:"gg",f:"晶体熔点、沸点、图象分析",x:"温度-时间图象读取训练"}
+  ],
+  "八上 · 质量与密度（约10分）":[
+   {n:"质量及其测量",lv:"zhu",f:"质量概念、托盘天平使用、单位换算",x:"天平使用规范步骤"},
+   {n:"密度及其测量",lv:"tz",f:"ρ=m/V、量筒测体积、测固体/液体密度；实验操作与计算常客",x:"测密度实验全流程规范，ρ=m/V计算"},
+   {n:"密度与社会生活",lv:"zhu",f:"鉴别物质、m-V图象、热胀冷缩影响",x:"密度鉴别应用题"}
+  ],
+  "八下 · 力学（最重·约35分）":[
+   {n:"力的基础与重力·摩擦力",lv:"gg",f:"三要素、示意图、G=mg、摩擦力方向与增减",x:"受力示意图规范，摩擦力增减判断"},
+   {n:"牛顿第一定律与二力平衡",lv:"gg",f:"惯性、平衡条件应用辨析",x:"惯性现象解释模板，平衡力辨别"},
+   {n:"压强(固/液/大气/流体)",lv:"tz",f:"p=F/S、p=ρgh、大气压、流体压强与流速；船闸（连通器）高频载体",x:"p=F/S与p=ρgh分场景选用，连通器题"},
+   {n:"浮力",lv:"bg",f:"阿基米德原理、沉浮条件、液面变化论证——成都压轴第一位置",x:"浮力四种求法对照，液面变化论证推理训练"},
+   {n:"简单机械与机械效率",lv:"tz",f:"杠杆平衡、滑轮组、机械效率计算；动滑轮素材直取教材",x:"杠杆平衡条件应用，滑轮组效率计算"},
+   {n:"功·功率·机械能",lv:"gg",f:"W=Fs、P=W/t、动能势能转化；生活工程情境",x:"功功率计算规范，机械能转化分析"}
+  ],
+  "九全 · 电学（约28分）":[
+   {n:"电流电压电阻·电路",lv:"gg",f:"串并联规律、电表使用、滑动变阻器；电路故障判断高频",x:"串并联识别与故障判断专项"},
+   {n:"欧姆定律",lv:"tz",f:"I=U/R、伏安法、动态电路分析",x:"动态电路分析步骤化训练"},
+   {n:"电功与电功率",lv:"bg",f:"P=UI、焦耳定律、额定/实际功率测量；大题高频",x:"电功率综合计算专训，额定实际对比"},
+   {n:"电学黑箱(成都特色)",lv:"bg",cd:1,f:"综合欧姆定律+串并联做科学推理；成都B卷特色压轴",x:"黑箱推理题：由外部现象反推内部结构"},
+   {n:"家庭电路与安全用电",lv:"gg",f:"火线零线、三孔插座、触电防护",x:"家庭电路连接规范与安全常识"}
+  ],
+  "九全 · 电与磁（约8分）":[
+   {n:"磁场与电流磁效应",lv:"gg",f:"磁感线、奥斯特实验、安培定则",x:"安培定则方向判断练"},
+   {n:"电磁铁·电动机",lv:"gg",f:"电磁继电器、通电导体受力",x:"电磁铁应用与电动机原理"},
+   {n:"电磁感应",lv:"gg",f:"感应电流条件、发电机原理",x:"产生感应电流条件辨析"}
+  ],
+  "九全 · 热学与能源（约10分）":[
+   {n:"内能与比热容",lv:"tz",f:"分子动理论、改变内能方式、Q=cmΔt计算",x:"Q=cmΔt计算规范，内能改变方式辨析"},
+   {n:"热机与热值",lv:"gg",f:"四冲程、热值、热机效率",x:"四冲程图判断，热值效率计算"},
+   {n:"能量守恒与能源",lv:"zhu",f:"转化守恒、能源分类、核能",x:"能源分类概念练"}
+  ],
+  "全学段 · 实验探究与操作（15分直计升学分）":[
+   {n:"测量与探究类实验",lv:"tz",f:"测密度、控制变量探究；数据分析与结论表述",x:"控制变量法规范表述训练"},
+   {n:"力学实验操作",lv:"gg",f:"测滑轮组机械效率、探究杠杆平衡等操作规范",x:"操作步骤与读数规范拿满"},
+   {n:"电学实验操作",lv:"gg",f:"伏安法测电阻/测小灯泡功率、连接电路规范；失分敏感区",x:"接线/量程/读数规范训练"}
+  ]
  },
  "化学":{
-  "身边的化学物质":[
-   {n:"空气与氧气",lv:"zhu",f:"性质用途混、实验现象记错",x:"记O2性质与制法，练现象描述"},
-   {n:"水与溶液（溶解度曲线）",lv:"gg",f:"溶解度曲线读错、质量分数算错",x:"练曲线交点/饱和判断，算溶质质量分数"},
-   {n:"碳及其氧化物",lv:"zhu",f:"CO/CO2性质混",x:"对比CO还原性与CO2酸性"},
-   {n:"金属与金属材料",lv:"gg",f:"活动性顺序、置换反应错",x:"背金属活动顺序，练置换判断"},
-   {n:"酸碱盐",lv:"tz",f:"复分解条件、离子共存错",x:"练复分解发生条件，判离子共存"}],
-  "物质构成的奥秘":[
-   {n:"微粒与元素/化合价",lv:"zhu",f:"化合价记错、化学式写错",x:"背常见化合价，练化学式与命名"},
-   {n:"质量守恒与化学方程式",lv:"gg",f:"不配平、计算按错量",x:"练配平，化方程计算按纯净物质量"}],
-  "化学与社会":[
-   {n:"化学与生活/材料/能源",lv:"zhu",f:"常识性丢分",x:"整理生活化学常识卡"}],
-  "科学探究":[
-   {n:"常见气体制取装置",lv:"gg",f:"装置选择/收集方法错",x:"练发生+收集装置匹配"},
-   {n:"物质的检验/除杂/推断",lv:"tz",f:"推断线索断、除杂引新杂",x:"练特征现象突破，除杂不引新杂质"},
-   {n:"实验探究与定量计算",lv:"bg",f:"综合实验无从下手",x:"练假设-验证-结论，化方程综合计算"}]
- },
- "语文":{
-  "积累与运用":[
-   {n:"字音字形/词语运用",lv:"zhu",f:"多音字、成语误用",x:"建错字音形成语本，周清"},
-   {n:"病句修改",lv:"gg",f:"病因辨不出",x:"归类六大病句类型，练修改"},
-   {n:"古诗文默写",lv:"zhu",f:"写错别字、张冠李戴",x:"理解性默写，易错字专项"}],
-  "古诗文阅读":[
-   {n:"文言实词虚词",lv:"gg",f:"一词多义、词类活用错",x:"整理120实词+常用虚词"},
-   {n:"文言文翻译与理解",lv:"tz",f:"直译漏点、句意不通",x:"练留删调换补，逐字落实"},
-   {n:"古诗词鉴赏",lv:"tz",f:"手法情感答不全",x:"练手法+画面+情感答题模板"}],
-  "现代文阅读":[
-   {n:"记叙文/散文阅读",lv:"gg",f:"概括不全、赏析不到位",x:"练分层概括，词句赏析角度"},
-   {n:"说明文/议论文阅读",lv:"gg",f:"说明方法/论证方法混",x:"辨方法类型，练作用分析"}],
-  "写作":[
-   {n:"记叙文写作",lv:"gg",f:"流水账、缺细节",x:"练细节描写与立意升华"},
-   {n:"考场作文审题立意",lv:"bg",f:"偏题、结构散",x:"练审题扣题，结构模板化"}]
+  "九上 · 物质构成与化学用语（基础·约15分）":[
+   {n:"分子原子离子·原子结构",lv:"gg",f:"微粒性质、原子构成、元素符号、地壳含量",x:"微粒图辨析，地壳元素含量排序"},
+   {n:"化合价与化学式",lv:"tz",f:"常见化合价、与化学式互求、相对分子质量与质量分数",x:"化合价口诀熟记，化学式书写规范"},
+   {n:"化学方程式与质量守恒",lv:"tz",f:"配平、方程式计算，全卷核心计算底座",x:"配平技巧+根据方程式计算规范"}
+  ],
+  "九上 · 空气·氧·水·碳（约25分）":[
+   {n:"空气成分与氧气性质",lv:"gg",f:"体积分数、测氧含量实验、碳硫磷铁镁燃烧现象描述",x:"燃烧现象描述规范（现象≠结论）"},
+   {n:"氧气制取(实验必考)",lv:"tz",f:"三种制法、装置选择、催化剂、验满",x:"制氧气装置选择与验满规范"},
+   {n:"水的组成与净化",lv:"gg",f:"电解水、硬水软水、净化方法",x:"电解水结论推断，净化流程排序"},
+   {n:"碳的氧化物(CO₂/CO)",lv:"tz",f:"CO₂性质制取检验、温室效应与双碳、CO还原性",x:"CO₂检验与除杂，双碳情境题"},
+   {n:"微观示意图辨识",lv:"tz",f:"从微观模型判断反应类型、分子个数比",x:"微观图→化学方程式转译训练"}
+  ],
+  "九上 · 金属与金属材料（约10分）":[
+   {n:"金属化学性质与活动性顺序",lv:"tz",f:"与氧气/酸/盐反应、活动性判断、置换规律",x:"活动性顺序表应用，置换反应判断"},
+   {n:"铁的冶炼与锈蚀",lv:"gg",f:"冶炼原理、生锈条件与防锈、炼铁流程",x:"生锈条件与防锈措施归纳"}
+  ],
+  "九上～九下 · 溶液与溶解度（约10分）":[
+   {n:"溶解度曲线",lv:"bg",f:"饱和判断、曲线读图、结晶方法、溶质质量分数变化；必考图表，常结合降温/蒸发设问",x:"溶解度曲线四问套路（判断/结晶/计算/比较）"},
+   {n:"溶液的配制与计算",lv:"gg",f:"溶质质量分数计算、配制步骤",x:"配制溶液步骤规范+计算"}
+  ],
+  "九下 · 酸碱盐（最重·约25分）":[
+   {n:"常见的酸与碱",lv:"gg",f:"盐酸硫酸/氢氧化钠氢氧化钙通性、浓硫酸稀释",x:"酸碱通性对照，稀释操作规范"},
+   {n:"中和反应与pH",lv:"tz",f:"中和实质、pH测定与应用、图像判断",x:"中和图像分析，pH应用题"},
+   {n:"复分解反应与离子共存",lv:"bg",f:"复分解条件、离子共存与鉴别、化肥鉴别；'过量滴加后剩哪些离子'为新考法",x:"过量滴加溶液成分推理专项"},
+   {n:"盐与物质推断",lv:"bg",f:"常见盐性质、推断题、除杂探究，大题难点",x:"物质推断题突破口归纳（颜色/沉淀/气体）"}
+  ],
+  "全学段 · 化学与社会·流程·探究（压轴区·约15分）":[
+   {n:"工业流程题(侯氏制碱等)",lv:"bg",cd:1,f:"工艺流程解读、原理迁移、循环利用；2026压轴即侯氏制碱法",x:"流程题三步法：原料→转化→产品，循环物质标注"},
+   {n:"化学与生活(酿造/发酵/材料)",lv:"gg",f:"酿造/发酵/催化剂/缓慢氧化/六大营养素/合成材料",x:"生活化学情境归类"},
+   {n:"科技前沿情境(航天/双碳)",lv:"gg",f:"航天燃料材料能源电池嵌进科技叙事",x:"情境题剥离素材抓考点训练"},
+   {n:"跨学科探究(传感器等)",lv:"bg",f:"压强传感器+图像分析、实验方案设计与误差分析",x:"跨学科探究题：图像读取+变量控制"},
+   {n:"气体制取与实验操作",lv:"tz",f:"O₂/CO₂/H₂制取检验验满、装置选择、基本操作规范",x:"制取装置选择表，操作规范拿满"}
+  ]
  },
  "英语":{
-  "词汇地基（先决·门槛）":[
-   {n:"核心词汇与词组（课标1600词）",lv:"zhu",pre:"vocab",f:"形近词/固定搭配混淆，生词量不足直接拖垮阅读与完形",x:"每天定量过词+高频搭配本+构词法；词汇不过关，阅读写作一律暂缓"},
-   {n:"词形变化与语法填空",lv:"zhu",pre:"vocab",f:"词性转换、名词复数/动词形式错",x:"练句子成分+构词法，先补词再补句"}],
-  "语法句法":[
-   {n:"时态与语态",lv:"gg",pre:"grammar",f:"时态标志词混用、被动语态漏",x:"专项练时态标志词+主被动转换"},
-   {n:"三大从句",lv:"gg",pre:"grammar",f:"引导词选错、从句语序乱",x:"练定语/宾语/状语从句引导词判断"},
-   {n:"完形填空",lv:"gg",pre:"grammar",f:"上下文逻辑断、词汇复现漏（根基仍是词汇量）",x:"先扫清生词再通读抓主线回填"}],
-  "语篇阅读":[
-   {n:"阅读·细节与主旨",lv:"gg",pre:"discourse",f:"细节定位错、主旨概括偏（前提：词汇认全）",x:"题干定位原文，区分事实与概括；先扫生词"},
-   {n:"阅读·推断与态度",lv:"tz",pre:"discourse",f:"过度推断、态度误判（依赖长难句拆解）",x:"练主干剥离+选项证伪"},
-   {n:"任务型阅读/还原",lv:"tz",pre:"discourse",f:"逻辑衔接、指代判断错",x:"练代词/连接词/复现线索"}],
-  "写作输出":[
-   {n:"书面表达（把要点写对）",lv:"gg",pre:"output",f:"要点漏、语法错误多",x:"背框架+要点全覆盖，先写对再写好"},
-   {n:"书面表达（提分表达）",lv:"tz",pre:"output",f:"句式单一、高级表达缺",x:"词汇语法稳了再加高分句型与连接词"},
-   {n:"看图/情境写作",lv:"bg",pre:"output",f:"信息组织乱、语域错",x:"练要点排序+成文逻辑"}]
+  "听力（A卷·30分）":[
+   {n:"听力对话(1.5分/题)",lv:"tz",f:"抓数字/地点/态度/转折词；单题1.5分，错3题=丢一阅读大题",x:"每日精听10题，数字/转折词捕捉专训"},
+   {n:"听力表格填空(一词一空)",lv:"gg",f:"一词一空规范，拼写与词形必严",x:"听写填空：先定词性再拼写"}
+  ],
+  "语言知识运用（单选/完形/语法语篇）":[
+   {n:"核心词汇与固定搭配",lv:"gg",pre:"vocab",f:"高频词、动词短语、固定搭配；A卷保底B卷攻坚的地基",x:"每天定量过词+高频搭配本，词汇周测过关"},
+   {n:"音标拼读与语调",lv:"zhu",f:"48音标、拼读规则、重音连读语调；语音辨析小题与听力地基",x:"见词能读听音能写训练"},
+   {n:"名词",lv:"gg",f:"可数不可数、复数、所有格；短文填空常考复数变形",x:"不规则复数表+所有格专练"},
+   {n:"冠词·代词·数词",lv:"gg",f:"a/an/the零冠词、代词辨析、基数序数词",x:"冠词口诀+代词对照表"},
+   {n:"形容词副词与比较等级",lv:"gg",f:"比较级最高级、as…as、倍数",x:"比较等级变形规则练"},
+   {n:"介词与动词短语",lv:"gg",f:"时间/地点/方式介词、固定短语；完形高频",x:"介词搭配本积累"},
+   {n:"连词与逻辑衔接",lv:"tz",f:"并列从属连词、however/in addition/for example等逻辑词——补全短文全靠它",x:"逻辑衔接词分类记诵，语篇填空专练"},
+   {n:"动词形式与一般三时态",lv:"gg",f:"三单、过去式、一般现在/过去/将来标志词辨析",x:"不规则动词表过关，时态标志词对应"},
+   {n:"进行时",lv:"gg",f:"现在/过去进行时与when/while辨析",x:"when/while句型对比练"},
+   {n:"现在完成时",lv:"tz",f:"since/for/already/yet、与一般过去辨析；易错高频",x:"完成时与过去时对比专训"},
+   {n:"情态动词",lv:"gg",f:"can/must/should及表推测(can't/must)",x:"表推测句型归纳"},
+   {n:"被动语态",lv:"tz",f:"be+过去分词、各时态被动",x:"各时态被动式变形练"},
+   {n:"非谓语初步",lv:"tz",f:"不定式/动名词常见搭配；完成短文综合考时态+非谓语+连词",x:"常见搭配归纳，语篇综合判断训练"},
+   {n:"宾语从句",lv:"tz",f:"引导词、陈述语序、时态呼应",x:"三要素（引导词/语序/时态）逐项排查"},
+   {n:"状语从句与定语从句初步",lv:"gg",f:"so that/although等连词；who/which/that基本用法",x:"从句引导词选择练"},
+   {n:"句子种类与主谓一致",lv:"gg",f:"反意疑问句、感叹句、there be就近原则、主谓一致",x:"反意疑问句构成规则练"},
+   {n:"情景交际(补全对话)",lv:"gg",f:"问路/就医/购物/邀请/建议等功能话题应答",x:"功能句应答模板积累"}
+  ],
+  "阅读理解（A卷）":[
+   {n:"阅读细节与同义替换定位",lv:"gg",f:"细节定位、同义替换识别",x:"题干关键词回文定位训练"},
+   {n:"阅读推断/主旨/写作意图",lv:"tz",f:"推断/主旨/结构/写作意图题增加；跨学科话题增多",x:"主旨题首末句法，推断题证据链训练"}
+  ],
+  "B卷专项（十二选十/六选五/表格/任务型·35分）":[
+   {n:"十二选十",lv:"bg",f:"选词+词形变化，认识≠会用；B卷失分重灾首题",x:"词形变化专训：先定词性再变形"},
+   {n:"六选五/补全短文",lv:"tz",f:"逻辑衔接、上下文复现、代词指代",x:"复现词定位法训练"},
+   {n:"完成表格(≤3词)",lv:"tz",f:"信息定位+'减法'概括，答案不超过3词；要点齐全优先于语法完美",x:"定位→概括→词数控制三步训练"},
+   {n:"任务型阅读(完整句)",lv:"tz",f:"按要点给分，需用完整句子回答",x:"要点齐全+完整句组织"},
+   {n:"高中衔接词(尖子生储备)",lv:"bg",f:"B卷阅读出现高中常见词汇，高一衔接压力前置",x:"高频衔接词提前储备"}
+  ],
+  "书面表达（B卷·15分）":[
+   {n:"书面表达(约80词·三层结构)",lv:"tz",f:"阐述重要性—两条建议—发出号召；锚定成都本土话题，写准不写多",x:"三层结构模板+要点全覆盖检查单"}
+  ]
  }
 },
 "高中":{
  "数学":{
-  "集合与函数":[
-   {n:"集合运算与逻辑",lv:"zhu",f:"补集/子集漏端点",x:"练数轴画集合，注意空集"},
-   {n:"函数定义域值域",lv:"zhu",f:"复合函数定义域错",x:"练'外层看内层'定义域求法"},
-   {n:"函数性质（奇偶/单调/周期）",lv:"gg",f:"性质综合用不熟",x:"练性质联动，抽象函数赋值"},
-   {n:"基本初等函数（指对幂）",lv:"gg",f:"图像性质混、比较大小错",x:"练图像+单调性比较大小"}],
-  "导数":[
-   {n:"导数与单调性/极值",lv:"tz",f:"含参讨论分类不全",x:"练导函数符号分类，端点取舍"},
-   {n:"含参恒成立/存在",lv:"bg",f:"分离参数/最值转化卡壳",x:"练参变分离，转最值问题"},
-   {n:"导数放缩证明不等式",lv:"bg",f:"不会构造、放缩方向错",x:"练经典放缩e^x≥x+1等构造函数"}],
-  "三角与数列":[
-   {n:"三角恒等变换",lv:"gg",f:"公式记混、角变换卡",x:"练和差倍角+辅助角"},
-   {n:"解三角形（正余弦定理）",lv:"gg",f:"多解讨论漏",x:"练正弦定理判断解的个数"},
-   {n:"数列通项与求和",lv:"tz",f:"递推求通项、错位相减错",x:"练累加法/构造法，错位相减规范"},
-   {n:"数列不等式综合",lv:"bg",f:"放缩求和无从下手",x:"练数列放缩与裂项"}],
-  "立体几何与解析":[
-   {n:"立体几何（空间向量）",lv:"tz",f:"建系坐标错、法向量求错",x:"练规范建系，法向量解方程"},
-   {n:"直线与圆",lv:"gg",f:"弦长/切线计算错",x:"练点到直线距离+几何法"},
-   {n:"圆锥曲线（椭圆/双曲/抛物）",lv:"tz",f:"联立韦达、范围讨论错",x:"练设而不求，韦达定理+判别式"},
-   {n:"圆锥曲线压轴",lv:"bg",f:"定点定值/最值不会设",x:"练设线设点、斜率积/和转化"}],
-  "概率统计":[
-   {n:"计数原理与二项式",lv:"gg",f:"排列组合分不清",x:"练分类分步，捆绑插空"},
-   {n:"概率分布（超几何/二项/正态）",lv:"tz",f:"模型选错、期望方差算错",x:"辨模型，练分布列+期望方差"},
-   {n:"统计与回归/独立性检验",lv:"gg",f:"公式套错、读表错",x:"练回归方程与卡方计算"}],
-  "选填技巧":[
-   {n:"小题压轴（函数/不等式）",lv:"bg",f:"耗时多、无策略",x:"练特值/图像/极限排除法"}]
+  "必修一 · 集合·逻辑·不等式（小题送分·约15分）":[
+   {n:"集合运算",lv:"zhu",f:"交并补运算、子集；年年小题首题",x:"集合运算符号规范，定义域/值域限定陷阱"},
+   {n:"常用逻辑用语",lv:"gg",f:"充分必要条件、全称存在量词否定",x:"充要条件判定与量词否定练"},
+   {n:"基本不等式",lv:"gg",f:"a+b≥2√ab求最值；一正二定三相等",x:"取等条件检验习惯，最值题专练"},
+   {n:"一元二次不等式",lv:"gg",f:"解法、含参讨论，常与函数综合",x:"二次不等式→二次函数图象转化"},
+   {n:"不等式性质",lv:"zhu",f:"性质、作差比较",x:"性质逐条辨析"}
+  ],
+  "必修一 · 函数与基本初等函数（约20分）":[
+   {n:"函数概念与性质",lv:"gg",f:"定义域值域、单调奇偶周期、图象变换；贯穿全卷",x:"性质综合小题套路化"},
+   {n:"指数对数函数",lv:"gg",f:"运算、图象性质、比较大小",x:"换底与比较大小技巧"},
+   {n:"函数与方程·零点",lv:"gg",f:"零点存在定理、二分法、函数模型应用",x:"零点个数判断（图象法）"},
+   {n:"幂函数",lv:"zhu",f:"常见幂函数图象比较",x:"五类幂函数图象记忆"}
+  ],
+  "必修一～必修二 · 三角函数与解三角形（B卷常规大题·约20分）":[
+   {n:"任意角·诱导公式·同角关系",lv:"gg",f:"弧度、诱导公式，化简基础",x:"诱导公式口诀+象限符号"},
+   {n:"三角恒等变换",lv:"tz",f:"和差、二倍角、辅助角公式；必考工具",x:"辅助角公式降次化简专训"},
+   {n:"三角函数图象性质",lv:"tz",f:"y=Asin(ωx+φ)、周期单调最值、图象变换",x:"由图象求解析式四步法"},
+   {n:"解三角形",lv:"tz",f:"正弦余弦定理、面积、实际应用；B卷三大题之一（常规位）",x:"正余弦定理选择判断，测量应用建模"}
+  ],
+  "必修二 · 平面向量与复数（约15分）":[
+   {n:"向量运算与坐标",lv:"gg",f:"加减数乘、共线、坐标运算",x:"基底表示与坐标化训练"},
+   {n:"数量积",lv:"gg",f:"数量积、夹角、模；必考工具",x:"数量积求夹角/模公式练"},
+   {n:"向量应用",lv:"tz",f:"与几何三角综合，中档题",x:"向量法解几何题"},
+   {n:"复数",lv:"zhu",f:"复平面、共轭、模、四则运算；年年1小题必送分",x:"复数运算规范拿满"}
+  ],
+  "必修二 · 立体几何（B卷大题·约17分）":[
+   {n:"点线面位置关系",lv:"tz",f:"平行垂直判定性质、线面角；B卷大题常规位",x:"平行垂直证明书写规范（条件齐全）"},
+   {n:"空间向量法",lv:"tz",f:"建系求角求距离，压轴常用",x:"建系规范化，法向量求解流程"},
+   {n:"球的切接·无配图题",lv:"bg",f:"外接内切球半径、无图空间想象与作图；近年突出无配图考想象",x:"球切接模型归纳，无图题先作图"},
+   {n:"表面积与体积",lv:"gg",f:"三视图还原、割补法",x:"三视图还原体积计算"}
+  ],
+  "选必一 · 解析几何（压轴大题·约22分）":[
+   {n:"直线与圆",lv:"gg",f:"方程、位置关系、弦长距离；工具基础",x:"位置关系判定条件表"},
+   {n:"椭圆",lv:"tz",f:"定义、方程、离心率；必考",x:"定义法解题意识，离心率求法"},
+   {n:"双曲线",lv:"tz",f:"方程、渐近线、离心率；小题高频",x:"渐近线与离心率互求"},
+   {n:"抛物线",lv:"gg",f:"定义、焦点准线、性质",x:"焦点弦结论积累"},
+   {n:"圆锥曲线综合(压轴)",lv:"bg",f:"联立、韦达、弦长、定点定值；成都要求打破联立韦达依赖，重轨迹/曲线探究等代数本质",x:"非联立路径训练：设点、几何条件代数化、曲线系"}
+  ],
+  "选必二 · 数列（约17分）":[
+   {n:"等差等比数列",lv:"tz",f:"通项、求和、性质；必考",x:"基本量方程思想，性质巧算"},
+   {n:"数列求和与应用",lv:"tz",f:"错位相减、裂项相消；解答题常规",x:"四种求和方法对照选型"},
+   {n:"an与Sn关系",lv:"gg",f:"递推转化，小题常考",x:"an=Sn-Sn-1适用条件（n≥2）"}
+  ],
+  "选必二 · 导数及其应用（压轴最难·约17分）":[
+   {n:"导数概念与运算",lv:"gg",f:"几何意义、求导法则；基础必会",x:"求导公式熟记，切线方程两类型"},
+   {n:"单调性与极值最值",lv:"tz",f:"导数判单调、求极值；大题主体",x:"含参单调性讨论（分类标准：根的个数与大小）"},
+   {n:"导数综合(含参·恒成立)",lv:"bg",f:"含参讨论、恒成立、不等式证明；19题常在此，成都考生公认最难",x:"恒成立分离参数/最值法，不等式证明构造函数"},
+   {n:"定积分(已移出课标)",lv:"bg",f:"2020修订已删，仅竞赛/强基拓展",x:"拓展视野，常规考试不投入"}
+  ],
+  "必修二～选必三 · 概率与统计（B卷大题·约22分）":[
+   {n:"计数原理·排列组合",lv:"gg",f:"分类分步、常见模型；概率基础",x:"常见计数模型归纳（捆/插/隔板）"},
+   {n:"概率与随机变量",lv:"tz",f:"古典概型、条件概率、分布列期望方差、二项分布；B卷首题常为统计/概率，中等生稳拿位",x:"分布列规范书写，条件概率公式辨析"},
+   {n:"统计·回归·独立性检验",lv:"tz",f:"抽样、回归分析、独立性检验、列联表；新高考高频",x:"K²计算与结论表述规范"},
+   {n:"二项式定理",lv:"gg",f:"通项、系数性质；小题常考",x:"通项公式区分系数与二项式系数"},
+   {n:"正态分布",lv:"zhu",f:"正态曲线与3σ原则",x:"对称性求概率"}
+  ],
+  "全学段 · 推理证明与数学建模（约10分）":[
+   {n:"数学归纳法",lv:"tz",f:"归纳步骤、应用；解答题偶考",x:"两步骤规范书写"},
+   {n:"逻辑推理与新定义",lv:"tz",f:"类比、归纳、新定义信息题；与成都中考B23一脉相承",x:"新定义题：读懂定义→套用定义"},
+   {n:"数学建模",lv:"tz",f:"实际问题→假设建模→求解检验；函数/解三角/概率应用题皆建模",x:"应用题建模四步走训练"},
+   {n:"数学探究与新情境",lv:"tz",f:"开放探究、方案设计、跨学科情境；新高考高频",x:"开放题答题框架训练"}
+  ]
  },
  "物理":{
-  "力学":[
-   {n:"受力分析与共点力平衡",lv:"zhu",f:"漏力、正交分解错",x:"练隔离受力图，正交分解列方程"},
-   {n:"牛顿运动定律应用",lv:"gg",f:"连接体/临界加速度错",x:"练整体隔离法，临界条件分析"},
-   {n:"曲线运动与万有引力",lv:"tz",f:"向心力来源辨错、天体模型乱",x:"练向心力来源，黄金代换"},
-   {n:"功和能/动量",lv:"tz",f:"过程选错、守恒条件判错",x:"练选过程，动量能量守恒判据"}],
-  "电学":[
-   {n:"电场（场强/电势/电容）",lv:"gg",f:"场强叠加、电势高低混",x:"练电场线+等势面，叠加原理"},
-   {n:"恒定电流与电路",lv:"gg",f:"动态电路、电表内阻错",x:"练串反并同，内外接误差"},
-   {n:"磁场与电磁感应",lv:"tz",f:"安培力/洛伦兹方向、感应电动势错",x:"练左手定则，楞次定律+法拉第"},
-   {n:"交变电流与变压器",lv:"gg",f:"有效值、原副线圈关系错",x:"练有效值定义，变压比+功率守恒"}],
-  "实验":[
-   {n:"力学实验（纸带/验证定律）",lv:"gg",f:"数据处理、误差分析弱",x:"练逐差法，误差来源表述"},
-   {n:"电学实验（测电阻/伏安法）",lv:"tz",f:"电路选择、仪器选取错",x:"练内外接、滑动变阻器分压限流"}],
-  "选考模块":[
-   {n:"热学/振动波/光学（选考）",lv:"tz",f:"概念多记不牢、计算题套路不熟",x:"练分子动理论/波动图像/折射率高频考法"},
-   {n:"物理压轴（多过程综合）",lv:"bg",f:"过程拆分不清、衔接条件漏",x:"练分过程画情景图，抓衔接速度/位移"}]
+  "必修一 · 运动学（基础·约10分）":[
+   {n:"匀变速直线运动",lv:"gg",f:"三公式及推论、v-t图象、自由落体；必考基础",x:"三公式选用判断，图象信息提取"},
+   {n:"运动学概念",lv:"zhu",f:"位移速度加速度、矢量性",x:"矢量标量辨析"}
+  ],
+  "必修一 · 相互作用（全卷前提）":[
+   {n:"三种常见力·受力分析",lv:"tz",f:"重力弹力摩擦力、受力分析；一切力学题起点",x:"受力分析顺序化（重力→接触力）"},
+   {n:"力的合成分解",lv:"gg",f:"平行四边形、正交分解；必用工具",x:"正交分解规范化"},
+   {n:"共点力平衡",lv:"tz",f:"平衡条件、动态平衡、图解法",x:"动态平衡图解法专项"}
+  ],
+  "必修一 · 牛顿运动定律（压轴候选·约15分）":[
+   {n:"牛顿三定律",lv:"gg",f:"F=ma、作用力反作用力、超重失重",x:"两类基本问题（已知力求运动/反之）"},
+   {n:"牛顿定律综合",lv:"bg",f:"连接体、传送带、临界、多物体关联；纯力学常为单选压轴焦点",x:"传送带/板块模型专训"}
+  ],
+  "必修二 · 曲线运动与万有引力（约15分）":[
+   {n:"平抛运动",lv:"gg",f:"分解规律、推论；必考",x:"平抛推论（tanθ关系）应用"},
+   {n:"圆周运动",lv:"tz",f:"向心力、临界、竖直平面圆周",x:"绳杆轨道模型临界条件"},
+   {n:"万有引力与航天",lv:"gg",f:"开普勒、天体质量、卫星变轨、宇宙速度",x:"黄金代换应用，变轨问题"},
+   {n:"运动合成与分解",lv:"gg",f:"小船过河、绳端速度",x:"绳端速度分解（沿绳+垂直绳）"}
+  ],
+  "必修二～选必一 · 机械能与动量（压轴候选·约18分）":[
+   {n:"功和功率",lv:"gg",f:"变力做功、机车启动、P=Fv",x:"机车启动两模式"},
+   {n:"动能定理",lv:"tz",f:"多过程应用；必考工具",x:"多过程分段列动能定理"},
+   {n:"机械能守恒",lv:"tz",f:"条件判断、与圆周/弹簧综合",x:"守恒条件判定，系统守恒列式"},
+   {n:"动量定理与动量守恒",lv:"bg",f:"守恒条件、碰撞反冲；力电综合压轴常与动量/弹簧联用",x:"碰撞分类（弹性/非弹性/完全）与动量守恒列式"}
+  ],
+  "必修三 · 静电场与恒定电流（约20分）":[
+   {n:"电场力性质",lv:"gg",f:"库仑、场强、电场线、叠加",x:"场强叠加矢量合成"},
+   {n:"电场能性质",lv:"gg",f:"电势、电势差、电势能、等势面",x:"W=Uq符号法则"},
+   {n:"电容器与带电粒子",lv:"tz",f:"平行板、粒子加速偏转；大题常客",x:"类平抛偏转模型"},
+   {n:"恒定电流与电路",lv:"tz",f:"欧姆定律、电功率、电表改装；直流电路通常在实验题考",x:"串反并同结论，电表改装原理"}
+  ],
+  "选必二 · 磁场·电磁感应·交变电流（压轴核心·约25分）":[
+   {n:"安培力",lv:"gg",f:"磁场、左手定则、安培力矩",x:"左手定则方向判断"},
+   {n:"洛伦兹力与圆周",lv:"bg",f:"半径周期、临界；带电粒子在电磁场中运动=计算压轴之一",x:"画圆定心求半径流程化"},
+   {n:"复合场",lv:"bg",f:"速度选择器、质谱仪、回旋加速器；压轴难点",x:"三场组合分类讨论"},
+   {n:"楞次定律与法拉第定律",lv:"tz",f:"感应电流判断、E=nΔΦ/Δt；必考",x:"楞次定律'增反减同'应用"},
+   {n:"导体切割磁感线(压轴)",lv:"bg",f:"E=BLv、杆导轨、电磁感应+力学/电路功率综合；四川压轴首选",x:"单杆双杆模型，电磁感应+动量/能量综合"},
+   {n:"交变电流·变压器",lv:"gg",f:"有效值、变压器、远距离输电；高频选择题",x:"有效值计算（方波/正弦）"},
+   {n:"传感器实验",lv:"gg",f:"传感器自动控制装置；创新实验开放方向",x:"传感器原理迁移"}
+  ],
+  "选必三 · 热学·光·近代物理（选择题高频·约20分）":[
+   {n:"机械振动与机械波",lv:"gg",f:"简谐、单摆、波图象、干涉衍射多普勒；选择题高频",x:"波形图与振动图区分"},
+   {n:"光学",lv:"gg",f:"折射全反射、干涉衍射偏振",x:"全反射临界角计算，光路作图"},
+   {n:"光电效应与原子结构",lv:"gg",f:"光子说、玻尔模型、能级跃迁",x:"光电效应方程应用"},
+   {n:"原子核与波粒二象性",lv:"gg",f:"衰变、核反应方程、质能方程；近代物理多考波粒二象性",x:"核反应方程守恒（质量数/电荷数）"},
+   {n:"电磁波与相对论",lv:"zhu",f:"电磁波谱、相对论结论",x:"概念记忆"},
+   {n:"分子动理论与气体实验定律",lv:"tz",f:"理想气体状态方程、图象；选择+计算各半，注意热力综合",x:"气体状态方程分过程列式"},
+   {n:"热力学定律",lv:"gg",f:"第一第二定律、能量耗散",x:"ΔU=W+Q符号法则"}
+  ],
+  "全学段 · 实验（一力一电·必考约15分）":[
+   {n:"力学实验(教材改编)",lv:"tz",f:"测速度加速度、验证牛顿定律、机械能守恒；教材改编/创新比例提高",x:"实验原理迁移能力训练"},
+   {n:"电学实验(含伏安法)",lv:"tz",f:"测电阻/电动势内阻、电表改装；开放题三方向：优化/原理/误差",x:"分压限流接法选择，滑动变阻器规格"},
+   {n:"图象分析与误差处理",lv:"tz",f:"U-I、a-F图象处理、系统误差分析",x:"图象截距斜率物理意义解读"}
+  ]
  },
  "化学":{
-  "化学基础":[
-   {n:"物质的量与化学计量",lv:"zhu",f:"n/M/Vm/c关系混",x:"练四量换算，阿伏加德罗陷阱"},
-   {n:"离子反应与离子方程式",lv:"gg",f:"拆写错、过量少量错",x:"练强弱电解质拆分，量比书写"},
-   {n:"氧化还原反应",lv:"gg",f:"配平错、强弱比较错",x:"练化合价升降配平，氧化性还原性排序"}],
-  "元素化合物":[
-   {n:"金属及其化合物（Na/Al/Fe）",lv:"gg",f:"性质转化链不熟",x:"练'价类二维'转化关系"},
-   {n:"非金属及其化合物（Cl/S/N）",lv:"tz",f:"性质多、方程记错",x:"练含氧酸性质与工业流程"},
-   {n:"元素推断/化工流程",lv:"bg",f:"流程信息提取难",x:"练核心反应识别，箭头前后物质"}],
-  "化学反应原理":[
-   {n:"化学平衡（速率/限度/移动）",lv:"tz",f:"平衡判据、等效平衡错",x:"练三段式，勒夏特列+等效"},
-   {n:"水溶液中的离子平衡",lv:"bg",f:"三大守恒、离子浓度排序错",x:"练电荷/物料/质子守恒，大小比较"},
-   {n:"电化学（原电池/电解池）",lv:"tz",f:"电极判断、离子移动错",x:"练阴阳极判断，电子流向"},
-   {n:"反应热与盖斯定律",lv:"gg",f:"ΔH符号、盖斯叠加错",x:"练热化学方程叠加"}],
-  "有机与实验":[
-   {n:"有机化学（结构/反应/推断）",lv:"tz",f:"官能团性质、同分异构漏",x:"练官能团转化，同分异构书写"},
-   {n:"化学实验综合",lv:"bg",f:"装置/操作/探究设计弱",x:"练实验目的-原理-装置-现象逻辑链"}]
- },
- "语文":{
-  "现代文阅读":[
-   {n:"论述类文本（信息筛选）",lv:"gg",f:"曲解文意、无中生有",x:"练选项与原文比对，标逻辑词"},
-   {n:"文学类文本（小说/散文）",lv:"tz",f:"形象/手法/主旨答题空",x:"练情节-人物-环境-主题四维答题"},
-   {n:"实用类文本（非连续性）",lv:"gg",f:"多材料整合漏点",x:"练分材料概括+比较"}],
-  "古诗文":[
-   {n:"文言文阅读（实虚词/文化常识）",lv:"gg",f:"实词推断、断句错",x:"练语境推断+标志词断句"},
-   {n:"古代诗歌鉴赏",lv:"tz",f:"手法/情感/形象答不全",x:"练'手法+分析+效果+情感'模板"},
-   {n:"名篇名句默写",lv:"zhu",f:"情境默写错字",x:"理解性默写，易错字专项"}],
-  "语言运用":[
-   {n:"成语/病句/衔接",lv:"gg",f:"成语误用、衔接逻辑断",x:"归类积累+语境逻辑"},
-   {n:"图文转换/语言表达",lv:"tz",f:"信息压缩、得体性错",x:"练概括要点+对象得体"}],
-  "写作":[
-   {n:"议论文审题立意",lv:"tz",f:"立意偏浅、任务驱动漏",x:"练任务指令拆解，多角度立意"},
-   {n:"议论文结构与论证",lv:"bg",f:"结构散、论据空泛",x:"练'引议联结'结构+分层论证"},
-   {n:"作文素材与语言",lv:"gg",f:"素材陈旧、语言平淡",x:"建时鲜素材库，练思辨表达"}]
+  "必修一 · 物质的量·化学计量（全卷底座·约12分）":[
+   {n:"物质的量·气体摩尔体积",lv:"gg",f:"n、NA、摩尔质量、阿伏加德罗定律；全卷计算基础",x:"n=N/NA=m/M=V/Vm换算网"},
+   {n:"NA正误判断",lv:"tz",f:"阿伏加德罗常数选择题；年年必考陷阱，须零失误",x:"陷阱清单（气体状态/可逆/电离水解/电子转移）"},
+   {n:"物质的量浓度",lv:"gg",f:"配制、稀释混合、相关计算",x:"稀释混合守恒式（c₁V₁=c₂V₂）"}
+  ],
+  "必修一 · 离子反应·氧化还原（思维主线·约15分）":[
+   {n:"物质分类与胶体",lv:"zhu",f:"分散系、胶体性质",x:"胶体性质（丁达尔/电泳/聚沉）"},
+   {n:"离子反应",lv:"tz",f:"离子方程式、离子共存、离子检验；选择题+大题必考",x:"离子方程式书写拆写原则，共存表"},
+   {n:"氧化还原反应",lv:"tz",f:"电子转移、配平、强弱规律、陌生方程式书写；全卷核心思维",x:"双线桥法，陌生方程式信息题套路"}
+  ],
+  "必修一～必修二 · 元素化合物（约18分）":[
+   {n:"钠·铝·铁及其化合物",lv:"tz",f:"Na₂O₂、铝两性图像、Fe²⁺/Fe³⁺转化与检验",x:"铝三角/铁三角转化网络"},
+   {n:"氯·硫·氮及其化合物",lv:"tz",f:"氯气/次氯酸、SO₂与浓硫酸、氨与硝酸工业流程；大题高频",x:"气体性质实验网络图"},
+   {n:"碳硅与无机材料",lv:"gg",f:"硅、二氧化硅、硅酸盐、新型无机材料",x:"SiO₂性质与应用"},
+   {n:"元素推断(位构性)",lv:"gg",f:"周期表+周期律+结构综合推断；选择题必考",x:"位构性推断题解题模板"}
+  ],
+  "必修二～选必二 · 物质结构与周期律（约15分）":[
+   {n:"原子结构与电子排布",lv:"gg",f:"核素、能层能级、基态排布、电离能电负性",x:"排布式书写规范"},
+   {n:"元素周期律",lv:"gg",f:"半径/化合价/金属性递变、位构性推断",x:"递变规律比较题"},
+   {n:"化学键与分子间作用力",lv:"gg",f:"离子/共价键、氢键、熔沸点比较、晶体类型",x:"熔沸点比较思路链"},
+   {n:"分子空间结构与杂化",lv:"tz",f:"VSEPR、杂化轨道、配合物；结构选考重点",x:"VSEPR模型判断流程"},
+   {n:"晶体结构与晶胞计算",lv:"bg",f:"四类晶体、晶胞均摊法、密度/粒子数/配位数计算；选必二难点常考",x:"均摊法+密度计算公式套用"}
+  ],
+  "选必一 · 反应与能量·电化学（大题必考·约16分）":[
+   {n:"反应热与盖斯定律",lv:"tz",f:"焓变、热化学方程式、盖斯定律计算",x:"盖斯定律方程式叠加技巧"},
+   {n:"原电池与电解池",lv:"tz",f:"原理、化学电源（锂电/燃料电池）、电解应用、腐蚀防护；新能源情境",x:"电极判断与电极反应式书写"},
+   {n:"反应速率与化学平衡",lv:"tz",f:"速率计算、平衡判断、勒夏特列、K计算、三段式、等效平衡；必考大题",x:"三段式规范，K与转化率计算"},
+   {n:"平衡图像分析",lv:"bg",f:"转化率、多曲线图像、条件改变的趋势推理；拉分题",x:"图像题先看坐标轴与拐点"}
+  ],
+  "选必一 · 水溶液离子平衡（难点·约14分）":[
+   {n:"弱电解质与电离",lv:"gg",f:"电离平衡、Kw、强弱电解质比较、稀释图像",x:"稀释图像规律"},
+   {n:"pH与中和滴定",lv:"tz",f:"pH计算、滴定曲线、指示剂选择、误差分析；实验必考",x:"pH两算（酸碱混合/稀释），滴定误差分析"},
+   {n:"盐类水解",lv:"tz",f:"水解规律、三大守恒、粒子浓度比较、双水解；高频难点",x:"三大守恒式书写，浓度排序技巧"},
+   {n:"沉淀溶解平衡",lv:"tz",f:"Ksp、沉淀转化、分步沉淀、图像；压轴小题",x:"Ksp比较与Qc判断"}
+  ],
+  "选必三 · 有机化学（大题必考·约16分）":[
+   {n:"有机基础与烃",lv:"gg",f:"命名、同分异构体数目、烷烯炔苯、官能团性质",x:"同分异构体书写有序法"},
+   {n:"烃的衍生物与转化",lv:"bg",f:"卤代烃/醇/酚/醛/羧酸/酯转化网络；有机推断大题核心",x:"官能团转化网络图默写"},
+   {n:"有机合成路线设计",lv:"bg",f:"官能团引入/保护、逆合成分析、条件书写；压轴难点",x:"逆合成分析训练"},
+   {n:"营养物质与高分子",lv:"gg",f:"糖油脂蛋白、加聚缩聚、合成材料",x:"高分子单体判断"}
+  ],
+  "全学段 · 化学实验与工艺流程（压轴大题·约14分）":[
+   {n:"基本操作与分离提纯",lv:"gg",f:"仪器、过滤蒸馏萃取、气密性检查",x:"分离方法选择依据表"},
+   {n:"气体制备与检验除杂",lv:"gg",f:"装置选择、离子/气体检验、除杂干燥",x:"制气装置组合（发生+净化+收集）"},
+   {n:"实验方案设计与探究",lv:"bg",f:"方案评价、控制系统变量、误差分析、传感器/数字化实验；压轴大题",x:"变量控制思想，方案评价角度"},
+   {n:"工艺流程题",lv:"bg",f:"原料预处理、条件控制、循环利用、产率计算；与中考侯氏制碱一脉相承",x:"流程题主线梳理（除杂/转化/分离）"}
+  ],
+  "全学段 · STSE·化学与技术（选择题·约6分）":[
+   {n:"资源环境与绿色化学",lv:"gg",f:"海水综合利用、化工生产、污染治理、双碳",x:"绿色化学概念判断"},
+   {n:"化学与材料·生活·科技",lv:"gg",f:"航天燃料材料、新能源、药物食品添加剂、传统文化中的化学",x:"材料分类常识积累"}
+  ]
  },
  "英语":{
-  "词汇地基（先决·门槛）":[
-   {n:"核心词汇与词组（课标3500词）",lv:"zhu",pre:"vocab",f:"3500词未过关，生词量拖垮阅读、完形与续写",x:"高频词+熟词生义+搭配，每天定量滚动；词汇不过关，读写一律暂缓"},
-   {n:"语法填空·词性与构词",lv:"zhu",pre:"vocab",f:"词性转换、词缀判断错",x:"练构词法+句子成分，先词后句"},
-   {n:"长难句拆解",lv:"gg",pre:"vocab",f:"主干找不出、从句套嵌看不懂（依赖词汇认全）",x:"练主干剥离+从句切分"}],
-  "语法与完形":[
-   {n:"语法填空·谓语与非谓语",lv:"gg",pre:"grammar",f:"谓语vs非谓语判断错、时态语态乱",x:"练句子成分分析+时态语态"},
-   {n:"完形填空",lv:"gg",pre:"grammar",f:"语篇逻辑、词汇复现漏（根基仍是词汇）",x:"先扫生词再练篇章主线+前后照应"}],
-  "语篇阅读":[
-   {n:"阅读·细节与主旨",lv:"gg",pre:"discourse",f:"定位错、主旨概括偏（先扫生词）",x:"题干定位+选项证伪"},
-   {n:"阅读·推断与态度",lv:"tz",pre:"discourse",f:"过度推断、态度误判",x:"练证据链+长难句主干"},
-   {n:"七选五",lv:"tz",pre:"discourse",f:"衔接逻辑、指代判断错",x:"练代词/连接词/复现线索"}],
-  "写作输出":[
-   {n:"应用文写作",lv:"gg",pre:"output",f:"要点漏、格式语域错",x:"背格式+要点全覆盖，先写对"},
-   {n:"读后续写/概要写作",lv:"bg",pre:"output",f:"情节衔接、语言协同弱",x:"原文语言植入+情节推进（词汇语法稳了再加高级表达）"}]
+  "听力（30分）":[
+   {n:"听力理解(对话与独白)",lv:"gg",f:"抓主旨/细节/态度/数字；语篇变长要求提升",x:"每日精听，审题预判+关键信息笔记"}
+  ],
+  "词汇与词法基础（全卷地基）":[
+   {n:"高考核心词汇(3500)",lv:"gg",pre:"vocab",f:"熟词生义、同义替换、词块搭配；阅读写作共同地基",x:"高频词滚动+熟词生义积累本"},
+   {n:"外研版教材词汇体系",lv:"gg",cd:1,f:"成都高中统一外研版，按外研版7册主题词汇推进；勿买人教版词汇书",x:"按外研版主题词汇清单推进"},
+   {n:"构词法与词性转换",lv:"gg",f:"前后缀、名动形副互转；语法填空'给词填空'核心考点",x:"前后缀清单+词性转换专项"},
+   {n:"名词·冠词·代词·介词",lv:"gg",f:"抽象名词、it用法、冠词特指泛指、介词固定搭配、with复合结构",x:"介词搭配本积累"},
+   {n:"形容词副词与比较等级",lv:"zhu",f:"倍数表达、比较级特殊结构、排序",x:"倍数句型三式"},
+   {n:"情态动词",lv:"gg",f:"对现在/过去推测、情态动词+have done",x:"must have done类推测句型"}
+  ],
+  "语法填空考点体系（15分）":[
+   {n:"时态语态体系",lv:"tz",f:"各时态语境辨析、时态呼应、标志词；谓语考点年年必考",x:"语境定时态三步法"},
+   {n:"非谓语动词",lv:"tz",f:"不定式/动名词/分词作状语定语补语、独立主格；语法填空最难点",x:"非谓语三函数（状/定/补）判断流程"},
+   {n:"名词性从句",lv:"tz",f:"引导词选择、that/what区别、语序、同位语从句",x:"what/that判别口诀"},
+   {n:"定语从句",lv:"tz",f:"关系词选择、介词+which、非限制性、as引导；语法填空高频",x:"关系词判断两步（先行词+成分）"},
+   {n:"状语从句",lv:"gg",f:"九类连词辨析、省略结构",x:"连词语义分类记诵"},
+   {n:"虚拟语气",lv:"tz",f:"if条件句、含蓄虚拟、wish/suggest/insist后从句",x:"三类虚拟时间轴对照"},
+   {n:"倒装与强调",lv:"gg",f:"完全/部分倒装、否定词与only置于句首、It is…that",x:"倒装触发条件清单"},
+   {n:"主谓一致",lv:"zhu",f:"就近就远、集合名词、there be、量词短语",x:"一致规则速查"}
+  ],
+  "阅读理解与七选五（约50分）":[
+   {n:"长难句分析",lv:"tz",f:"句子成分划分、从句嵌套拆解、插入语剥离；阅读提速关键",x:"每日3句长难句成分标注"},
+   {n:"阅读理解(ABCD篇)",lv:"tz",f:"细节/主旨/推断/观点/写作意图；全国二卷推断与主旨题占比高",x:"题型分类答题策略（细节定位/主旨首末/推断证据）"},
+   {n:"七选五",lv:"tz",f:"段落逻辑、代词与连接词复现、首尾句呼应",x:"复现词+逻辑词定位法"}
+  ],
+  "完形填空（30分）":[
+   {n:"完形填空",lv:"tz",f:"上下文线索、情感态度、固定搭配、词汇辨析",x:"首轮跳读定基调，线索链训练"}
+  ],
+  "写作（应用文+读后续写·约40分）":[
+   {n:"应用文写作",lv:"tz",f:"书信/通知/演讲稿/申请/建议框架、高分句型、要点全覆盖；必考",x:"八类应用文框架模板"},
+   {n:"读后续写(压轴)",lv:"bg",f:"情节合理衔接、心理+动作+环境细节描写、语言风格与前文一致；25分档，135+与120+的分水岭",x:"五感描写词库+情节续写训练（每周2篇精改）"}
+  ]
  }
 }
 };
 
-/* ============ V7.2 新增：教材册次·学期进度·范围锚点匹配 ============ */
-(function(){var s=document.createElement('style');s.textContent='.chip.lazy{opacity:.42;cursor:not-allowed;filter:grayscale(.45)}.chip.lazy:hover{opacity:.42}.bk{font-size:11px;color:#8A97A5;margin-left:3px}.scopeWarn{border-left:4px solid #D6433B}';document.head.appendChild(s);})();
-
-/* 册次代码 → 通用学期槽位（跨科目统一轴，1=初一上/高一上 … 6=初三下/高三下总复习） */
+/* ============ 教材册次槽位（学期进度上限用） ============ */
 var BOOK_SLOT={M1:1,M2:2,M3:3,M4:4,M5:5,M6:6, P1:3,P2:4,P3:5, C1:5,C2:6, E1:1,E2:2,E3:3,E4:4,E5:5, G1:1,G2:2,G3:3,G4:4,G5:5, REV:6};
-var BOOK_LABEL={M1:"七上",M2:"七下",M3:"八上",M4:"八下",M5:"九上",M6:"九下", P1:"八上",P2:"八下",P3:"九全", C1:"九上",C2:"九下", E1:"七上",E2:"七下",E3:"八上",E4:"八下",E5:"九全", G1:"必修一",G2:"必修二",G3:"选必一",G4:"选必二",G5:"选必三", REV:"总复习/压轴"};
+var BOOK_LABEL={M1:"七上",M2:"七下",M3:"八上",M4:"八下",M5:"九上",M6:"九下", P1:"八上",P2:"八下",P3:"九全", C1:"九上",C2:"九下", E1:"七上",E2:"七下",E3:"八上",E4:"八下",E5:"九全", G1:"必修一",G2:"必修二",G3:"选必一",G4:"选必二",G5:"选必三", REV:"总复习"};
 var CAP_LABEL_J=["","七年级上册","七年级下册","八年级上册","八年级下册","九年级上册","九年级下册/中考总复习"];
 var CAP_LABEL_S=["","必修第一册(必修上)","必修第二册(必修下)","选择性必修一","选择性必修二","选择性必修三","高三一轮总复习"];
 
-/* 逐题型所属册次（默认教材顺序：初中数学=北师大版；物理/化学/英语=人教版；语文=部编版；高中=人教A/2019人教版。可按本校教学进度在口径表核对） */
-var PROG={
+/* 逐题型册次映射：V7.5 起自动从 BANK_CD 模块名的年级前缀生成（"全学段"归入总复习） */
+var BOOK_PREFIX={"七上":"M1","七下":"M2","八上":"M3","八下":"M4","九上":"M5","九下":"M6","必修一":"G1","必修二":"G2","必修三":"G3","选必一":"G3","选必二":"G4","选必三":"G5","全学段":"REV"};
+var PROG={"初中":{},"高中":{}};
+function modGrade(mk){ // 取模块名中第一个"·"前的完整年级册区间（如"七上～八下""必修二～选必一"）；英语按试卷题型组织，无年级册则返回空
+  var head=mk.split('·')[0].replace(/[(（].*$/,'').trim();
+  return /^(七上|七下|八上|八下|九上|九下|九全|必修一|必修二|必修三|选必一|选必二|选必三|全学段)/.test(head)?head:'';
+}
+(function(){
+  var stArr=["初中","高中"];
+  for(var si=0;si<stArr.length;si++){var st=stArr[si];PROG[st]={};
+    var sub=BANK_CD[st]||{};
+    Object.keys(sub).forEach(function(sj){
+      var mp={};
+      Object.keys(sub[sj]).forEach(function(mk){
+        var code=(function(){var m=mk.match(/^(七上|七下|八上|八下|九上|九下|必修一|必修二|必修三|选必一|选必二|选必三|全学段)/);return (m&&BOOK_PREFIX[m[1]])||"REV";})();
+        var arr=sub[sj][mk];
+        for(var i=0;i<arr.length;i++)mp[arr[i].n]=code;
+      });
+      PROG[st][sj]=mp;
+    });
+  }
+})();
+/* 通用地区教材视图：运行时生成——去掉模块名的卷位次标注（），剔除成都卷专属题型 */
+var BANK_TY={"初中":{},"高中":{}};
+(function(){
+  var stArr=["初中","高中"];
+  for(var si=0;si<stArr.length;si++){var st=stArr[si];BANK_TY[st]={};
+    var sub=BANK_CD[st]||{};
+    Object.keys(sub).forEach(function(sj){
+      var out={};
+      Object.keys(sub[sj]).forEach(function(mk){
+        var nm=mk.replace(/\s*[（(][^（）()]*[）)]/g,'').trim();
+        var qs=[];var arr=sub[sj][mk];
+        for(var i=0;i<arr.length;i++)if(!arr[i].cd)qs.push(arr[i]);
+        if(qs.length)out[nm]=(out[nm]||[]).concat(qs);
+      });
+      BANK_TY[st][sj]=out;
+    });
+  }
+})();
+/* 当前知识体系下的题库（成都/通用切换） */
+function bankOf(stage,subject){var R=(val('a_region')=='ty')?BANK_TY:BANK_CD;return (R[stage]&&R[stage][subject])||{};}
+
+/* ============ 试卷结构映射（初/高中真实卷面结构） ============ */
+var EXAM_LABEL={
  "初中":{
-  "数学":{"有理数混合运算":"M1","整式与因式分解":"M4","分式运算与化简求值":"M4","一元二次方程":"M5","二次函数综合":"M6","规律探索与代数推理":"REV","三角形全等证明":"M4","相似三角形":"M5","圆（垂径/圆周角/切线）":"M6","几何压轴（动点/存在性）":"REV","一次函数与图像":"M3","反比例函数":"M6","函数与几何综合":"REV","统计图表分析":"M3","概率计算（列表/树状图）":"M5","实际应用题（方程/不等式）":"M5","方案优化与最值":"REV","跨学科情境题":"REV"},
-  "物理":{"声现象":"P1","光现象（反射/折射/成像）":"P1","物态变化与热学":"P3","力与运动（受力分析）":"P2","压强（固/液/大气）":"P2","浮力":"P2","简单机械与功/功率/效率":"P2","电路识别与电表":"P3","欧姆定律":"P3","电功电功率与电热":"P3","电学综合计算":"REV","测量类实验（长度/密度/电阻）":"P3","探究类实验（控制变量）":"REV","电学/力学设计性实验":"REV"},
-  "化学":{"空气与氧气":"C1","水与溶液（溶解度曲线）":"C2","碳及其氧化物":"C1","金属与金属材料":"C2","酸碱盐":"C2","微粒与元素/化合价":"C1","质量守恒与化学方程式":"C1","化学与生活/材料/能源":"C2","常见气体制取装置":"C1","物质的检验/除杂/推断":"C2","实验探究与定量计算":"REV"},
-  "语文":{"字音字形/词语运用":"M1","病句修改":"M4","古诗文默写":"M1","文言实词虚词":"M2","文言文翻译与理解":"M3","古诗词鉴赏":"M5","记叙文/散文阅读":"M1","说明文/议论文阅读":"M5","记叙文写作":"M1","考场作文审题立意":"REV"},
-  "英语":{"词汇与词组辨析":"E1","语法（时态/语态/从句）":"E5","完形填空":"E3","阅读理解（细节/主旨/推断）":"E1","任务型阅读/还原":"E4","书面表达":"E2","看图/情境写作":"E3"}
+  "数学":[["X","选择题"],["T","填空题"],["J","解答题·计算与化简"],["Z","解答题·证明与推理"],["Y","解答题·应用与综合（含压轴位置）"]],
+  "物理":[["X","选择题"],["T","填空题"],["S","实验探究题"],["J","解答题·计算"],["Y","综合压轴题"]],
+  "化学":[["X","选择题"],["T","填空题"],["S","实验探究题"],["J","解答题·计算与推断"],["Y","综合压轴题"]],
+  "英语":[["T","听力（A卷·30分）"],["G","语言知识运用（单选/完形/语法语篇）"],["R","阅读理解（A卷）"],["B","B卷专项（十二选十/六选五/表格/任务型）"],["W","书面表达（B卷·15分）"]]
  },
  "高中":{
-  "数学":{"集合运算与逻辑":"G1","函数定义域值域":"G1","函数性质（奇偶/单调/周期）":"G1","基本初等函数（指对幂）":"G1","导数与单调性/极值":"G4","含参恒成立/存在":"REV","导数放缩证明不等式":"REV","三角恒等变换":"G1","解三角形（正余弦定理）":"G2","数列通项与求和":"G4","数列不等式综合":"REV","立体几何（空间向量）":"G3","直线与圆":"G3","圆锥曲线（椭圆/双曲/抛物）":"G3","圆锥曲线压轴":"REV","计数原理与二项式":"G5","概率分布（超几何/二项/正态）":"G5","统计与回归/独立性检验":"G5","小题压轴（函数/不等式）":"REV"},
-  "物理":{"受力分析与共点力平衡":"G1","牛顿运动定律应用":"G1","曲线运动与万有引力":"G2","功和能/动量":"G3","电场（场强/电势/电容）":"G3","恒定电流与电路":"G3","磁场与电磁感应":"G4","交变电流与变压器":"G4","力学实验（纸带/验证定律）":"G2","电学实验（测电阻/伏安法）":"G3","热学/振动波/光学（选考）":"G5","物理压轴（多过程综合）":"REV"},
-  "化学":{"物质的量与化学计量":"G1","离子反应与离子方程式":"G1","氧化还原反应":"G1","金属及其化合物（Na/Al/Fe）":"G2","非金属及其化合物（Cl/S/N）":"G2","元素推断/化工流程":"REV","化学平衡（速率/限度/移动）":"G3","水溶液中的离子平衡":"G3","电化学（原电池/电解池）":"G3","反应热与盖斯定律":"G3","有机化学（结构/反应/推断）":"G5","化学实验综合":"REV"},
-  "语文":{"论述类文本（信息筛选）":"G1","文学类文本（小说/散文）":"G1","实用类文本（非连续性）":"G2","文言文阅读（实虚词/文化常识）":"G1","古代诗歌鉴赏":"G1","名篇名句默写":"G1","成语/病句/衔接":"G1","图文转换/语言表达":"G2","议论文审题立意":"G1","议论文结构与论证":"G2","作文素材与语言":"G1"},
-  "英语":{"语法填空（谓语/非谓语/词性）":"G1","词汇与长难句":"G2","完形填空":"G1","阅读理解（七选五）":"G2","阅读（细节/主旨/推断/态度）":"G1","应用文写作":"G1","读后续写/概要写作":"G3"}
+  "数学":[["X","选择题（单选/多选）"],["T","填空题"],["J","解答题·常规大题（三角/数列/立几/概率统计）"],["Y","解答题·压轴（导数/圆锥曲线/综合）"]],
+  "物理":[["X","选择题（单选/多选）"],["S","实验题"],["J","解答题·常规计算"],["Y","综合压轴题"]],
+  "化学":[["X","选择题"],["S","实验综合题"],["J","解答题·原理与工艺流程"],["Y","有机/推断综合题"]],
+  "英语":[["T","听力（30分）"],["G","词汇词法与语法填空"],["R","阅读理解（含七选五）"],["X","完形填空"],["W","写作（应用文/读后续写）"]]
  }
 };
-
-/* 考试范围 → 常模锚的跨度匹配（科学优化第1条：锚点须与考试「范围/阶段/卷型」匹配） */
+var EXAM={
+ "初中":{
+  "数学":{"有理数运算与科学记数法":"X","实数与二次根式":"X","整式运算与乘法公式":"J","因式分解":"J","分式化简与求值":"J","一元一次方程与二元一次方程组":"Y","一元二次方程":"Y","分式方程":"Y","一元一次不等式(组)":"Y","统计图表与数据分析":"Y","概率(列表/树状图)":"Y","几何基础(线/角/平行线)":"X","全等三角形证明":"Z","等腰直角三角形与勾股定理":"Z","垂直平分线与角平分线":"T","平移·轴对称·旋转":"X","三视图与投影·展开图":"X","平面直角坐标系与函数基础":"X","一次函数":"Y","反比例函数":"T","二次函数":"Y","平行四边形":"Z","矩形·菱形·正方形":"Z","梯形与多边形":"X","相似三角形":"Y","锐角三角函数与解直角三角形":"Y","几何压轴拓展(辅助线/倒角)":"T","圆的基本性质":"J","点线圆位置与切线":"Z","圆的计算":"J","项目式/课题学习":"Y"},
+  "物理":{"长度时间测量·误差":"X","机械运动与速度":"X","声音的产生传播与特性":"X","噪声控制与超声次声":"T","光的反射与平面镜成像":"T","光的折射":"X","直线传播·色散":"X","凸透镜成像规律":"S","眼睛与光学仪器":"X","六种物态变化":"T","熔化与沸腾规律":"T","质量及其测量":"X","密度及其测量":"S","密度与社会生活":"X","力的基础与重力·摩擦力":"X","牛顿第一定律与二力平衡":"X","压强(固/液/大气/流体)":"J","浮力":"Y","简单机械与机械效率":"J","功·功率·机械能":"J","电流电压电阻·电路":"X","欧姆定律":"J","电功与电功率":"Y","电学黑箱(成都特色)":"Y","家庭电路与安全用电":"T","磁场与电流磁效应":"X","电磁铁·电动机":"X","电磁感应":"X","内能与比热容":"J","热机与热值":"T","能量守恒与能源":"X","测量与探究类实验":"S","力学实验操作":"S","电学实验操作":"S"},
+  "化学":{"分子原子离子·原子结构":"X","化合价与化学式":"T","化学方程式与质量守恒":"J","空气成分与氧气性质":"X","氧气制取(实验必考)":"S","水的组成与净化":"X","碳的氧化物(CO₂/CO)":"X","微观示意图辨识":"T","金属化学性质与活动性顺序":"X","铁的冶炼与锈蚀":"T","溶解度曲线":"Y","溶液的配制与计算":"J","常见的酸与碱":"X","中和反应与pH":"J","复分解反应与离子共存":"Y","盐与物质推断":"Y","工业流程题(侯氏制碱等)":"Y","化学与生活(酿造/发酵/材料)":"T","科技前沿情境(航天/双碳)":"T","跨学科探究(传感器等)":"Y","气体制取与实验操作":"S"},
+  "英语":{"听力对话(1.5分/题)":"T","听力表格填空(一词一空)":"T","核心词汇与固定搭配":"G","音标拼读与语调":"G","名词":"G","冠词·代词·数词":"G","形容词副词与比较等级":"G","介词与动词短语":"G","连词与逻辑衔接":"G","动词形式与一般三时态":"G","进行时":"G","现在完成时":"G","情态动词":"G","被动语态":"G","非谓语初步":"G","宾语从句":"G","状语从句与定语从句初步":"G","句子种类与主谓一致":"G","情景交际(补全对话)":"G","阅读细节与同义替换定位":"R","阅读推断/主旨/写作意图":"R","十二选十":"B","六选五/补全短文":"B","完成表格(≤3词)":"B","任务型阅读(完整句)":"B","高中衔接词(尖子生储备)":"B","书面表达(约80词·三层结构)":"W"}
+ },
+ "高中":{
+  "数学":{"集合运算":"X","常用逻辑用语":"X","基本不等式":"T","一元二次不等式":"X","不等式性质":"X","函数概念与性质":"X","指数对数函数":"X","函数与方程·零点":"X","幂函数":"X","任意角·诱导公式·同角关系":"X","三角恒等变换":"J","三角函数图象性质":"J","解三角形":"J","向量运算与坐标":"X","数量积":"X","向量应用":"T","复数":"X","点线面位置关系":"J","空间向量法":"J","球的切接·无配图题":"T","表面积与体积":"X","直线与圆":"X","椭圆":"X","双曲线":"X","抛物线":"X","圆锥曲线综合(压轴)":"Y","等差等比数列":"J","数列求和与应用":"J","an与Sn关系":"X","导数概念与运算":"X","单调性与极值最值":"J","导数综合(含参·恒成立)":"Y","定积分(已移出课标)":"X","计数原理·排列组合":"X","概率与随机变量":"J","统计·回归·独立性检验":"J","二项式定理":"T","正态分布":"X","数学归纳法":"J","逻辑推理与新定义":"X","数学建模":"J","数学探究与新情境":"J"},
+  "物理":{"匀变速直线运动":"X","运动学概念":"X","三种常见力·受力分析":"X","力的合成分解":"X","共点力平衡":"X","牛顿三定律":"X","牛顿定律综合":"Y","平抛运动":"X","圆周运动":"X","万有引力与航天":"X","运动合成与分解":"X","功和功率":"X","动能定理":"J","机械能守恒":"J","动量定理与动量守恒":"Y","电场力性质":"X","电场能性质":"X","电容器与带电粒子":"J","恒定电流与电路":"S","安培力":"X","洛伦兹力与圆周":"Y","复合场":"Y","楞次定律与法拉第定律":"J","导体切割磁感线(压轴)":"Y","交变电流·变压器":"X","传感器实验":"S","机械振动与机械波":"X","光学":"X","光电效应与原子结构":"X","原子核与波粒二象性":"X","电磁波与相对论":"X","分子动理论与气体实验定律":"J","热力学定律":"X","力学实验(教材改编)":"S","电学实验(含伏安法)":"S","图象分析与误差处理":"S"},
+  "化学":{"物质的量·气体摩尔体积":"X","NA正误判断":"X","物质的量浓度":"X","物质分类与胶体":"X","离子反应":"X","氧化还原反应":"X","钠·铝·铁及其化合物":"J","氯·硫·氮及其化合物":"J","碳硅与无机材料":"X","元素推断(位构性)":"X","原子结构与电子排布":"X","元素周期律":"X","化学键与分子间作用力":"X","分子空间结构与杂化":"X","晶体结构与晶胞计算":"T","反应热与盖斯定律":"J","原电池与电解池":"J","反应速率与化学平衡":"J","平衡图像分析":"J","弱电解质与电离":"X","pH与中和滴定":"J","盐类水解":"X","沉淀溶解平衡":"T","有机基础与烃":"J","烃的衍生物与转化":"Y","有机合成路线设计":"Y","营养物质与高分子":"X","基本操作与分离提纯":"S","气体制备与检验除杂":"S","实验方案设计与探究":"J","工艺流程题":"J","资源环境与绿色化学":"X","化学与材料·生活·科技":"X"},
+  "英语":{"听力理解(对话与独白)":"T","高考核心词汇(3500)":"G","外研版教材词汇体系":"G","构词法与词性转换":"G","名词·冠词·代词·介词":"G","形容词副词与比较等级":"G","情态动词":"G","时态语态体系":"G","非谓语动词":"G","名词性从句":"G","定语从句":"G","状语从句":"G","虚拟语气":"G","倒装与强调":"G","主谓一致":"G","长难句分析":"R","阅读理解(ABCD篇)":"R","七选五":"R","完形填空":"X","应用文写作":"W","读后续写(压轴)":"W"}
+ }
+};
 var EXAM_SCOPES=[
- {v:"chapter",t:"章节考 / 月考（单章~几章）",span:"partial"},
- {v:"midterm",t:"期中考试（约半册）",span:"half"},
- {v:"final", t:"期末考试（整册全卷）",span:"full"},
- {v:"diag",  t:"诊断模考（中/高考全卷模拟）",span:"full"},
- {v:"gate",  t:"中考 / 高考（正式全卷）",span:"full"}
+ {v:"a",t:"A卷（基础题，按点得分）",desc:"基础题优先，规范书写稳拿"},
+ {v:"b",t:"B卷（中档题，分层拿分）",desc:"中档题分层拿分，不恋战"},
+ {v:"all",t:"全卷统筹（基础+中档+压轴）",desc:"统筹全卷，分层取舍"}
 ];
-var SUBJ_SUBJECTIVE={"语文":1,"英语":1};
+var SUBJ_SUBJECTIVE={"英语":1};
 
 function scopeSpan(v){for(var i=0;i<EXAM_SCOPES.length;i++){if(EXAM_SCOPES[i].v==v)return EXAM_SCOPES[i];}return EXAM_SCOPES[2];}
 function bookSlot(b){return BOOK_SLOT[b]!=null?BOOK_SLOT[b]:6;}
@@ -1164,10 +1459,11 @@ function switchTab(name,el){
   el.classList.add('on');$('p-'+name).classList.add('on');
   try{localStorage.setItem('zydb_tab',name);}catch(e){}
   if(name==='advice'&&!hasLocateDone()&&$('advResult'))$('advResult').innerHTML=needLocateTip();
-  if(name==='setting'){renderAuthPanel();pwSettingState();aiState();}
+  if(name==='setting'){renderAuthPanel();pwSettingState();syncAICard();}
   if(name=='city')renderCity();
   if(name=='ref')renderRef();
   if(name=='advice')renderModules();
+  if(name=='map')renderMap();
 }
 
 /* ============ 年级联动 ============ */
@@ -1178,27 +1474,27 @@ function fillGrades(selId,stage,def){
   for(var i=0;i<arr.length;i++){var o=document.createElement('option');o.value=arr[i];o.text=arr[i];if(def&&def==arr[i])o.selected=true;s.add(o);}
 }
 function smartGrade(selId,stage){var prev=$(selId)?$(selId).value:'';var ok=(GRADES[stage]||[]).indexOf(prev)>=0;fillGrades(selId,stage,ok?prev:(stage=="初中"?"初三":"高二"));var s=$(selId);if(s&&s.value)return;fillGrades(selId,stage,stage=="初中"?"初三":"高二");}
-function onStageChange(){smartGrade('l_grade',val('l_stage'));fillCitySel('l_city',val('l_stage'),'__all');fillSubjects('l_subject',val('l_stage'));onSubjectChange();}
+function onStageChange(){smartGrade('l_grade',val('l_stage'));fillCitySel('l_city',val('l_stage'),'__all');fillSubjects('l_subject',val('l_stage'));onSubjectChange();syncClassField(true);}
+function onGradeChange(){syncClassField(false);} // 年级变化时更新班级占位提示
+function syncClassField(clearVal){ // 班级随学段/年级联动：切换学段清空残留班级，占位提示跟随年级
+  var c=$('l_class');if(!c)return;var g=val('l_grade');
+  if(clearVal)c.value='';
+  c.placeholder=g?('如 '+g+'(1)班'):'选填';
+}
 function onBatchStageChange(){smartGrade('b_grade',val('b_stage'));fillCitySel('b_city',val('b_stage'),'__all');fillSubjects('b_subject',val('b_stage'));onBatchSubjectChange();}
 function onBatchCityChange(){fillSubjects('b_subject',val('b_stage'));onBatchSubjectChange();}
 function onAdvStageChange(){clearChips();smartGrade('a_grade',val('a_stage'));fillAdvSubjects();renderModules();}
 function onAdvGradeChange(){clearChips();renderModules();}
 function onAdvTermChange(){clearChips();renderModules();}
 function onAdvSubjectChange(){clearChips();renderModules();}
+function onRegionChange(){clearChips();renderModules();} // 切换知识体系（成都/通用）后重渲染题型并清空勾选
 
 /* ============ 科目/卷别联动 ============ */
 function cityData(){ try{var s=localStorage.getItem(CITY_KEY);if(s)return JSON.parse(s);}catch(e){} return DEFAULT_CITY.slice();}
 function subjectsOf(stage){
-  // 从城市数据取科目；初中：语数物化英；高中：语数物化英
-  var set={};var d=cityData();
-  for(var i=0;i<d.length;i++)set[d[i].subject]=1;
-  var base=["数学","物理","化学","语文","英语"];
-  var out=[];
-  for(var k=0;k<base.length;k++)if(set[base[k]])out.push(base[k]);
-  // 高中额外有历史等
-  if(stage=="高中"){var ex=["历史","政治","地理","生物"];for(var j=0;j<ex.length;j++)if(set[ex[j]])out.push(ex[j]);}
-  if(out.length==0)out=base.slice();
-  return out;
+  // 科目体系（V7.5 起固定为数理化英）
+  var base=["数学","物理","化学","英语"];
+  return base.slice();
 }
 function fillSubjects(selId,stage){
   var s=$(selId);if(!s)return;s.innerHTML="";
@@ -1231,13 +1527,14 @@ function fillPools(selId,stage,subject){
   var s=$(selId);if(!s)return;s.innerHTML="";
   var arr=poolsOf(stage,subject,undefined,selId);
   if(arr.length==0){var o0=document.createElement('option');o0.value="__none";o0.text="（该考区无预置，将用本校均分实测）";s.add(o0);return;}
-  // "全部/推荐"首项：按本校均分实测优先
-  var all=document.createElement('option');all.value="__auto";all.text="➤ 本校均分实测（推荐，需填年级均分）";s.add(all);
+  // "全部/推荐"首项：本校平日卷（按本校均分实测），默认选中
+  var all=document.createElement('option');all.value="__auto";all.text="➤ 本校平日卷（按本校均分实测 · 推荐）";s.add(all);
   for(var i=0;i<arr.length;i++){
     var d=arr[i];var o=document.createElement('option');
     o.value=d.city+"|"+d.pool;o.text=d.city+" · "+d.pool+"（P="+d.p+"）";
     s.add(o);
   }
+  s.value="__auto"; // 默认：本校平日卷
 }
 function onCityChange(){fillPools('l_pool',val('l_stage'),val('l_subject'));updatePoolHint('l_pool','poolHint2');}
 function onSubjectChange(){
@@ -1292,9 +1589,14 @@ function livePreview(){
   var r=compute(score,full,avg,poolVal,scopeSpan(val('l_scope')));r.subject=val('l_subject');
   var bg=num('l_bgot'),bf=num('l_bfull');applyIron(r,bg,bf);
   var L=linesFor(full);
-  var html='<div class="result"><div class="kv"><span>校准得分率</span><span class="big">'+(r.cal*100).toFixed(1)+'%</span><span>'+layerTag(r.layer)+'</span><span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div>'
-   +'<div class="kv"><span>卷面得分率 <b>'+(r.sr*100).toFixed(1)+'%</b></span><span>常模池基准P <b>'+r.baseP.toFixed(3)+'</b>（'+(r.usedAvg?'本校实测':'兜底')+'）</span><span>校准折算分 <b>'+Math.round(r.cal*full)+'/'+full+'</b></span></div>'
-   +'<div class="kv"><span>'+full+'分制划线：拔高≥<b>'+L.ba+'</b> · 临界 '+L.linLo+'~'+(L.ba-1)+' · 缓冲 '+L.ba+'~'+L.bufHi+'</span></div></div>';
+  var stepCls=({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]||'zhu';
+  var html='<div class="result cal-wrap"><div class="cal-hero"><div><div class="cal-label">校准得分率</div><div class="big">'+(r.cal*100).toFixed(1)+'%</div></div><div class="cal-hero-r">'+layerTag(r.layer)+'<span class="tag t-'+stepCls+'">台阶·'+r.step+'</span></div></div>'
+   +'<div class="cal-grid">'
+   +'<div class="m"><i>卷面得分率</i><b>'+(r.sr*100).toFixed(1)+'%</b></div>'
+   +'<div class="m"><i>常模池基准P</i><b>'+r.baseP.toFixed(3)+'</b><em>'+(r.usedAvg?'本校实测':'兜底')+'</em></div>'
+   +'<div class="m"><i>校准折算分</i><b>'+Math.round(r.cal*full)+'/'+full+'</b></div>'
+   +'<div class="m wide"><i>'+full+'分制划线</i><b>拔高≥'+L.ba+' · 临界 '+L.linLo+'~'+(L.ba-1)+' · 缓冲 '+L.ba+'~'+L.bufHi+'</b></div>'
+   +'</div></div>';
   html+=buildFlags(r);
   if(r.iron)html+='<div class="danger">⛔ '+esc(r.ironNote)+'</div>';
   else if(r.layer=="临界观察")html+='<div class="note">🔎 落在临界观察带（72%~75%），建议连续追踪3次再定层，勿单次下结论。</div>';
@@ -1328,7 +1630,7 @@ function fillAdvSubjects(sel){var s=$('a_subject');if(!s)return;s.innerHTML="";v
 function renderLocate(r){
   var L=r.lines;
   var h='<div class="result"><div style="font-size:15px;font-weight:700;color:var(--pri-d);margin-bottom:6px">'+esc(r.name)+' · '+esc(r.grade)+(r.school?' · '+esc(r.school):'')+'</div>'
-   +'<div class="kv"><span>校准得分率</span><span class="big">'+(r.cal*100).toFixed(1)+'%</span><span>'+layerTag(r.layer)+'</span><span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div>'
+   +'<div class="cal-hero" style="margin:6px 0 12px"><div><div class="cal-label">校准得分率</div><div class="big">'+(r.cal*100).toFixed(1)+'%</div></div><div class="cal-hero-r">'+layerTag(r.layer)+'<span class="tag t-'+({'筑基':'zhu','巩固':'gg','拓展':'tz','拔高':'bg'})[r.step]+'">台阶·'+r.step+'</span></div></div>'
    +'<table><tr><th>卷面得分率</th><th>常模池基准P</th><th>校准折算分</th><th>考试/卷别</th></tr><tr><td>'+(r.sr*100).toFixed(1)+'%</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td>'+Math.round(r.cal*r.full)+'/'+r.full+'</td><td>'+esc(r.examLabel)+'</td></tr></table>'
    +'<div class="kv" style="margin-top:8px"><span>'+r.full+'分制划线 → 拔高冲刺层 ≥<b>'+L.ba+'</b>；临界观察 '+L.linLo+'~'+(L.ba-1)+'；缓冲带 '+L.ba+'~'+L.bufHi+'；基础巩固层 &lt;'+L.linLo+'</span></div>'
    +'<div class="kv"><span>四层台阶 → 筑基&lt;'+L.stepGg+' · 巩固 '+L.stepGg+'~'+(L.stepTz-1)+' · 拓展 '+L.stepTz+'~'+(L.stepBg-1)+' · 拔高≥'+L.stepBg+'</span></div></div>';
@@ -1336,7 +1638,7 @@ function renderLocate(r){
   if(r.iron)h+='<div class="danger">⛔ '+esc(r.ironNote)+'。此类孩子高分多靠压轴赌分，卷子一变常规易崩，须先补基础概念闭环，配题先降一档。</div>';
   else if(r.layer=="临界观察")h+='<div class="note">🔎 临界观察：校准落 72%~75%，建议追踪3次（看趋势而非单次）再定层。此阶段配题以巩固段为主、拓展段少量试探。</div>';
   else if(r.cal>=0.75&&r.cal<0.78)h+='<div class="note">🟡 拔高下沿缓冲带：已判拔高冲刺层，处 75%~78%，建议追踪3次确认稳定后再加压轴限时训练。</div>';
-  h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去补短建议</button><button class="btn sec" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
+  h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去智能补短建议</button><button class="btn sec" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
   $('locResult').innerHTML=h;
 }
 function fillDemo(){
@@ -1344,7 +1646,7 @@ function fillDemo(){
   $('l_school').value="成都七中";$('l_campus').value="天府校区";$('l_class').value="高二(3)班";
   $('l_subject').value="数学";onSubjectChange();
   // 选天府新区中考数学A卷? 用高考物理类
-  fillSelSimple('l_scope',EXAM_SCOPES,'final');$('l_scope').value="midterm";onSubjectChange();fillPools();$('l_pool').value="__auto";
+  fillSelSimple('l_scope',EXAM_SCOPES,'all');$('l_scope').value="all";onSubjectChange();fillPools();$('l_pool').value="__auto";
   $('l_score').value=118;$('l_full').value=150;$('l_avg').value=96;$('l_bfull').value=90;$('l_bgot').value=74;
   fillTermSel('a_term',autoTerm());
   livePreview();
@@ -1358,41 +1660,88 @@ function gotoReport(){var t=document.querySelector('.tab[data-p="report"]');swit
 function gotoLocateTab(){switchTab('locate');}
 function gotoBatchTab(){switchTab('batch');}
 function hasLocateDone(){return !!(ST.lastLocate||(ST.lastBatch&&ST.lastBatch.length));}
-function needLocateTip(){return '<div class="danger">📌 请先完成「学情定位」或「批量定位」，再使用补短建议功能。补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去学情定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
+function needLocateTip(){return '<div class="danger">📌 请先完成「学情定位」或「批量定位」，再使用智能补短建议功能。智能补短建议与AI建议将基于定位结果（学员信息、卷面得分率、层级判定）生成。</div><div class="btns noprint"><button class="btn" onclick="gotoLocateTab()">➜ 去学情定位</button><button class="btn sec" onclick="gotoBatchTab()">➜ 去批量定位</button></div>';}
 
-/* ============ 补短建议 ============ */
+/* ============ 智能补短建议 ============ */
 var LVName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
+var MOD_VIEW='mod'; // 'mod'=按知识板块 'exam'=按试卷结构
+function setModView(v){MOD_VIEW=v;renderModules();}
 function renderModules(){
   var stage=val('a_stage'),subject=val('a_subject'),grade=val('a_grade'),term=val('a_term')||'上';
-  var bank=(BANK[stage]&&BANK[stage][subject])||{};
+  var bank=bankOf(stage,subject);
   var box=$('modList');box.innerHTML="";
-  var mods=Object.keys(bank);
-  if(mods.length==0){box.innerHTML='<div class="muted">该学段/科目暂无题型库，请在「城市与基准P」补充或在教研中自定义。</div>';return;}
-    var cap=gradeTermCap(stage,grade,term);
-  var inN=0,outN=0;
-  mods.forEach(function(m,mi){
-    var qs=bank[m],inIt=[],outIt=[];
-    qs.forEach(function(q,qi){var b=qBook(stage,subject,q.n);if(inScope(b,cap))inIt.push({q:q,qi:qi,b:b});else outIt.push({q:q,qi:qi,b:b});});
-    inN+=inIt.length;outN+=outIt.length;
-    var mk=function(items,dis){
-      var md=document.createElement('div');md.className='mod'+((items.length&&!dis)?' open':'');
-      var h='<div class="mh" onclick="this.parentNode.classList.toggle(\'open\')"><span>'+esc(m)+'（'+items.length+'）</span><span style="font-size:12px;font-weight:400">展开 ▾</span></div><div class="mb">';
-      if(!items.length)h+='<div class="muted" style="padding:6px">本板块本学期暂无已学题型</div>';
-      items.forEach(function(it){
-        var bk=esc(BOOK_LABEL[it.b]||'总复习');
-        if(dis){h+='<span class="chip lazy"><span class="tag t-'+it.q.lv+'">'+LVName[it.q.lv]+'</span>'+esc(it.q.n)+'<span class="bk">● '+bk+' 未学到·暂缓</span></span>';return;}
-        var key=m+'||'+it.qi;
-        h+='<span class="chip" role="checkbox" tabindex="0" id="chip_'+mi+'_'+it.qi+'" onclick="toggleChip(\''+mi+'_'+it.qi+'\',\''+esc(key).replace(/'/g,"")+'\')"><input type="checkbox" style="display:none"><span class="tag t-'+it.q.lv+'">'+LVName[it.q.lv]+'</span>'+esc(it.q.n)+'<span class="bk">'+bk+'</span></span>';
-      });
-      h+='</div>';md.innerHTML=h;return md;
-    };
-    if(inIt.length)box.appendChild(mk(inIt,false));
-    if(outIt.length)box.appendChild(mk(outIt,true));
-  });
+  if(!Object.keys(bank).length){box.innerHTML='<div class="muted">该学段/科目暂无题型库，请在「城市与基准P」补充或在教研中自定义。</div>';return;}
+  /* 视图切换 */
+  var tb=document.createElement('div');tb.className='btns';tb.style.margin='0 0 10px';
+  tb.innerHTML='<button class="btn sm '+(MOD_VIEW=='mod'?'':'sec')+'" onclick="setModView(\'mod\')">🗂 按知识板块</button><button class="btn sm '+(MOD_VIEW=='exam'?'':'sec')+'" onclick="setModView(\'exam\')">📄 按试卷结构</button>';
+  box.appendChild(tb);
+  /* 全题型可选，不区分总复习/压轴/未学到；册次标签仅作教材进度参考 */
+  var groups=[];
+  if(MOD_VIEW=='mod'){
+    Object.keys(bank).forEach(function(m){
+      var arr=[];bank[m].forEach(function(q,qi){arr.push({q:q,qi:qi,mod:m,bk:modGrade(m)});});
+      groups.push({name:m,items:arr});
+    });
+  }else{
+    var ex=(EXAM[stage]&&EXAM[stage][subject])||{};
+    var labs=(EXAM_LABEL[stage]&&EXAM_LABEL[stage][subject])||[];
+    var bucket={};
+    Object.keys(bank).forEach(function(m){bank[m].forEach(function(q,qi){
+      var c=ex[q.n]||'_';
+      if(!bucket[c])bucket[c]=[];
+      bucket[c].push({q:q,qi:qi,mod:m,bk:modGrade(m)});
+    });});
+    labs.forEach(function(l){groups.push({name:l[1],items:bucket[l[0]]||[]});});
+    if(bucket['_'])groups.push({name:'其他（教研补充题型）',items:bucket['_']});
+  }
+  var total=0;groups.forEach(function(g){total+=g.items.length;});
   var sum=document.createElement('div');sum.className='note';sum.style.marginTop='0';
-  sum.innerHTML='📚 <b>进度范围：</b>'+esc(grade)+(term=="下"?"下学期":"上学期")+' → 按默认教材进度已学到 <b>'+esc(capLabel(stage,grade,term))+'</b>。共 <b>'+inN+'</b> 个题型在已学范围（可勾选补短），<b>'+outN+'</b> 个属后续册次（灰显·暂缓，不超纲补短）。<span class="muted">册次为默认教材顺序（初中数学北师大版，其余人教/部编通用），可按本校实际进度在「口径与参考表」核对。</span>';
+  sum.innerHTML='📚 <b>勾选口径：</b>'+esc(val('a_region')=='ty'?'通用地区教材':'成都地区教材')+' · '+esc(grade)+(term=="下"?"下学期":"上学期")+' · '+esc(subject)+'，共 <b>'+total+'</b> 个题型<b>全部可勾选</b>，不再区分总复习/压轴/未学到；题型旁的年级册标注（如"七上～八下"）仅为教材进度参考。教师按本次试卷<b>实际丢分位置</b>勾选即可，上方按钮可切换「知识板块 / 试卷结构」两种视图。<span class="muted">切换知识体系会清空已勾选题型。</span>';
   box.insertBefore(sum,box.firstChild);
-  if(outN){var tt=document.createElement('div');tt.className='muted';tt.style.margin='10px 0 4px';tt.textContent='— 以下为后续册次题型，当前学期暂缓 —';box.appendChild(tt);}
+  groups.forEach(function(g,gi){
+    var md=document.createElement('div');md.className='mod open';
+    var h='<div class="mh" onclick="this.parentNode.classList.toggle(\'open\')"><span>'+esc(g.name)+'（'+g.items.length+'）</span><span style="font-size:12px;font-weight:400">展开/收起 ▾</span></div><div class="mb">';
+    if(!g.items.length)h+='<div class="muted" style="padding:6px">本板块暂无题型库条目</div>';
+    g.items.forEach(function(it,ii){
+      var bk=it.bk?esc(it.bk):'';
+      var key=it.mod+'||'+it.qi; // 与板块视图同一 key，切换视图不丢勾选
+      var id='v'+gi+'_'+ii;
+      h+='<span class="chip" role="checkbox" tabindex="0" id="chip_'+id+'" onclick="toggleChip(\''+id+'\',\''+esc(key).replace(/'/g,"")+'\')"><input type="checkbox" style="display:none"><span class="tag t-'+it.q.lv+'">'+LVName[it.q.lv]+'</span>'+esc(it.q.n)+(bk?'<span class="bk">'+bk+'</span>':'')+'</span>';
+    });
+    h+='</div>';md.innerHTML=h;box.appendChild(md);
+  });
+}
+/* ============ 考点地图 ============ */
+function mapWeight(mk){var m=mk.match(/[（(]([^（）()]*分[^（）()]*)[）)]/);return m?m[1]:'';}
+function renderMap(){
+  var region=val('m_region'),stage=val('m_stage'),subject=val('m_subject');
+  var R=(region=='ty')?BANK_TY:BANK_CD;
+  var bank=(R[stage]&&R[stage][subject])||{};
+  var box=$('mapList');if(!box)return;box.innerHTML='';
+  if(!Object.keys(bank).length){box.innerHTML='<div class="card"><div class="muted">该学段/科目暂无考点数据。</div></div>';return;}
+  var isCD=(region=='cd');
+  var modN=0,itemN=0,press=0;var h='';
+  Object.keys(bank).forEach(function(m){
+    modN++;var arr=bank[m];itemN+=arr.length;
+    var cnt={zhu:0,gg:0,tz:0,bg:0};arr.forEach(function(q){cnt[q.lv]=(cnt[q.lv]||0)+1;});
+    var w=isCD?mapWeight(m):'';var isPz=/压轴|B22|B24|B25|B26|19题|B卷/.test(m);
+    if(isPz)press++;
+    h+='<div class="mod open"><div class="mh" onclick="this.parentNode.classList.toggle(\'open\')"><span>'+esc(m)+'</span><span style="font-size:12px;font-weight:400">'
+      +(w?'<span class="tag t-gg" style="margin-right:6px">'+esc(w)+'</span>':'')
+      +(isPz?'<span class="tag t-jc" style="margin-right:6px">压轴/高分位</span>':'')
+      +'展开/收起 ▾</span></div><div class="mb">';
+    h+='<div class="map-stat">共 '+arr.length+' 个考点 ｜ 难度分布：筑基 '+cnt.zhu+' · 巩固 '+cnt.gg+' · 拓展 '+cnt.tz+' · 拔高 '+cnt.bg+'</div>';
+    arr.forEach(function(q){
+      h+='<div class="map-item"><span class="tag t-'+q.lv+'">'+(LVName[q.lv]||q.lv)+'</span><b>'+esc(q.n)+'</b>'
+        +(q.f?'<div class="map-f"><b>考法/易错：</b>'+esc(q.f)+'</div>':'')
+        +(q.x?'<div class="map-x"><b>补法：</b>'+esc(q.x)+'</div>':'')
+        +(isCD&&q.cd?'<div class="map-cd">◈ 成都卷专属题型（通用卷不考）</div>':'')
+        +'</div>';
+    });
+    h+='</div></div>';
+  });
+  h='<div class="card"><div class="note" style="margin-top:0"><b>'+esc(isCD?'成都地区教材':'通用地区教材')+'</b> · '+esc(stage)+esc(subject)+' ｜ 共 <b>'+modN+'</b> 个知识板块 · <b>'+itemN+'</b> 个考点 ｜ 压轴/高分位板块 <b>'+press+'</b> 个。'+(isCD?'模块名括注为成都卷位次与分值权重。':'已剔除成都卷专属题型，模块按教材册次顺序标注年级册。')+'</div>'+h+'</div>';
+  box.innerHTML=h;
 }
 var CHIPS={};
 function toggleChip(id,key){
@@ -1401,13 +1750,12 @@ function toggleChip(id,key){
   if(on)CHIPS[key]=true;else delete CHIPS[key];
 }
 function clearChips(){CHIPS={};var c=document.querySelectorAll('#modList .chip.on');for(var i=0;i<c.length;i++)c[i].classList.remove('on');$('advResult').innerHTML="";}
-function bankFind(stage,subject,mod,qi){var b=BANK[stage]&&BANK[stage][subject];if(!b)return null;var a=b[mod];if(!a)return null;return a[qi]||null;}
+function bankFind(stage,subject,mod,qi){var b=bankOf(stage,subject);if(!b)return null;var a=b[mod];if(!a)return null;return a[qi]||null;}
 function ruleAdvice(){
   var stage=val('a_stage'),subject=val('a_subject'),grade=val('a_grade'),term=val('a_term')||'上',layer=$('a_layer').value;
-  var cap=gradeTermCap(stage,grade,term);
-  var learnedAll=function(q){return inScope(qBook(stage,subject,q.n),cap);};
+  var cap=gradeTermCap(stage,grade,term); // 册次上限仅作展示参考，勾选题型一律纳入建议（不区分已学/未学）
   var picked=[],skipped=0;var ks=Object.keys(CHIPS);
-  ks.forEach(function(k){var p=k.split('||');var q=bankFind(stage,subject,p[0],+p[1]);if(q){if(learnedAll(q))picked.push({mod:p[0],q:q});else skipped++;}});
+  ks.forEach(function(k){var p=k.split('||');var q=bankFind(stage,subject,p[0],+p[1]);if(q)picked.push({mod:p[0],q:q});});
   var ord={zhu:1,gg:2,tz:3,bg:4};
   // 按层级确定目标段
   var target;
@@ -1438,16 +1786,15 @@ function ruleAdvice(){
   // 若没勾选，按层给全板块代表题型
   var autoNote="";
   if(picked.length==0){
-    autoNote="未勾选本学期已学范围内的失分题型，已按「"+layer+"」+"+grade+(term=="下"?"下":"上")+"学期已学范围（学到"+capLabel(stage,grade,term)+"）自动推荐重点题型";
-    var bank=BANK[stage]&&BANK[stage][subject]||{};
-    Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(learnedAll(q)&&target.indexOf(q.lv)>=0)fixFirst.push({mod:m,q:q});});});
+    autoNote="未勾选失分题型，已按「"+layer+"」+"+grade+(term=="下"?"下":"上")+"学期（学到"+capLabel(stage,grade,term)+"）自动推荐重点题型（不区分总复习/压轴/未学到）";
+  var bank=bankOf(stage,subject);
+    Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(target.indexOf(q.lv)>=0)fixFirst.push({mod:m,q:q});});});
     fixFirst=fixFirst.slice(0,8);
   }
-  if(skipped>0)autoNote+=(autoNote?"；":"")+"有 "+skipped+" 个勾选题型属后续册次（未学到），已剔除不纳入建议。";
-  // 暂缓：高于目标段且本学期已学
-  var bank=BANK[stage]&&BANK[stage][subject]||{};
+  // 暂缓：仅按难度高于目标段判定（教学逻辑），不再受教材进度限制
+  var bank=bankOf(stage,subject);
   var maxT=target[target.length-1];
-  Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(ord[q.lv]>ord[maxT]&&learnedAll(q))hold.push({mod:m,q:q});});});
+  Object.keys(bank).forEach(function(m){bank[m].forEach(function(q){if(ord[q.lv]>ord[maxT])hold.push({mod:m,q:q});});});
   var L0=ST.lastLocate;
   return {layer:layer,subject:subject,stage:stage,grade:grade,term:term,cap:cap,capLabel:capLabel(stage,grade,term),skipped:skipped,vocabNote:vocabNote,
     target:target,fixFirst:fixFirst,pract:pract,hold:hold,autoNote:autoNote,pickedN:picked.length,
@@ -1460,7 +1807,7 @@ function renderAdvice(a){
   var h='<div class="result"><div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">补短方案 · '+esc(a.subject)+' · '+esc(a.layer)+(a.grade?' · '+esc(a.grade)+(a.term=="下"?"下学期":"上学期"):'')+'</div>';
   var scTxt=(a.cal!=null?"本次校准得分率 <b>"+(a.cal*100).toFixed(1)+"%</b>，"+(a.cal>=0.75?"已达拔高线":a.cal>=0.72?"落在临界带":"尚未到拔高线"):"本次未做定位，仅按所选层级给方向");
   var brTxt=(a.baseRate!=null?"；基础题应得率 <b>"+(a.baseRate*100).toFixed(1)+"%</b>（"+r2_0(a.baseRate)+"）"+(a.iron?"，<span class=\'red\'>低于 85%，地基有洞——先补基础，压轴暂缓</span>":"，已达 85% 地基线"):"");
-  h+='<div class="note" style="margin-top:0"><b>① 先看什么：</b>'+scTxt+brTxt+'。分数只作初筛，以纸笔痕迹核对层级：看基础题步骤是否完整、卡点在哪一问。<br><b>进度范围：</b>'+esc(a.grade||'')+(a.term=="下"?"下学期":"上学期")+' · 已学到 '+esc(a.capLabel||'')+'，下列建议<b>只在本学期已学知识点内</b>配题。'+(a.autoNote?'<br>'+esc(a.autoNote):'')+'</div>';
+  h+='<div class="note" style="margin-top:0"><b>① 先看什么：</b>'+scTxt+brTxt+'。分数只作初筛，以纸笔痕迹核对层级：看基础题步骤是否完整、卡点在哪一问。<br><b>进度参考：</b>'+esc(a.grade||'')+(a.term=="下"?"下学期":"上学期")+' · 教材默认进度已学到 '+esc(a.capLabel||'')+'（仅作参考）。勾选的失分题型可能含总复习、压轴或后续册次（教研有意勾选），配题时按<b>先已学、后未学；先基础、后综合</b>的教学逻辑排序。'+(a.autoNote?'<br>'+esc(a.autoNote):'')+'</div>';
   if(a.vocabNote){h+='<div class="danger"><b>② 英语提分顺序（优先于层级方向）：</b>'+esc(a.vocabNote)+'</div>';}
   h+='<div class="note"><b>② 培养方向：</b>'+dirMap[a.layer]+'</div>';
   h+='<div class="note"><b>③ 先补（该拿却丢的，优先）：</b>'+(a.fixFirst.length?'':'<span class="muted">无</span>')+'<ul class="rlist">';
@@ -1496,7 +1843,7 @@ function aiParseSections(txt){ // 把 AI 文本按 ①~⑦/一~七/1~7 标记拆
 }
 function aiModulesHtml(a,txt,note){ // 按模块卡片渲染 AI 建议（note：补充说明，如缓存提示；通道/模型名不对外展示）
   var secs=aiParseSections(txt);
-  var h='<div class="result"><div class="ai-head"><div><b>🤖 AI 补短建议</b>'+((note&&note.trim())?(' · '+esc(note)):'')+' · '+esc(val('a_subject'))+' · '+esc(a.layer)+'</div><div class="btns" style="margin:0"><button class="btn sec sm" onclick="exportAdviceCSV()">⬇ 导出CSV</button><button class="btn sm" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho sm" onclick="genAdvice(true)">🔄 重新生成</button></div></div>';
+  var h='<div class="result"><div class="ai-head"><div><b>🤖 AI 智能补短建议</b>'+((note&&note.trim())?(' · '+esc(note)):'')+' · '+esc(val('a_subject'))+' · '+esc(a.layer)+'</div><div class="btns" style="margin:0"><button class="btn sec sm" onclick="exportAdviceCSV()">⬇ 导出CSV</button><button class="btn sm" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho sm" onclick="genAdvice(true)">🔄 重新生成</button></div></div>';
   if(secs.length>=2){
     for(var i=0;i<secs.length;i++){
       var s=secs[i];var body=s.b.join('\n').replace(/\n{3,}/g,'\n\n').trim()||'—';
@@ -1513,14 +1860,14 @@ function aiExtract(d){ // 从 OpenAI 兼容响应中提取文本
   try{return (d&&d.choices&&d.choices[0]&&(d.choices[0].message?d.choices[0].message.content:d.choices[0].text))||'';}catch(e){return '';}
 }
 function aiLoadingHtml(){ // Loading 界面
-  return '<div class="result"><div class="ai-loading"><div class="spin"></div><div style="font-weight:700;color:var(--pri-d);font-size:15px">🤖 AI 正在联网生成针对性补短建议…</div><div class="ai-steps"><span>基于层级判定</span><span>结合失分题型</span><span>七段结构输出</span></div><div style="font-size:12px;color:var(--sub)">约需 10~30 秒 · 请勿关闭页面 · 失败将自动改用内置规则库</div></div></div>';
+  return '<div class="result"><div class="ai-loading"><div class="spin"></div><div style="font-weight:700;color:var(--pri-d);font-size:15px">🤖 AI 正在生成针对性智能补短建议…</div><div class="ai-steps"><span>基于层级判定</span><span>结合失分题型</span><span>七段结构输出</span></div><div style="font-size:12px;color:var(--sub)">约需 10~30 秒 · 请勿关闭页面 · 失败将自动改用内置规则库</div></div></div>';
 }
 function aiRuleFallback(a,msg){ // 最终兜底：内置规则库（AI 全部通道失败时）
   ST.lastAdvice=a;ST.lastAIText='';ST.lastAISig='';
-  $('advResult').innerHTML='<div class="danger">🤖 AI 联网建议未能生成：'+esc(msg)+'。已改用<b>内置规则库</b>建议（结构完整可用）；也可点下方按钮复制提示词去元宝，把回答粘回。</div>'+renderAdvice(a)+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div><div class="card" style="margin-top:8px"><label>把元宝的回答粘到这里，再点【导入AI建议】，即可进入报告</label><textarea id="aiPaste" rows="6" style="width:100%"></textarea><div class="btns"><button class="btn" onclick="applyAIText()">📥 导入AI建议</button></div></div>';
+  $('advResult').innerHTML='<div class="danger">🤖 AI 建议未能生成：'+esc(msg)+'。已改用<b>内置规则库</b>建议（结构完整可用）；也可点下方按钮复制提示词去元宝，把回答粘回。</div>'+renderAdvice(a)+'<div class="btns noprint"><button class="btn sec" onclick="copyPromptAdv()">📋 复制提示词去元宝（免配置）</button></div><div class="card" style="margin-top:8px"><label>把元宝的回答粘到这里，再点【导入AI建议】，即可进入报告</label><textarea id="aiPaste" rows="6" style="width:100%"></textarea><div class="btns"><button class="btn" onclick="applyAIText()">📥 导入AI建议</button></div></div>';
 }
 function aiDirect(a,prompt,sig,cfg){ // 通道2：本机配置 Key 直连（可能被 CORS 拦截）
-  if(!cfg.key){aiRuleFallback(a,'本机未配置 AI Key，且云端中转不可用（管理员在 Worker 变量中配置 AI_URL/AI_KEY/AI_MODEL 后，全体教师即可零配置联网生成）');return;}
+  if(!cfg.key){aiRuleFallback(a,'本机未配置 AI Key，且云端中转不可用（管理员在 Worker 变量中配置 AI_URL/AI_KEY/AI_MODEL 后，全体教师即可零配置AI生成）');return;}
   fetch(cfg.url,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},body:JSON.stringify({model:cfg.model||"hy4",messages:[{role:"user",content:prompt}],temperature:0.4})})
   .then(function(r){return r.json();})
   .then(function(d){var txt=aiExtract(d);if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}else aiRuleFallback(a,'AI 响应解析失败');})
@@ -1537,7 +1884,8 @@ function genAdvice(force){
     return;
   }
   var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
-  var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员层级："+a.layer+"。本次失分题型："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
+  var _term=val('a_term')||'上';
+  var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员"+val('a_grade')+( _term=="下"?"下学期":"上学期")+"（教材默认进度已学至"+capLabel(val('a_stage'),val('a_grade'),_term)+"，仅供参考）。学员层级："+a.layer+"。本次失分题型（教师按试卷结构/知识板块勾选，可能包含总复习、压轴或后续册次题型，属教研有意勾选，请按先已学后未学、先基础后综合的教学逻辑处理）："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
   $('advResult').innerHTML=aiLoadingHtml(); // Loading
   // 通道1：云端 Worker 中转（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用，天然绕过 CORS）
   var scfg=getSync();
@@ -1548,18 +1896,26 @@ function genAdvice(force){
 }
 function aiAdvice(force){genAdvice(force);} // 兼容旧调用
 
-function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){var pp=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),pp[0],+pp[1]);if(q)picked.push(pp[0]+'-'+q.n);});var L=ST.lastLocate||{};var nm=L.name||'';var sc=L.score?(L.score+'/'+L.full):'';var cal=L.cal!=null?(L.cal*100).toFixed(1)+'%':'';return '你是资深K12'+val('a_stage')+val('a_subject')+'教研老师。学员'+nm+'，'+val('a_grade')+'，卷面'+sc+'，校准得分率'+cal+'，层级判定：'+ruleAdvice().layer+'。本次失分题型：'+(picked.join('、')||'未指定')+'。请按①先核对卷面痕迹②培养方向③先补题型(含易错点与补法)④再练⑤压轴策略⑥暂缓清单⑦复核条件与本周动作，给出专业、可执行的补短方案，500字内，分点清晰。';}
+function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){var pp=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),pp[0],+pp[1]);if(q)picked.push(pp[0]+'-'+q.n+'（'+(LVName[q.lv]||'')+'）');});
+ var L=ST.lastLocate||{};var region=(val('a_region')=='ty')?'通用地区教材（全国通用）':'成都地区教材（考频导向）';
+ var sc=(L.score!=null)?(L.score+'/'+L.full):'未提供';var cal=(L.cal!=null)?(L.cal*100).toFixed(1)+'%':'未提供';var avg=(L.avg!=null)?L.avg:'未提供';var br=(L.baseRate!=null)?(L.baseRate*100).toFixed(1)+'%':'未提供';
+ var a=ruleAdvice();var shortRegion=(val('a_region')=='ty')?'全国通用':'成都';
+ return '你是资深K12'+val('a_stage')+val('a_subject')+'教研老师，请面向学生的知识漏洞做诊断式补短分析。\n'
+  +'【学员画像】姓名：'+(L.name||'')+'；地区/教材体系：'+region+'；学段：'+val('a_stage')+'；年级：'+val('a_grade')+'（'+(val('a_term')||'上')+'学期）；科目：'+val('a_subject')+'。\n'
+  +'【考试表现】卷面得分：'+sc+'；班级/年级均分：'+avg+'；校准得分率：'+cal+'；基础题应得率：'+br+'；层级判定：'+a.layer+'（台阶：'+(L.step||'—')+'）。\n'
+  +'【本次失分知识点】'+(picked.join('、')||'未指定')+'。\n'
+  +'【要求】1)先判断丢分本质是概念漏洞、方法缺失还是熟练度不足；2)按知识漏洞根因归组分析，而非按题型罗列；3)每个漏洞给出「概念澄清→典型例题→变式训练」路径；4)结合'+val('a_grade')+'教学进度与'+shortRegion+'考情标注补漏优先级；5)严格按 ①卷面核对 ②漏洞诊断归因 ③优先补漏清单(含易错点与补法) ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作 输出，500字内，分点清晰。';}
 function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
 function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}var a=ruleAdvice();ST.lastAdvice=a;ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML=aiModulesHtml(a,t,'元宝粘贴导入');}
 /* ============ 机构报告 ============ */
 function genReport(){
   var r=ST.lastLocate;
-  if(!r){$('report').innerHTML='<div class="note">请先完成「学情定位」，报告将自动带入定位结果与补短建议。</div>';return;}
+  if(!r){$('report').innerHTML='<div class="note">请先完成「学情定位」，报告将自动带入定位结果与智能补短建议。</div>';return;}
   var org=val('r_org')||"章圆智学中心",teacher=val('r_teacher'),logo=logoSrc();
   var a=ST.lastAdvice;
   var L=r.lines||linesFor(r.full);
   var d=new Date(),ds=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-  var h='<div class="rpt"><div class="rhead">'+(logo?'<img class="logo" src="'+esc(logo)+'" onerror="this.style.display=\'none\'">':'')+'<div><div class="org">'+esc(org)+'</div><div class="muted">学员层级定位报告 · '+ds+'</div></div></div>';
+  var h='<div class="rpt"><div class="rhead">'+(logo?'<img class="logo" src="'+esc(logo)+'" onerror="this.style.display=\'none\'">':'')+'<div><div class="org">'+esc(org)+'</div><div class="muted">学情分层定位报告 · '+ds+'</div></div></div>';
   h+='<table><tr><th>姓名</th><th>年级</th><th>学校</th><th>科目</th></tr><tr><td>'+esc(r.name)+'</td><td>'+esc(r.grade)+'</td><td>'+esc(r.school||'—')+'</td><td>'+esc(r.subject)+'</td></tr></table>';
   if(r.campus||r.clazz||teacher)h+='<table style="margin-top:6px"><tr><th>校区</th><th>班级</th><th>报告教师</th></tr><tr><td>'+esc(r.campus||'—')+'</td><td>'+esc(r.clazz||'—')+'</td><td>'+esc(teacher||'—')+'</td></tr></table>';
   h+='<h3>一、定位结论</h3><table><tr><th>考试/卷别</th><th>卷面</th><th>满分</th><th>年级均分</th><th>常模池基准P</th><th>校准得分率</th><th>校准折算分</th></tr><tr><td>'+esc(r.examLabel)+'</td><td>'+r.score+'</td><td>'+r.full+'</td><td>'+(r.avg==null?'—':r.avg)+'</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td><b>'+(r.cal*100).toFixed(1)+'%</b></td><td>'+Math.round(r.cal*r.full)+'</td></tr></table>';
@@ -1583,7 +1939,7 @@ function genReport(){
     if(a.pract.length){h+='<p><b>再练：</b></p><ul class="rlist">';a.pract.forEach(function(it){h+='<li><span class="pill">'+esc(it.mod)+'</span>'+esc(it.q.n)+'（'+lvName[it.q.lv]+'）</li>';});h+='</ul>';}
     h+='<p><b>暂缓：</b>'+(a.hold.length?a.hold.slice(0,8).map(function(it){return esc(it.q.n);}).join('、'):'无')+'</p>';
     if(ST.lastAIText)h+='<p><b>AI 建议：</b></p><div style="white-space:pre-wrap;font-size:12.5px;border:1px dashed var(--line);border-radius:8px;padding:10px">'+esc(ST.lastAIText)+'</div>';
-  }else{h+='<p class="muted">尚未生成补短建议。可到「补短建议」页勾选失分题型后生成，本报告将自动补全本部分。</p>';}
+  }else{h+='<p class="muted">尚未生成智能补短建议。可到「智能补短建议」页勾选失分题型后生成，本报告将自动补全本部分。</p>';}
   h+='<h3>五、升/降层复核条件</h3><ul class="rlist"><li>升层：连续3次校准得分率稳定进入上一档区间，且基础题应得率≥85%。</li><li>降层：连续2次回落原区间，或基础题应得率&lt;85%（铁律立即降层）。</li></ul>';
   h+='<h3>六、后续复测安排</h3><table><tr><th>复测节点</th><th>内容</th><th>观察指标</th></tr><tr><td>本周</td><td>先补清单限时小测</td><td>基础题应得率是否≥85%</td></tr><tr><td>2~3周</td><td>同卷制整卷</td><td>校准得分率是否上移一档</td></tr><tr><td>下次月考</td><td>年级统一考</td><td>用本校均分回算，复核层级</td></tr></table>';
   h+='<p style="margin-top:20px;border-top:1px solid var(--line);padding-top:10px" class="muted">本报告由「天元AI·学情分层定位系统」生成，校准口径与《难度系数校准速查卡 V3.7》一致。层级为教学配题参考，非升学承诺。基准P为机构预估·非官方，须以本校实测校准为准。'+(teacher?'<br>报告教师：'+esc(teacher):'')+'<br><span style="display:inline-block;margin-top:4px;letter-spacing:3px;color:#8A9AAE">章圆 · 天元AI ｜ 智学有章 · 思致圆融</span></p></div>';
@@ -1706,14 +2062,14 @@ function exportBatchCSV(){
   downloadCSV(rows,"批量层级定位_"+new Date().toISOString().slice(0,10)+".csv");
 }
 function exportAdviceCSV(){
-  var a=ST.lastAdvice;if(!a){alert("请先生成补短建议");return;}
+  var a=ST.lastAdvice;if(!a){alert("请先生成智能补短建议");return;}
   var lvName={zhu:"筑基",gg:"巩固",tz:"拓展",bg:"拔高"};
   var rows=[["科目","层级","类别","板块","题型","所属段","易错表现","补短动作"]];
   a.fixFirst.forEach(function(it){rows.push([a.subject,a.layer,"先补",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
   a.pract.forEach(function(it){rows.push([a.subject,a.layer,"再练",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
   a.hold.forEach(function(it){rows.push([a.subject,a.layer,"暂缓",it.mod,it.q.n,lvName[it.q.lv],it.q.f,it.q.x]);});
   var nm=ST.lastLocate?ST.lastLocate.name:"学员";
-  downloadCSV(rows,"补短建议_"+a.subject+"_"+nm+"_"+new Date().toISOString().slice(0,10)+".csv");
+  downloadCSV(rows,"智能补短建议_"+a.subject+"_"+nm+"_"+new Date().toISOString().slice(0,10)+".csv");
 }
 
 /* ============ 城市与基准P 管理 ============ */
@@ -1786,6 +2142,10 @@ var AI_PRESETS={
     guide:"免费领取：注册 https://siliconflow.cn →API 密钥 →新建。平台提供多个 0 元免费模型（如 Qwen2.5-7B-Instruct），注册即送额度。"},
   glm:{name:"智谱AI GLM",url:"https://open.bigmodel.cn/api/paas/v4/chat/completions",model:"glm-4-flash",
     guide:"免费领取：注册 https://open.bigmodel.cn →控制台 →API Keys。glm-4-flash 模型永久免费。"},
+  xfyun:{name:"讯飞星火 Spark Lite（教育 · 永久免费）",url:"https://spark-api-open.xf-yun.com/v1/chat/completions",model:"generalv3.5",
+    guide:"永久免费不限Token（QPS=2，适合单教师使用）。领取：https://xinghuo.xfyun.cn/spark →开通Spark Lite →创建应用，复制 APIKey 与 APISecret，粘贴到「API Key」框时格式为 APIKey:APISecret（英文冒号连接）。K12 题库/教案生态最强，语文英语批改尤佳。"},
+  bailian:{name:"阿里云百炼 · 通义千问（送7000万Token）",url:"https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",model:"qwen-turbo",
+    guide:"新用户送 7000 万 Token（+每模型100万）。领取：https://bailian.console.aliyun.com →API-KEY管理 →创建Key。通义千问数学/理科推理强，qwen-turbo 超低价，额度用尽后成本可忽略。"},
   cfworker:{name:"Cloudflare Worker 中转（推荐）",url:"https://你的子域.你的账号.workers.dev/?up=tokenhub",model:"hy4",
     guide:"部署约3分钟（免费，每天10万次）：①登录 https://dash.cloudflare.com → Workers & Pages → Create → Create Worker → Deploy；②点 Edit code，把物料包 01_定位工具/cloudflare-worker/worker.js 的全部代码粘贴进去 → Deploy；③复制你的 Worker 地址（形如 https://xxx.xxx.workers.dev），替换本框中的「你的子域.你的账号」；④?up= 可切换厂商：tokenhub / siliconflow / glm（模型名需同步改：tokenhub 用 hy4 或 hy3-preview，siliconflow 用 Qwen/Qwen2.5-7B-Instruct，glm 用 glm-4-flash）；⑤到对应厂商免费领取 API Key 粘贴保存。本地双击打开 HTML 也可调用，彻底绕过 CORS。"},
   custom:{name:"自定义",url:"",model:"",guide:"自建或第三方兼容 OpenAI /chat/completions 的接口，自行填写地址、模型名与 Key。"}
@@ -1793,16 +2153,21 @@ var AI_PRESETS={
 var AI_DEFAULT="tokenhub"; // 默认预置：腾讯混元（元宝）免费模型
 function aiDef(){var p=AI_PRESETS[AI_DEFAULT];return{url:p.url,key:"",model:p.model,preset:AI_DEFAULT};}
 function nk(k){return (k||"").toString().trim().replace(/[\s"']/g,"");}
+function syncAICard(){ // AI 接口设置仅系统管理员可用
+  var c=$('aiCard');if(!c)return;
+  if(isAdmin()){c.style.display='';aiState();return;}
+  c.innerHTML='<h2>🔒 AI 接口设置（仅系统管理员可用）</h2><div class="hint" style="margin-top:6px">AI 接口地址与密钥由<b>系统管理员统一配置管理</b>，授权教师无需配置、亦不可见。教师端「AI 生成建议」优先走云端中转，零配置可用；不可用时自动回退内置规则库，结果同样完整。</div>';
+}
 function aiCfg(){try{var s=localStorage.getItem(AI_KEY);if(s){var c=JSON.parse(s);var pr=c.preset||(c.url?(function(){for(var k in AI_PRESETS){if(AI_PRESETS[k].url===c.url)return k;}return"custom";})():AI_DEFAULT);var pp=AI_PRESETS[pr]||AI_PRESETS[AI_DEFAULT];return{url:c.url||pp.url,key:nk(c.key),model:c.model||pp.model,preset:pr};}}catch(e){}return aiDef();}
 function onAIPreset(){var k=val('ai_preset');var p=AI_PRESETS[k];if(!p)return;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;syncModelPreset();if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);}
 function onModelPreset(){var m=val('ai_model_preset');if(m&&$('ai_model'))$('ai_model').value=m;}
 function syncModelPreset(){var s=$('ai_model_preset');if(!s)return;var m=val('ai_model');var hit=false;for(var i=0;i<s.options.length;i++){if(s.options[i].value&&s.options[i].value===m){s.value=m;hit=true;break;}}if(!hit)s.value="";}
-function saveAI(){var c={preset:val('ai_preset'),url:val('ai_url').trim(),key:nk(val('ai_key')),model:val('ai_model').trim()};try{localStorage.setItem(AI_KEY,JSON.stringify(c));}catch(e){}aiState();}
+function saveAI(){var k=val('ai_key').trim();if(!k)k=aiCfg().key||'';var c={preset:val('ai_preset'),url:val('ai_url').trim(),key:nk(k),model:val('ai_model').trim()};try{localStorage.setItem(AI_KEY,JSON.stringify(c));}catch(e){}aiState();}
 function clearAI(){try{localStorage.removeItem(AI_KEY);}catch(e){}var p=AI_PRESETS[AI_DEFAULT];if($('ai_preset'))$('ai_preset').value=AI_DEFAULT;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;if($('ai_key'))$('ai_key').value="";if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);aiState();}
 function aiState(){var c=aiCfg();var h=$('aiState');var pn=(AI_PRESETS[c.preset]||{}).name||"免费AI";if(!h)return;
   h.innerHTML=c.key?('<span class="tag t-ba">AI已启用</span> 产品：'+esc(pn)+' · 模型：'+esc(c.model||"")+'，补短页「AI生成建议」将调用该接口。')
     :('<span class="tag t-lin">已预置免费AI：'+esc(pn)+'</span> 地址与模型已填好，<b>到对应官网免费领取 API Key 粘贴后即可启用</b>；未填 Key 时补短页自动用内置规则库，结果同样可用。');
-  if($('ai_preset'))$('ai_preset').value=c.preset;if($('ai_url'))$('ai_url').value=c.url;if($('ai_key'))$('ai_key').value=c.key;if($('ai_model'))$('ai_model').value=c.model;syncModelPreset();
+  if($('ai_preset'))$('ai_preset').value=c.preset;if($('ai_url'))$('ai_url').value=c.url;if($('ai_key')){$('ai_key').value='';$('ai_key').placeholder=c.key?'已保存密钥（●●●●●●●●，重新粘贴即可覆盖）':'粘贴免费领取的 Key，未填则自动用内置规则库';}if($('ai_model'))$('ai_model').value=c.model;syncModelPreset();
   if($('aiGuide'))$('aiGuide').innerHTML=esc((AI_PRESETS[c.preset]||AI_PRESETS[AI_DEFAULT]).guide);}
 
 /* ============ 参考表 ============ */
@@ -1832,7 +2197,7 @@ function normStage(id){var e=$(id);if(e&&!e.value)e.value="高中";}
 function init(){
   var steps=[ensureDefaults,function(){
   normStage('l_stage');normStage('b_stage');normStage('a_stage');
-  try{fillSelSimple('l_scope',EXAM_SCOPES,'final');fillSelSimple('b_scope',EXAM_SCOPES,'final');}catch(e){console.error('scope init',e);}
+  try{fillSelSimple('l_scope',EXAM_SCOPES,'all');fillSelSimple('b_scope',EXAM_SCOPES,'all');}catch(e){console.error('scope init',e);}
   fillTermSel('a_term',autoTerm());
   fillGrades('l_grade',val('l_stage'),"高二");
   fillGrades('b_grade',val('b_stage'),"高二");
@@ -1858,7 +2223,7 @@ function clearStudentData(){
   var rp=$('report');if(rp)rp.innerHTML='<div class="muted">点击「生成机构报告」后，此处显示完整报告。</div>';
   try{localStorage.removeItem('zydb_tab');}catch(e){}
 }
-function doLogout(){if(confirm('确定退出登录？将清除登录状态与当前学员数据（定位结果、补短建议、报告），恢复默认状态。')){try{addLog('退出登录');}catch(e){}try{clearStudentData();}catch(e){}setCurPhone('');location.reload();}}
+function doLogout(){if(confirm('确定退出登录？将清除登录状态与当前学员数据（定位结果、智能补短建议、报告），恢复默认状态。')){try{addLog('退出登录');}catch(e){}try{clearStudentData();}catch(e){}setCurPhone('');location.reload();}}
 function renderAuthPanel(){
   var wrap=$('authPanel'),badge=$('pwBadge'),ttl=$('authTitle'),st=$('authState');if(!wrap)return;
   var me=getCurPhone();
@@ -2058,6 +2423,12 @@ function viewCloudPhones(){ // 管理员查看云端授权名单（CSV 原始数
     if(box)box.innerHTML='<div class="hint">❌ 读取失败：请确认 Worker 已部署最新代码（含 /phones 接口），且地址/密钥正确。</div>';
   });
 }
+/* 顶栏LOGO与版本徽标 */
+document.addEventListener('DOMContentLoaded',function(){
+  var lg=$('topLogo');if(lg){var src='assets/logo.png';try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d)src=d;}catch(e){}lg.src=src;}
+  var tv=$('tbVer');if(tv&&typeof DATA_VERSION!=='undefined')tv.textContent='V'+DATA_VERSION+' · 授权版';
+  var fy=$('ftYear');if(fy)fy.textContent=new Date().getFullYear(); // 版权年份自动更新
+});
 </script>
 </body>
 </html>
