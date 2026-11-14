@@ -693,6 +693,8 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="hint" id="a_from" style="margin-top:8px"></div>
       <div style="margin-top:14px"><label>勾选本次实际丢分的题型（可多选，展开板块查看）：</label></div>
       <div id="modList" style="margin-top:8px"></div>
+      <div style="margin-top:12px"><label style="display:flex;align-items:center;justify-content:space-between;gap:8px">✏️ 追加提示词（可选 · 教师写给 AI 的额外要求，自动附加在指令末尾）<button class="btn sm gho" onclick="clearAdvPrompt()">清空</button></label>
+      <textarea id="aiExtraPrompt" rows="3" style="width:100%" placeholder="例：孩子三周后期末考试，请重点给考前冲刺安排；表达请口语化，方便家长阅读；数学计算题易错，请多给口算训练方法……（自动保存本机，换页不丢）" oninput="saveAdvPrompt()"></textarea></div>
       <div class="btns">
         <button class="btn" onclick="genAdvice()">🤖 AI 生成建议</button>
         <button class="btn sec" onclick="genAdvice(true)">🔄 重新生成</button>
@@ -850,6 +852,13 @@ document.addEventListener('DOMContentLoaded',function(){
           <option value="dark">深色模式</option>
         </select>
         <div class="hint" style="margin-top:8px">「跟随系统」自动匹配操作系统的深色/浅色外观；选择后立即生效并保存在本机，刷新不丢。机构报告打印始终为白底样式，不受主题影响。</div>
+      </div>
+      <div class="card">
+        <h2>🔄 云端数据同步</h2>
+        <div class="set-item"><div class="ic">⏱️</div><div><b>自动同步</b><span>打开工具时与进入「城市与基准P」页时自动拉取云端最新数据；管理员增删改基准P口径后，全设备自动生效。</span></div></div>
+        <div class="set-item"><div class="ic">🔄</div><div><b>手动同步</b><span>页面长时间开着时，点下方按钮立即拉取最新口径与AI配置。</span></div></div>
+        <div class="btns"><button class="btn" onclick="syncAllCloud(this)" style="width:100%">🔄 立即同步云端数据</button></div>
+        <div class="hint" id="cloudSyncState" style="margin-top:8px">—</div>
       </div>
       <div class="card logout-card">
         <h2>🚪 退出登录</h2>
@@ -1744,6 +1753,8 @@ function renderLocate(r){
   if(r.iron)h+='<div class="danger">⛔ '+esc(r.ironNote)+'。此类孩子高分多靠压轴赌分，卷子一变常规易崩，须先补基础概念闭环，配题先降一档。</div>';
   else if(r.layer=="临界观察")h+='<div class="note">🔎 临界观察：校准落 72%~75%，建议追踪3次（看趋势而非单次）再定层。此阶段配题以巩固段为主、拓展段少量试探。</div>';
   else if(r.cal>=0.75&&r.cal<0.78)h+='<div class="note">🟡 拔高下沿缓冲带：已判拔高冲刺层，处 75%~78%，建议追踪3次确认稳定后再加压轴限时训练。</div>';
+  var rp='';try{rp=localStorage.getItem(RPT_PROMPT_KEY)||'';}catch(e){}
+  h+='<div class="noprint" style="margin-top:10px"><label style="display:flex;align-items:center;justify-content:space-between;gap:8px">✏️ 报告追加提示词（可选 · 教师写给AI的额外要求，生成机构报告时附加）<button class="btn sm gho" onclick="clearRptPrompt()">清空</button></label><textarea id="rptExtraPrompt" rows="3" style="width:100%" placeholder="例：家长会后需要单独沟通，请额外给出与家长沟通的话术要点；孩子近期备考期末，请侧重考前安排……（独立于补短页的追加提示词，自动保存本机）" oninput="saveRptPrompt()">'+esc(rp)+'</textarea></div>';
   h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去智能补短建议</button><button class="btn sec" onclick="gotoReportAI()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
   $('locResult').innerHTML=h;
 }
@@ -1782,6 +1793,7 @@ function gotoReportAI(){ // 生成机构报告：先AI多因子综合判定（�
    +'【校准因子】常模池基准P：'+L.baseP.toFixed(3)+'（'+(L.usedAvg?'本校实测':'兜底')+'）；校准得分率：'+(L.cal*100).toFixed(1)+'%；基础题应得率：'+br+'；层级判定：'+L.layer+'（台阶：'+L.step+'）'+(L.iron?'；⚠️基础题应得率<85%已触发铁律强制降层待复核':'')+'。\n'
    +'【判定规则】校准得分率=卷面得分率−（本校均分率−基准P）；基础题应得率<85%触发铁律强制降为基础巩固层。未填年级均分时基准P为卷别兜底值，结论仅供参考。\n'
    +'【要求】先综合以上因子复核层级判定是否合理（如发现因子矛盾请指出并给出更合理的判定），再严格按七段结构输出：①卷面核对 ②漏洞诊断归因（概念漏洞/方法缺失/熟练度不足） ③优先补漏清单（含易错点与补法） ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作。500字内，分点清晰。';
+  var ep=rptExtraPromptText();if(ep)prompt+='\n'+ep+'（请在不破坏上述七段结构的前提下尽量遵循）。'; // 追加定位页独立的报告教师提示词
   $('locResult').innerHTML=aiLoadingHtml();
   function done(txt){ // 成功带AI文本回退规则库均可：报告第四部分结构完整
     ST.lastAdvice=a;if(txt)ST.lastAIText=txt;
@@ -2040,6 +2052,7 @@ function genAdvice(force){
   var picked=[];Object.keys(CHIPS).forEach(function(k){var p=k.split('||');var q=bankFind(val('a_stage'),val('a_subject'),p[0],+p[1]);if(q)picked.push(p[0]+'-'+q.n);});
   var _term=val('a_term')||'上';
   var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员"+val('a_grade')+( _term=="下"?"下学期":"上学期")+"（教材默认进度已学至"+capLabel(val('a_stage'),val('a_grade'),_term)+"，仅供参考）。学员层级："+a.layer+"。本次失分题型（教师按试卷结构/知识板块勾选，可能包含总复习、压轴或后续册次题型，属教研有意勾选，请按先已学后未学、先基础后综合的教学逻辑处理）："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
+  var ep=extraPromptText();if(ep)prompt+='\n'+ep; // 追加教师自定义提示词
   $('advResult').innerHTML=aiLoadingHtml(); // Loading
   aiCallChain(prompt,function(txt){ // 统一调用链：①智谱AI（默认）②管理员配置的云端中转 ③规则库兜底
     if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}
@@ -2052,11 +2065,13 @@ function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){v
  var L=ST.lastLocate||{};var region=(val('a_region')=='ty')?'通用地区教材（全国通用）':'成都地区教材（考频导向）';
  var sc=(L.score!=null)?(L.score+'/'+L.full):'未提供';var cal=(L.cal!=null)?(L.cal*100).toFixed(1)+'%':'未提供';var avg=(L.avg!=null)?L.avg:'未提供';var br=(L.baseRate!=null)?(L.baseRate*100).toFixed(1)+'%':'未提供';
  var a=ruleAdvice();var shortRegion=(val('a_region')=='ty')?'全国通用':'成都';
- return '你是资深K12'+val('a_stage')+val('a_subject')+'教研老师，请面向学生的知识漏洞做诊断式补短分析。\n'
+ var s='你是资深K12'+val('a_stage')+val('a_subject')+'教研老师，请面向学生的知识漏洞做诊断式补短分析。\n'
   +'【学员画像】姓名：'+(L.name||'')+'；地区/教材体系：'+region+'；学段：'+val('a_stage')+'；年级：'+val('a_grade')+'（'+(val('a_term')||'上')+'学期）；科目：'+val('a_subject')+'。\n'
   +'【考试表现】卷面得分：'+sc+'；班级/年级均分：'+avg+'；校准得分率：'+cal+'；基础题应得率：'+br+'；层级判定：'+a.layer+'（台阶：'+(L.step||'—')+'）。\n'
   +'【本次失分知识点】'+(picked.join('、')||'未指定')+'。\n'
-  +'【要求】1)先判断丢分本质是概念漏洞、方法缺失还是熟练度不足；2)按知识漏洞根因归组分析，而非按题型罗列；3)每个漏洞给出「概念澄清→典型例题→变式训练」路径；4)结合'+val('a_grade')+'教学进度与'+shortRegion+'考情标注补漏优先级；5)严格按 ①卷面核对 ②漏洞诊断归因 ③优先补漏清单(含易错点与补法) ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作 输出，500字内，分点清晰。';}
+  +'【要求】1)先判断丢分本质是概念漏洞、方法缺失还是熟练度不足；2)按知识漏洞根因归组分析，而非按题型罗列；3)每个漏洞给出「概念澄清→典型例题→变式训练」路径；4)结合'+val('a_grade')+'教学进度与'+shortRegion+'考情标注补漏优先级；5)严格按 ①卷面核对 ②漏洞诊断归因 ③优先补漏清单(含易错点与补法) ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作 输出，500字内，分点清晰。';
+ var ep=extraPromptText();if(ep)s+='\n'+ep; // 追加教师自定义提示词（复制去元宝同样生效）
+ return s;}
 function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
 function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}var a=ruleAdvice();ST.lastAdvice=a;ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML=aiModulesHtml(a,t,'元宝粘贴导入');}
 /* ============ 机构报告 ============ */
@@ -2266,6 +2281,22 @@ function exportAdviceCSV(){
   downloadCSV(rows,"智能补短建议_"+a.subject+"_"+nm+"_"+new Date().toISOString().slice(0,10)+".csv");
 }
 
+/* ============ 追加提示词（教师自定义，AI生成建议时附加到指令末尾） ============ */
+var ADV_PROMPT_KEY="zydb_adv_prompt_v51"; // 补短页·AI生成建议
+var RPT_PROMPT_KEY="zydb_rpt_prompt_v51"; // 定位页·生成机构报告（独立于补短页）
+function saveAdvPrompt(){try{localStorage.setItem(ADV_PROMPT_KEY,val('aiExtraPrompt'));}catch(e){}}
+function loadAdvPrompt(){try{var t=localStorage.getItem(ADV_PROMPT_KEY)||'';var e=$('aiExtraPrompt');if(e&&t&&!e.value)e.value=t;}catch(e){}}
+function clearAdvPrompt(){var e=$('aiExtraPrompt');if(e)e.value='';saveAdvPrompt();alert('已清空追加提示词（可重新输入）。');}
+function extraPromptText(){ // 补短页教师提示词：以「教师补充要求」身份附加，AI 需优先遵循
+  var t=(val('aiExtraPrompt')||'').trim();if(!t){try{t=(localStorage.getItem(ADV_PROMPT_KEY)||'').trim();}catch(e){}}
+  return t?('【教师补充要求】以下要求与前面的指令同等优先，请务必遵循：'+t):'';
+}
+function saveRptPrompt(){try{localStorage.setItem(RPT_PROMPT_KEY,val('rptExtraPrompt'));}catch(e){}}
+function clearRptPrompt(){try{localStorage.removeItem(RPT_PROMPT_KEY);}catch(e){}var e=$('rptExtraPrompt');if(e)e.value='';alert('已清空报告追加提示词（可重新输入）。');}
+function rptExtraPromptText(){ // 定位页报告教师提示词（独立保存，与补短页互不影响）
+  var t=(val('rptExtraPrompt')||'').trim();if(!t){try{t=(localStorage.getItem(RPT_PROMPT_KEY)||'').trim();}catch(e){}}
+  return t?('【教师补充要求】以下要求与前面的指令同等优先，请务必遵循：'+t):'';
+}
 /* ============ 城市与基准P 管理 ============ */
 function renderCity(){
   var kw=($('citySearch').value||"").trim().toLowerCase();
@@ -2289,6 +2320,12 @@ function renderCity(){
 }
 var CITY_CACHE_KEY="zydb_city_v51";
 function saveCityLocal(d){try{localStorage.setItem(CITY_KEY,JSON.stringify(d));}catch(e){}}
+/* 删除墓碑：记录被管理员删除的内置条目（city|subject|pool），防止「检查更新」合并时复活 */
+var CITY_TOMB="zydb_city_tomb_v51";
+function cityKey(r){return (r.city||"")+"|"+(r.subject||"")+"|"+(r.pool||"");}
+function cityTombList(){try{return JSON.parse(localStorage.getItem(CITY_TOMB)||'[]');}catch(e){return [];}}
+function cityTombSave(a){try{localStorage.setItem(CITY_TOMB,JSON.stringify(a));}catch(e){}}
+function cityTombDel(k){var a=cityTombList();var i=a.indexOf(k);if(i>=0){a.splice(i,1);cityTombSave(a);}}
 function setCitySync(t){var h=$('citySync');if(h)h.innerHTML=t;}
 function pushCityCloud(d){ // 口径推送云端（管理员增删改后触发，全设备生效）
   var cfg=getSync();setCitySync('⏳ 正在同步云端…');
@@ -2300,7 +2337,7 @@ function pushCityCloud(d){ // 口径推送云端（管理员增删改后触发�
     return false;
   }).catch(function(){setCitySync('❌ 云端同步失败（网络问题）——改动暂存本机，恢复网络后重新编辑触发重试。');return false;});
 }
-function pullCityCloud(){ // 拉取云端口径（云端为准）：启动/打开口径页时自动同步
+function pullCityCloud(){ // 拉取云端口径（云端为准）：启动/打开口径页/手动同步时
   var cfg=getSync();
   return fetchWithTimeout(cfg.url+'/city',{headers:{'x-sync-key':cfg.key||''}},8000)
   .then(function(r){return r.json();})
@@ -2313,6 +2350,20 @@ function pullCityCloud(){ // 拉取云端口径（云端为准）：启动/打�
     }
     return false;
   }).catch(function(){return false;});
+}
+function syncAllCloud(btn){ // 教师端主动刷新云端数据：城市基准P口径 + AI配置（管理员改动后无需等待下次启动）
+  if(btn){btn.disabled=true;btn.dataset.old=btn.textContent;btn.textContent='⏳ 同步中…';}
+  var st=$('cloudSyncState');if(st)st.textContent='⏳ 正在拉取云端最新数据…';
+  return Promise.all([pullCityCloud(),pullAICloud()]).then(function(rs){
+    if(btn){btn.disabled=false;btn.textContent=btn.dataset.old||'🔄 立即同步云端数据';}
+    if(rs[0]){try{renderCity();}catch(e){}}
+    if(rs[1]){try{aiState();}catch(e){}}
+    var ok1=rs[0]?'✅ 已更新到管理员最新版本':'✓ 已是最新（与云端一致）';
+    var ok2=rs[1]?'✅ 已更新到管理员最新版本':'✓ 已是最新（与云端一致）';
+    var msg='同步完成：城市与基准P口径 '+ok1+'；AI 接口配置 '+ok2+'。（历史定位结论与报告不受口径更新影响，新定位使用最新口径。）';
+    if(st)st.textContent=msg;
+    alert('云端数据同步完成：\n· 城市与基准P口径：'+ok1+'\n· AI 接口配置：'+ok2+'\n\n提示：已生成的历史定位结论与报告不受口径更新影响，新定位将使用最新口径。');
+  });
 }
 function saveCity(d){
   saveCityLocal(d);
@@ -2332,27 +2383,40 @@ function editCity(i,field,v){
 function delCity(i){
   if(!isAdmin()){onlyAdminCity();return;}
   if(!confirm("确定删除该条基准P口径？删除后将同步云端，全设备生效。"))return;
-  var d=cityData();d.splice(i,1);saveCity(d);renderCity();
+  var d=cityData();var rm=d.splice(i,1)[0];var k=cityKey(rm);
+  for(var j=0;j<DEFAULT_CITY.length;j++){ // 删除的是内置条目：记墓碑，防止检查更新时复活
+    if(cityKey(DEFAULT_CITY[j])==k){var a=cityTombList();if(a.indexOf(k)<0)a.push(k);cityTombSave(a);break;}
+  }
+  saveCity(d);renderCity();
 }
 function addCityRow(){
   if(!isAdmin()){onlyAdminCity();return;}
-  var d=cityData();d.push({city:"本校平日卷",subject:"数学",pool:"自定义卷",p:0.60,src:"本校实测",stage:"全部"});saveCity(d);renderCity();
+  var d=cityData();var r={city:"本校平日卷",subject:"数学",pool:"自定义卷",p:0.60,src:"本校实测",stage:"全部"};
+  cityTombDel(cityKey(r)); // 重新添加的条目移除墓碑
+  d.push(r);saveCity(d);renderCity();
 }
 function resetCity(){
   if(!isAdmin()){onlyAdminCity();return;}
   if(confirm("恢复为内置默认口径？你自定义的条目将被清除，并同步云端（全设备生效）。")){
+    cityTombSave([]); // 全量恢复：清除全部墓碑
     saveCity(DEFAULT_CITY.slice());try{localStorage.setItem("zydb_city_ver",DATA_VERSION);}catch(e){}
     refreshAllSelects();renderCity();
   }
 }
 function checkUpdate(){
-  // 与内置默认比较版本
-  var stored=null;try{stored=localStorage.getItem("zydb_city_ver");}catch(e){}
-  if(stored==DATA_VERSION){alert("已是最新内置口径（v"+DATA_VERSION+"）。\n提示：内置口径更新时，本工具会自动合并新增条目、保留你的自定义改动。");return;}
-  // 合并：内置有、本机无的补进来
-  var added=ensureDefaults();
-  refreshAllSelects();renderCity();
-  alert("口径更新完成：新增 "+added+" 条内置条目，你的自定义条目已保留。当前内置版本 v"+DATA_VERSION+"。");
+  if(!isAdmin()){onlyAdminCity();return;}
+  setCitySync('⏳ 正在拉取云端口径…');
+  pullCityCloud().then(function(){ // 先拉云端为基底，避免合并回退其他设备的改动
+    var stored=null;try{stored=localStorage.getItem("zydb_city_ver");}catch(e){}
+    if(stored==DATA_VERSION){
+      setCitySync('✅ 已是最新内置口径（v'+DATA_VERSION+'），云端口径已同步');
+      alert("已是最新内置口径（v"+DATA_VERSION+"）。\n云端口径在打开本页时已自动同步；内置口径升级后会自动合并新增条目、保留管理员改动与删除。");
+      return;
+    }
+    var added=ensureDefaults(); // 只补内置新增；已删除的内置条目（墓碑）不会复活
+    refreshAllSelects();renderCity();
+    alert("口径更新完成：新增 "+added+" 条内置条目"+(added?"（已同步云端，全设备生效）":"")+"；管理员的修改与删除均保留。当前内置版本 v"+DATA_VERSION+"。");
+  });
 }
 function exportCityJSON(){var d=cityData();var txt=JSON.stringify({v:DATA_VERSION,data:d},null,2);
   var blob=new Blob([txt],{type:'application/json'});
@@ -2361,6 +2425,7 @@ function exportCityJSON(){var d=cityData();var txt=JSON.stringify({v:DATA_VERSIO
 }
 function importCityJSON(){if(!isAdmin()){onlyAdminCity();return;}var t=$('impCityText').value.trim();if(!t){alert("请先粘贴配置JSON");return;}
   try{var o=JSON.parse(t);var arr=o.data||o;if(!(arr instanceof Array))throw"格式错误";
+    cityTombSave([]); // 显式导入=权威全量：清除墓碑
     saveCity(arr);try{localStorage.setItem("zydb_city_ver",o.v||DATA_VERSION);}catch(e){}
     refreshAllSelects();renderCity();$('impCityText').value="";alert("导入成功，共 "+arr.length+" 条。");
   }catch(e){alert("导入失败：JSON 解析错误。请确认内容完整。");}
@@ -2458,9 +2523,10 @@ function renderRef(){
 /* ============ 初始化 ============ */
 function ensureDefaults(){
   var d=cityData();if(!(d instanceof Array))d=[];
-  var key=function(r){return (r.city||"")+"|"+(r.subject||"")+"|"+(r.pool||"");};
-  var have={};d.forEach(function(r){have[key(r)]=true;});
-  var added=0;DEFAULT_CITY.forEach(function(r){if(!have[key(r)]){d.push(JSON.parse(JSON.stringify(r)));added++;}});
+  var have={},tomb={};cityTombList().forEach(function(k){tomb[k]=1;});
+  d.forEach(function(r){have[cityKey(r)]=true;});
+  var added=0;DEFAULT_CITY.forEach(function(r){var k=cityKey(r);if(tomb[k]||have[k])return; // 墓碑/已存在均不补
+    d.push(JSON.parse(JSON.stringify(r)));added++;});
   if(added>0)saveCity(d);
   try{localStorage.setItem("zydb_city_ver",DATA_VERSION);}catch(e){}
   return added;
@@ -2702,6 +2768,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var fy=$('ftYear');if(fy)fy.textContent=new Date().getFullYear(); // 版权年份自动更新
   pullAICloud().then(function(ch){if(ch){try{aiState();}catch(e){}}}); // 启动时同步云端AI配置（管理员保存后全设备生效）
   pullCityCloud().then(function(ch){if(ch){try{renderCity();}catch(e){}}}); // 启动时同步云端城市基准P口径
+  loadAdvPrompt(); // 恢复本机保存的追加提示词
 });
 /* ===== 统一美化提示弹窗（接管原生 alert，全站提示自动美化） ===== */
 (function(){
