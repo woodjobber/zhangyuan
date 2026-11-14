@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1B4396">
 <title>天元AI·学情分层定位系统</title>
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="apple-touch-icon" href="assets/logo.png">
@@ -22,8 +23,7 @@ body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;backgroun
 .topbar h1{position:relative;text-align:center;font-size:30px;font-weight:800;letter-spacing:4px;margin:0;text-shadow:0 2px 14px rgba(9,37,84,.4)}
 .topbar .subline{position:relative;text-align:center;font-size:13.5px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.92);margin:9px auto 0}
 .topbar .slogan{position:relative;text-align:center;font-size:14.5px;font-weight:600;letter-spacing:7px;color:rgba(255,214,140,.95);margin:7px auto 0;text-shadow:0 1px 8px rgba(120,70,10,.25)}
-.tb-right{position:relative;flex-shrink:0}
-.tb-badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);padding:8px 18px;border-radius:22px;font-size:12.5px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+.tb-center{flex:1;min-width:260px;text-align:center}
 @media(max-width:860px){.topbar{flex-direction:column;padding:26px 18px 24px;text-align:center}.tb-left{justify-content:center}.tb-center{min-width:100%}}
 .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px}
 .footer{text-align:center;font-size:12px;color:var(--sub);padding:6px 0 26px;letter-spacing:.5px}
@@ -179,7 +179,7 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
   .topbar .subline{font-size:12px}
   .tb-logo{width:50px;height:50px}
   .tb-brand{font-size:17px}
-  .tb-badge{padding:6px 12px;font-size:11px}
+  .tb-center{min-width:100%}
   /* 卡片与表单 */
   .card{padding:14px 13px;border-radius:13px;overflow-x:auto}
   .card h2{font-size:15px}
@@ -575,7 +575,7 @@ document.addEventListener('DOMContentLoaded',function(){
   try{var tn=localStorage.getItem('zydb_tab');if(tn){var t2=document.querySelector('.tab[data-p="'+tn+'"]');if(t2)switchTab(tn,t2);}}catch(e){}
 });
 </script>
-<div class="topbar"><div class="tb-left"><img class="tb-logo" id="topLogo" alt="章圆LOGO" onerror="this.style.display='none'"><div class="tb-brand"><b>章圆</b><span></span></div></div><div class="tb-center"><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline">双轨判定（大分层航道 × 四层台阶）｜ 授权教师专用</div></div><div class="tb-right"><div class="tb-badge" id="tbVer">V7.5</div></div></div>
+<div class="topbar"><div class="tb-left"><img class="tb-logo" id="topLogo" alt="章圆LOGO" onerror="this.style.display='none'"><div class="tb-brand"><b>章圆</b><span></span></div></div><div class="tb-center"><h1>天元AI·学情分层定位系统</h1><div class="slogan">智学有章 · 思致圆融</div><div class="subline">双轨判定（大分层航道 × 四层台阶）｜ 授权教师专用</div></div></div>
 <div class="wrap">
   <div class="tabs">
     <div class="tab on" data-p="locate" onclick="switchTab('locate',this)">学情定位</div>
@@ -2463,9 +2463,26 @@ function viewCloudPhones(){ // 管理员查看云端授权名单（CSV 原始数
 /* 顶栏LOGO与版本徽标 */
 document.addEventListener('DOMContentLoaded',function(){
   var lg=$('topLogo');if(lg){var src='assets/logo.png';try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d)src=d;}catch(e){}lg.src=src;}
-  var tv=$('tbVer');if(tv&&typeof DATA_VERSION!=='undefined')tv.textContent='V'+DATA_VERSION+' · 授权版';
   var fy=$('ftYear');if(fy)fy.textContent=new Date().getFullYear(); // 版权年份自动更新
 });
+/* ===== 统一美化提示弹窗（接管原生 alert，全站提示自动美化） ===== */
+(function(){
+  var mask=document.createElement('div');
+  mask.style.cssText='position:fixed;inset:0;background:rgba(9,28,58,.5);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px';
+  mask.innerHTML='<div style="background:#fff;border-radius:16px;max-width:370px;width:100%;box-shadow:0 24px 64px rgba(8,40,90,.35);overflow:hidden;text-align:center">'
+   +'<div style="background:linear-gradient(135deg,#12306E,#1B4396 60%,#2458C8);padding:13px 18px;display:flex;align-items:center;justify-content:center"><b style="color:#fff;font-size:15px;letter-spacing:3px">系 统 提 示</b></div>'
+   +'<div id="alertMsg" style="padding:22px 20px;font-size:14.5px;line-height:1.85;color:#2A3A55;white-space:pre-wrap;word-break:break-word;max-height:52vh;overflow-y:auto"></div>'
+   +'<div style="padding:0 20px 20px"><button id="alertOk" style="width:100%;padding:11px;border:none;border-radius:10px;background:linear-gradient(135deg,#1E6FD9,#3E8BEE);color:#fff;font-size:15px;font-weight:700;letter-spacing:6px;cursor:pointer;box-shadow:0 6px 16px rgba(30,111,217,.35)">确定</button></div></div>';
+  document.body.appendChild(mask);
+  function hide(){mask.style.display='none';}
+  document.getElementById('alertOk').addEventListener('click',hide);
+  mask.addEventListener('click',function(e){if(e.target===mask)hide();});
+  var orig=window.alert;
+  window.alert=function(msg){ // 接管原生 alert：所有提示自动使用统一样式
+    try{document.getElementById('alertMsg').textContent=String(msg==null?'':msg);mask.style.display='flex';}
+    catch(e){orig(msg);}
+  };
+})();
 </script>
 </body>
 </html>
