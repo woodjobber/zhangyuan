@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成都 · 初高中数理化英知识点考频地图（本地真题导向）</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1f2430; --sub:#5b6474; --line:#e6e9f0;
+    --shadow:0 6px 22px rgba(30,40,80,.08);
+    --math:#e0653b; --phys:#2f7ce0; --chem:#3aa76d; --eng:#d1497d;
+    --cd:#c0392b; --cdbg:#fdecea;
+    --f5:#e8453c; --f4:#ef8a2e; --f3:#e0b400; --f2:#8a94a8;
+    --f5bg:#fdecea; --f4bg:#fdf1e5; --f3bg:#fbf7e0; --f2bg:#f1f3f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei","PingFang SC","WenQuanYi Micro Hei",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  header{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,#8f1d1d,#c0392b 60%,#e0653b);color:#fff;box-shadow:0 4px 20px rgba(120,20,20,.28)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  .htop{display:flex;align-items:center;gap:14px;padding:15px 0 8px;flex-wrap:wrap}
+  .logo{font-size:21px;font-weight:800;letter-spacing:.5px}
+  .logo .badge{display:inline-block;background:#ffd27a;color:#7a2a00;font-size:13px;padding:2px 10px;border-radius:999px;margin-right:8px;vertical-align:2px}
+  .logo span{color:#ffe0b8;font-weight:700;font-size:15px}
+  .htip{font-size:12.5px;color:#ffe0d8;margin-left:auto}
+  .stages{display:flex;gap:10px;padding-bottom:12px;flex-wrap:wrap}
+  .stage-btn{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;padding:7px 20px;border-radius:999px;cursor:pointer;font-size:14.5px;font-weight:700;transition:.2s}
+  .stage-btn.active{background:#ffd27a;color:#5a1e00;border-color:#ffd27a}
+  .stage-btn:hover:not(.active){background:rgba(255,255,255,.2)}
+  /* 本地考情横幅 */
+  .cdbar{position:sticky;top:0;z-index:45;background:#fff7f5;border-bottom:1px solid #f3d6d0;box-shadow:0 2px 10px rgba(180,40,30,.06)}
+  .cdbar-inner{max-width:1180px;margin:0 auto;padding:11px 22px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+  .cdbar .flag{flex:none;font-size:13px;font-weight:800;color:#fff;background:var(--cd);padding:3px 11px;border-radius:7px;margin-top:1px}
+  .cdbar .txt{flex:1;min-width:280px;font-size:13.5px;color:#6b3a34}
+  .cdbar .txt b{color:var(--cd)}
+  .cdbar .score{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:#fff;border:1px solid #f0cfc9;color:#96312a;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  /* toolbar */
+  .toolbar{position:sticky;top:70px;z-index:40;background:var(--bg);padding:15px 0 8px;border-bottom:1px solid var(--line)}
+  .row1{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .subjects{display:flex;gap:8px;flex-wrap:wrap}
+  .sub-btn{border:1px solid var(--line);background:#fff;padding:7px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;color:var(--sub);transition:.18s;display:flex;align-items:center;gap:6px}
+  .sub-btn .dot{width:9px;height:9px;border-radius:50%}
+  .sub-btn .ver{font-size:10.5px;font-weight:600;color:#a7aeba;background:#f2f4f9;padding:1px 6px;border-radius:5px}
+  .sub-btn.active{color:#fff;border-color:transparent;box-shadow:var(--shadow)}
+  .sub-btn.active .ver{background:rgba(255,255,255,.25);color:#fff}
+  .sub-btn[data-s="math"].active{background:var(--math)}
+  .sub-btn[data-s="phys"].active{background:var(--phys)}
+  .sub-btn[data-s="chem"].active{background:var(--chem)}
+  .sub-btn[data-s="eng"].active{background:var(--eng)}
+  .search{margin-left:auto;position:relative}
+  .search input{width:230px;max-width:55vw;padding:9px 14px 9px 36px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff;outline:none}
+  .search input:focus{border-color:#d98a80;box-shadow:0 0 0 3px rgba(192,57,43,.1)}
+  .search::before{content:"🔍";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.6}
+  .row2{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .row2 .lbl{font-size:13px;color:var(--sub);font-weight:700}
+  .fbtn{border:1px solid var(--line);background:#fff;padding:5px 13px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--sub);transition:.15s;display:flex;align-items:center;gap:5px}
+  .fbtn .stars{letter-spacing:-1px;font-size:11px}
+  .fbtn.active{color:#fff;border-color:transparent}
+  .fbtn[data-f="5"].active{background:var(--f5)} .fbtn[data-f="4"].active{background:var(--f4)}
+  .fbtn[data-f="3"].active{background:var(--f3)} .fbtn[data-f="2"].active{background:var(--f2)}
+  .fbtn.only{color:var(--cd);border-color:#f0cfc9;background:#fff7f5}
+  .fbtn.only.active{background:var(--cd);color:#fff;border-color:var(--cd)}
+  .fbtn.reset{margin-left:auto;color:#9aa3b5}
+  /* stats */
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
+  .stat{flex:1;min-width:110px;background:#fff;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);border-left:4px solid #ccc}
+  .stat .n{font-size:24px;font-weight:800}
+  .stat .k{font-size:12.5px;color:var(--sub)}
+  .stat.s5{border-color:var(--f5)} .stat.s4{border-color:var(--f4)} .stat.s3{border-color:var(--f3)} .stat.s2{border-color:var(--f2)}
+  .stat.cd{border-color:var(--cd)} .stat.cd .n{color:var(--cd)}
+  .statbar{height:8px;border-radius:5px;background:#eef0f6;overflow:hidden;margin-top:8px;display:flex}
+  .statbar span{height:100%}
+  /* intro */
+  .intro{background:#fff;border-radius:14px;padding:16px 20px;box-shadow:var(--shadow);margin:14px 0 14px;border-left:5px solid var(--cd)}
+  .intro h2{font-size:17px;margin-bottom:5px}
+  .intro h2 em{font-style:normal;color:var(--cd);font-size:13px;font-weight:700;background:var(--cdbg);padding:2px 9px;border-radius:6px;margin-left:6px;vertical-align:2px}
+  .intro p{color:var(--sub);font-size:14px}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--sub)}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* 命题洞察卡 */
+  .insight{background:linear-gradient(100deg,#fff8f6,#fff);border:1px dashed #eec3bc;border-radius:14px;padding:14px 20px;margin-bottom:18px}
+  .insight h3{font-size:14.5px;color:var(--cd);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .insight ul{margin:0;padding-left:20px}
+  .insight li{font-size:13.5px;color:#5d4440;margin:4px 0}
+  .insight li b{color:var(--cd)}
+  /* module */
+  .module{background:var(--card);border-radius:14px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;border:1px solid var(--line)}
+  .m-head{display:flex;align-items:center;gap:12px;padding:15px 20px;cursor:pointer;user-select:none;transition:.15s}
+  .m-head:hover{background:#fafbfe}
+  .m-idx{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff}
+  .m-title{font-size:16px;font-weight:800}
+  .m-meta{margin-left:auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+  .m-avg{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
+  .m-wt{font-size:11.5px;font-weight:700;color:var(--cd);background:var(--cdbg);padding:2px 9px;border-radius:999px}
+  .m-count{font-size:12px;color:var(--sub);background:#f0f2f8;padding:3px 10px;border-radius:999px}
+  .arrow{flex:none;transition:.25s;color:#9aa3b5;font-size:13px}
+  .module.open .arrow{transform:rotate(90deg)}
+  .m-body{display:none;padding:2px 20px 18px 62px;border-top:1px solid var(--line)}
+  .module.open .m-body{display:block}
+  .kp{display:flex;gap:12px;align-items:flex-start;padding:11px 12px;border-radius:10px;border-bottom:1px solid #f2f4f9;margin:4px 0}
+  .kp:last-child{border-bottom:none}
+  .kp.f5{background:var(--f5bg)} .kp.f4{background:var(--f4bg)} .kp.f3{background:var(--f3bg)} .kp.f2{background:var(--f2bg)}
+  .kp-badge{flex:none;width:52px;text-align:center}
+  .kp-stars{font-size:12px;letter-spacing:-1px;line-height:1}
+  .kp-lv{font-size:10px;font-weight:700;margin-top:2px}
+  .kp.f5 .kp-stars,.kp.f5 .kp-lv{color:var(--f5)} .kp.f4 .kp-stars,.kp.f4 .kp-lv{color:var(--f4)}
+  .kp.f3 .kp-stars,.kp.f3 .kp-lv{color:#b8860b} .kp.f2 .kp-stars,.kp.f2 .kp-lv{color:var(--f2)}
+  .kp-main{flex:1}
+  .kp-t{font-weight:700;font-size:14.5px;color:#2a3040;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .kp-d{color:var(--sub);font-size:13.5px;margin-top:3px}
+  .kp-cd{font-size:12.5px;color:#96312a;margin-top:4px;background:#fff7f5;border-left:2px solid var(--cd);padding:3px 9px;border-radius:0 6px 6px 0}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:6px;font-weight:600;vertical-align:middle}
+  .tag.hard{background:#eef0fd;color:#5a63c9} .tag.exp{background:#eaf6ee;color:#2f8a5a}
+  .tag.local{background:var(--cd);color:#fff}
+  .no-result{text-align:center;padding:50px;color:var(--sub);display:none}
+  mark{background:#fff3bf;padding:0 2px;border-radius:3px}
+  footer{text-align:center;color:#9aa3b5;font-size:13px;padding:22px 0 40px;line-height:1.9}
+  .tip{font-size:12px;color:#b0b7c4;margin-top:4px}
+  /* ===== 视图切换 ===== */
+  .row0{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .row0 .lbl{font-size:13px;color:var(--sub);font-weight:700}
+  .viewtoggle{display:inline-flex;background:#eef0f5;border-radius:10px;padding:3px;gap:2px}
+  .vt{border:none;background:transparent;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;color:var(--sub);transition:.18s;display:flex;align-items:center;gap:6px}
+  .vt.active{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .vt.active[data-v="exam"]{color:var(--cd)}
+  .vthint{font-size:12.5px;color:var(--sub);opacity:.85}
+  /* ===== 考点视图：题型战场 ===== */
+  .battle{border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .b-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;background:linear-gradient(90deg,#fbfcfe,#fff);border-left:5px solid var(--math)}
+  .b-head .b-idx{width:30px;height:30px;border-radius:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+  .b-title{font-size:16px;font-weight:800;color:var(--ink)}
+  .b-desc{font-size:12.5px;color:var(--sub);margin-top:2px}
+  .b-meta{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .b-score{font-size:12px;font-weight:700;color:#fff;background:var(--cd);padding:3px 10px;border-radius:20px}
+  .b-cnt{font-size:12px;color:var(--sub);font-weight:600}
+  .b-arrow{color:var(--sub);transition:.2s;font-size:12px}
+  .battle.open .b-arrow{transform:rotate(90deg)}
+  .b-body{padding:6px 18px 16px;display:none}
+  .battle.open .b-body{display:block}
+  .ekp{display:flex;gap:12px;padding:12px 14px;border-radius:10px;margin:10px 0;border:1px solid var(--line)}
+  .ekp.f5{background:var(--f5bg);border-color:#f6c9c4} .ekp.f4{background:var(--f4bg);border-color:#f5d9b8}
+  .ekp.f3{background:var(--f3bg);border-color:#efe6ad} .ekp.f2{background:var(--f2bg);border-color:#dfe3ea}
+  .ekp-badge{flex-shrink:0;width:56px;text-align:center}
+  .ekp-badge .kp-stars{font-size:11px;letter-spacing:-1px;line-height:1}
+  .ekp-badge .kp-lv{font-size:10px;color:var(--sub);margin-top:3px;font-weight:700}
+  .ekp-main{flex:1;min-width:0}
+  .ekp-t{font-size:14.5px;font-weight:800;color:var(--ink);margin-bottom:5px}
+  .ekp-row{font-size:13px;color:#3d4351;line-height:1.55;margin-top:3px}
+  .ekp-row b{color:var(--cd)}
+  .ekp-row .ico{font-weight:800;margin-right:4px}
+  .ekp-row.q .ico{color:var(--phys)}
+  .exam-banner{background:#fff6f4;border:1px dashed #e8b4ab;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13.5px;color:#7a3b32;line-height:1.6}
+  .exam-banner b{color:var(--cd)}
+  @media(max-width:640px){.m-body{padding-left:20px}.search input{width:160px}.htip{display:none}.kp-badge{width:44px}.cdbar{position:static}.toolbar{top:0}.vt{padding:6px 12px;font-size:13px}.ekp-badge{width:46px}.b-meta .b-score{display:none}}
+
+/* ===== 实战卡 ===== */
+.dr-card{margin:8px 0 2px;border:1px dashed var(--phys);border-radius:8px;background:#f8fbff;overflow:hidden}
+.dr-tab{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--phys);background:#eef4ff}
+.dr-tab .dr-n{font-weight:400;font-size:12px;color:#5b6b85}
+.dr-tab .b-arrow{transition:transform .2s;font-size:11px}
+.dr-card.open .dr-tab .b-arrow{transform:rotate(90deg)}
+.dr-body{display:none;padding:10px 12px 12px}
+.dr-card.open .dr-body{display:block}
+.dr-sec-t{font-size:12px;font-weight:700;color:var(--cd);margin:8px 0 5px}
+.dr-sec-t:first-child{margin-top:2px}
+.dr-real,.dr-item{background:#fff;border:1px solid #e3eaf5;border-radius:7px;padding:8px 10px;margin-bottom:6px;font-size:13px;line-height:1.65}
+.dr-y{display:inline-block;background:var(--cd);color:#fff;font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px;margin-bottom:4px}
+.dr-q{color:#25303f}
+.dr-a{margin-top:3px;color:#1c5a3a;background:#f0f8f3;border-left:3px solid var(--chem);padding:4px 8px;border-radius:0 5px 5px 0;font-size:12.5px}
+.dr-trap{margin-top:4px;color:#8a3a2e;font-size:12.5px}
+.dr-tpl{background:#fff7ee;border:1px solid #f5dcb8;border-radius:7px;padding:8px 10px;font-size:13px;line-height:1.7;color:#5b3f16}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="htop">
+      <div class="logo"><span class="badge">成都专版</span>知识点考频地图 <span>· 数理化英 / 中考·高考真题导向</span></div>
+      <div class="htip">教材版本·分值构成·命题风格 全部对齐成都本地</div>
+    </div>
+    <div class="stages" id="stages">
+      <button class="stage-btn active" data-stage="cz">初中 · 成都中考</button>
+      <button class="stage-btn" data-stage="gz">高中 · 四川新高考</button>
+    </div>
+  </div>
+</header>
+
+<div class="cdbar">
+  <div class="cdbar-inner">
+    <span class="flag" id="cdFlag">成都中考</span>
+    <div class="txt" id="cdTxt"></div>
+    <div class="score" id="cdScore"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="row0">
+      <span class="lbl">视图：</span>
+      <div class="viewtoggle" id="viewToggle">
+        <button class="vt active" data-v="textbook">📚 教材视图</button>
+        <button class="vt" data-v="exam">🎯 考点视图</button>
+      </div>
+      <span class="vthint" id="vthint">按课本章节铺开，系统学习、查漏补缺</span>
+    </div>
+    <div class="row1">
+      <div class="subjects" id="subjects"></div>
+      <div class="search"><input id="q" type="text" placeholder="搜知识点，如 浮力 / 侯氏制碱 / 定语从句…"></div>
+    </div>
+    <div class="row2" id="freqFilter">
+      <span class="lbl">考频筛选：</span>
+      <button class="fbtn active" data-f="all">全部</button>
+      <button class="fbtn" data-f="5"><span class="stars" style="color:var(--f5)">★★★★★</span>必考</button>
+      <button class="fbtn" data-f="4"><span class="stars" style="color:var(--f4)">★★★★</span>高频</button>
+      <button class="fbtn" data-f="3"><span class="stars" style="color:var(--f3)">★★★</span>中频</button>
+      <button class="fbtn" data-f="2"><span class="stars" style="color:var(--f2)">★★</span>低频</button>
+      <button class="fbtn only" data-f="cd">🔴 只看成都特色考点</button>
+      <button class="fbtn reset" id="expandAll">展开全部</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+  <div class="intro" id="intro"></div>
+  <div class="insight" id="insight"></div>
+  <div id="content"></div>
+  <div class="no-result" id="noResult">🔍 未找到匹配的知识点，换个关键词或调整考频筛选</div>
+</main>
+
+<footer>
+  考频星级依据近年 <b>成都中考真题</b> 与 <b>四川新高考（全国二卷 + 四川卷）</b> 命题规律归纳，为本地复习优先级参考，非官方精确统计<br>
+  <span class="tip">★5 必考（几乎年年必出）· ★4 高频 · ★3 中频 · ★2 低频/选学 ｜ 🔴成都特色 = 近三年本地卷反复出现或本土情境高频载体 ｜ 政策口径截至 2026-2027 学年，以当年成都市教育局公告为准</span>
+</footer>
+
+<script>
+/* f:本地考频 5/4/3/2  tag:hard难点/exp拓展  cd:成都命题特色说明（有则打🔴标） wt:模块本地权重提示 */
+const SUBJECTS={
+  math:{name:"数学",color:"var(--math)",cz:"北师大版",gz:"人教A版"},
+  phys:{name:"物理",color:"var(--phys)",cz:"教科版",gz:"教科版"},
+  chem:{name:"化学",color:"var(--chem)",cz:"人教版",gz:"人教版"},
+  eng:{name:"英语",color:"var(--eng)",cz:"人教版(Go for it!)",gz:"外研版"}
+};
+
+const CDBAR={
+  cz:{flag:"成都中考",
+      txt:"总分 <b>710 分</b>；语数英各 150（<b>A卷100+B卷50</b>）、物理 70（<b>A卷×50%+B卷20</b>）、化学 50（<b>只考A卷，×50%</b>）、体育 60；道法/历史/生物/地理各 20（等级折算）。物理化学含 <b>实验操作 15 分</b>。",
+      score:["数学 A100+B50","物理 (A100×50%+B20)=70","化学 A100×50%=50","英语 A100(含听力30)+B50"]},
+  gz:{flag:"四川新高考",
+      txt:"成都采用 <b>“3+1+2”</b>：语数外各 150（<b>全国二卷</b>）；首选物理/历史 100（<b>原始分</b>，四川卷）；再选化学等 4 选 2，各 100（<b>等级赋分</b>，30 分起赋）。总分 750。",
+      score:["数学/英语 全国Ⅱ卷 150","物理 四川卷 100(原始分)","化学 四川卷 100(等级赋分)","2025 首届新高考"]}
+};
+
+const DATA={
+/* ============ 初中 · 成都中考 ============ */
+cz:{
+ math:{intro:"成都中考数学 150 分 = <b>A卷100（保基本盘）+ B卷50（拉区分度）</b>。A卷重通性通法，B卷 21-26 题定生死：几何填空压轴、新定义阅读、二次函数代几综合是三大关卡。",
+  insight:[
+    "<b>去套路化已成定局</b>：胡不归、阿氏圆、将军饮马等“网红模型”在近三年成都卷中<b>持续弱化甚至取消</b>，B25 回归课本基础定理的层层递进推理。",
+    "<b>二次函数仍是压轴核心</b>（B26，约 8-10 分），但命题从“动点最值套路”转向<b>交点关系、含参化简、参数范围</b>的代数本质，计算量大，是尖子生主要失分点。",
+    "<b>几何占比最高（约 37%）</b>：<b>圆 + 相似三角形</b>权重显著上升；统计概率固定为 A 卷解答题必考（约 11%），审题陷阱是中等生粗心丢分区。",
+    "<b>情境化贯穿全卷</b>：《九章算术》盈不足、成都公园路线、智能门锁、北斗销量——<b>剥离文字冗余、建数学模型</b>的能力已成硬要求。"
+  ],
+  modules:[
+   {t:"数与式",wt:"A卷 · 约15分",kps:[
+     {t:"有理数运算与科学记数法",d:"符号法则、混合运算、大数表示与近似数。",f:3},
+     {t:"实数与二次根式",d:"平方根算术平方根、√a 非负、二次根式化简运算。",f:4},
+     {t:"整式运算与乘法公式",d:"幂的运算、平方差、完全平方，化简求值必备。",f:5},
+     {t:"因式分解",d:"提公因式+公式+十字相乘，解答题常规工具。",f:4},
+     {t:"分式化简与求值",d:"约分通分、有意义条件、化简后代值。",f:4}
+   ]},
+   {t:"方程与不等式",wt:"A卷主体 · 约20分",kps:[
+     {t:"一元一次方程 & 二元一次方程组",d:"解法与应用题；《九章算术》盈不足古文情境列方程组是成都卷标志考法。",f:5,cd:"2026 A卷第6题以《九章算术》文言原文考二元一次方程组建模"},
+     {t:"一元二次方程",d:"四种解法、判别式、根与系数、增长率/利润应用，A卷解答题必考。",f:5},
+     {t:"分式方程",d:"解法、增根检验、工程/行程应用，必考。",f:5},
+     {t:"一元一次不等式(组)",d:"解集数轴表示、方案设计型应用题。",f:4}
+   ]},
+   {t:"函数",wt:"A+B卷 · 约38分",kps:[
+     {t:"平面直角坐标系与函数基础",d:"点的坐标、对称平移、自变量取值范围。",f:3},
+     {t:"一次函数",d:"图象性质、与方程不等式综合、<b>实际应用（公园路线/方案比较）</b>——B24 高频位置。",f:5,cd:"B卷常设一次函数应用大题（如公园路线规划、智能门锁计费）"},
+     {t:"反比例函数",d:"图象性质、k 的几何意义、与一次函数交点及线段比。",f:4},
+     {t:"二次函数",d:"图象性质、最值、与方程综合；<b>B26 压轴</b>：抛物线交点、含参化简、参数范围，弱化几何拼接、强化代数本质。",f:5,tag:"hard",cd:"成都B26固定压轴载体，近三年转向“多参数+代数本质”，计算量偏大"}
+   ]},
+   {t:"三角形",wt:"几何基础 · 约20分",kps:[
+     {t:"几何基础(线/角/平行线)",d:"平行线判定性质、多边形内角和、命题证明。",f:3},
+     {t:"全等三角形",d:"SSS/SAS/ASA/AAS 判定与证明，几何证明核心工具。",f:5},
+     {t:"等腰与直角三角形·勾股定理",d:"三线合一、勾股及逆定理、解直角三角形实际测量。",f:5},
+     {t:"垂直平分线与角平分线",d:"性质判定、尺规作图。",f:3}
+   ]},
+   {t:"四边形",wt:"几何 · 约16分",kps:[
+     {t:"平行四边形",d:"性质判定、三角形中位线。",f:4},
+     {t:"矩形·菱形·正方形",d:"性质判定与相互转化，A卷证明题高频。",f:5},
+     {t:"梯形与多边形",d:"内角和、等腰梯形，权重趋弱。",f:2}
+   ]},
+   {t:"相似与锐角三角函数",wt:"几何核心 · 约20分",kps:[
+     {t:"相似三角形",d:"判定性质、位似、与函数综合；<b>B25 几何探究常以“等腰+相似”为基底</b>，前一问结论供后一问用。",f:5,tag:"hard",cd:"近三年B25几何压轴核心基底=等腰三角形+构造相似，层层递进设问"},
+     {t:"锐角三角函数与解直角三角形",d:"特殊角值、仰俯角/坡度应用，A卷解答题常客（如测量高度）。",f:5},
+     {t:"几何压轴拓展(辅助线/导角)",d:"冲 140+ 需备：梅涅劳斯雏形、和差角、旋转构造等课本外视野。",f:4,tag:"exp",cd:"成都B22几何填空压轴强调“一题多解+灵活倒角”，反背模型"}
+   ]},
+   {t:"圆",wt:"几何最重 · 约16分",kps:[
+     {t:"圆的基本性质",d:"垂径定理、圆周角定理、弧弦圆心角关系，A卷第17题常考简单计算。",f:5},
+     {t:"点线圆位置·切线",d:"切线判定与性质、证明题高频。",f:5},
+     {t:"圆的计算",d:"弧长、扇形面积、圆锥侧面积、阴影面积。",f:4}
+   ]},
+   {t:"图形变换",wt:"约8分",kps:[
+     {t:"平移·轴对称·旋转",d:"变换作图、中心对称、与坐标系结合。",f:3},
+     {t:"三视图与投影·展开图",d:"三视图还原、立方体展开图（A卷常考基础题）。",f:4}
+   ]},
+   {t:"统计与概率",wt:"A卷必考 · 约16分",kps:[
+     {t:"统计图表与数据分析",d:"频数分布、平均数/中位数/众数、<b>加权平均数</b>、方差；以评委打分、分层统计为情境。",f:5,cd:"成都固定 A卷解答题，2026以“评委打分+加权核算”为情境，审题陷阱多"},
+     {t:"概率",d:"列表/树状图求概率、与统计综合，必考解答题。",f:5}
+   ]},
+   {t:"综合与实践(课标第四领域)",wt:"跨领域应用",kps:[
+     {t:"项目式/课题学习",d:"测高、方案设计、最优选择、规律探究等真实问题，课标独立领域，融入各章应用题。",f:3,cd:"成都卷情境化应用题（公园路线、方案比较）即综合与实践落点"}
+   ]}
+  ]
+ },
+ phys:{intro:"成都中考物理 <b>升学分 = A卷×50% + B卷</b>，共 70 分；A卷含 <b>实验操作 15 分</b>。2026 是新课标新教材首次中考，<b>反套路、反刷题</b>、23 道题素材直取教材。",
+  insight:[
+    "<b>压轴必是浮力/力学论证</b>：2026 压轴要求论证“液面深度是否变化”，看似简单实考底层逻辑；<b>浮力+压强</b>是成都卷最稳的压轴位。",
+    "<b>电学黑箱是特色题</b>：近年 B 卷固定出现“黑箱问题”，需综合欧姆定律、串并联做科学推理，非套公式能解。",
+    "<b>教材即题库</b>：全卷 23 道题素材/配图直接来自教材（动滑轮、测心率、船闸、潜望镜）——<b>回归课本</b>比刷难题更划算。",
+    "<b>本土+大国重器情境</b>：成都地铁、天府广场音乐喷泉、锦江、神舟/嫦娥/氢燃料电池反复入题，考物理观念不考背景知识。",
+    "<b>实验操作 15 分要拿满</b>：这是成都特色，力学/电学基本实验操作规范直接影响升学分。"
+  ],
+  modules:[
+   {t:"测量与运动",wt:"约8分",kps:[
+     {t:"长度时间测量·误差",d:"刻度尺读数、多次测量求平均，实验基础。",f:3},
+     {t:"机械运动与速度",d:"参照物、v=s/t、s-t与v-t图象。",f:4}
+   ]},
+   {t:"质量与密度(物质主题·曾漏)",wt:"约10分",kps:[
+     {t:"质量及其测量",d:"质量概念、托盘天平使用、单位换算，实验操作基础。",f:3},
+     {t:"密度及其测量",d:"ρ=m/V、量筒测体积、测固体/液体密度——<b>中考实验必考</b>。",f:5,cd:"测密度是成都实验操作与计算常客，常与压强浮力联动"},
+     {t:"密度与社会生活",d:"鉴别物质、m-V图象、热胀冷缩对密度的影响。",f:3},
+     {t:"物质世界尺度(拓展)",d:"分子原子、宇宙与微观尺度数量级，课标“物质结构”主题。",f:2}
+   ]},
+   {t:"声现象",wt:"约6分",kps:[
+     {t:"声音的产生传播与特性",d:"振动发声、音调响度音色；2026 直接考“声音的产生”。",f:4,cd:"2026真题以古琴演奏/声音产生入题，五育融合常客"},
+     {t:"噪声控制与超声次声",d:"防治三途径、应用，填空基础。",f:2}
+   ]},
+   {t:"光现象",wt:"约10分",kps:[
+     {t:"光的反射与平面镜成像",d:"反射定律、成像特点与作图、潜望镜原理。",f:4,cd:"潜望镜制作、近视成因是成都卷爱用的本土/健康情境"},
+     {t:"光的折射",d:"折射规律、视深变浅、看水底偏浅。",f:3},
+     {t:"直线传播·色散",d:"小孔成像、三原色，较轻。",f:2}
+   ]},
+   {t:"透镜及其应用",wt:"约10分",kps:[
+     {t:"凸透镜成像规律",d:"物距像距关系、动态变化，<b>实验必考</b>；近视防治常作情境。",f:5,cd:"常与“近视成因与矫正”生命教育情境结合命题"},
+     {t:"眼睛与光学仪器",d:"视力矫正、照相机/投影仪/放大镜原理。",f:3}
+   ]},
+   {t:"物态变化",wt:"约8分",kps:[
+     {t:"六种物态变化",d:"熔化/凝固/汽化/液化/升华/凝华吸放热判断。",f:4},
+     {t:"熔化与沸腾规律",d:"晶体熔点、沸点、图象分析；2026 以“模拟淬火”为情境。",f:4,cd:"2026以“淬火”情境考物态变化，工艺文化结合"}
+   ]},
+   {t:"力学",wt:"最重 · 约35分",kps:[
+     {t:"力的基础与重力·摩擦力",d:"三要素、示意图、G=mg、摩擦力方向与增减。",f:4},
+     {t:"牛顿第一定律与二力平衡",d:"惯性、平衡条件应用辨析。",f:4},
+     {t:"压强(固/液/大气/流体)",d:"p=F/S、p=ρgh、大气压、流体压强与流速；<b>船闸（连通器）</b>是成都本土高频载体。",f:5,cd:"三峡/成都船闸多次入题；大题常与浮力联动"},
+     {t:"浮力",d:"阿基米德原理、沉浮条件、<b>液面变化论证</b>——成都压轴第一位置。",f:5,tag:"hard",cd:"2026压轴即“浮力+液面深度是否变化”论证题，2025压轴亦考浮力"},
+     {t:"简单机械与机械效率",d:"杠杆平衡、滑轮组、机械效率计算；<b>动滑轮</b>素材直取教材。",f:5,cd:"A卷动滑轮实验题直接取自教材，必会"},
+     {t:"功·功率·机械能",d:"W=Fs、P=W/t、动能势能转化；常与自行车/降落伞/热气球情境结合。",f:4,cd:"成都卷爱用自行车、降落伞、桥梁受力等生活工程情境"}
+   ]},
+   {t:"电学",wt:"约28分",kps:[
+     {t:"电流电压电阻·电路",d:"串并联规律、电表使用、滑动变阻器；<b>电路故障判断</b>近年高频。",f:5,cd:"2026真题明确考“电路故障判断”，探究性要求增强"},
+     {t:"欧姆定律",d:"I=U/R、伏安法、动态电路分析，必考核心。",f:5},
+     {t:"电功与电功率",d:"P=UI、焦耳定律、额定/实际功率测量，大题高频。",f:5,tag:"hard"},
+     {t:"电学黑箱(特色)",d:"综合欧姆定律+串并联做科学推理，<b>成都B卷特色压轴</b>；安全用电亦常考。",f:5,tag:"hard",cd:"近年B卷固定“黑箱问题”，需科学推理而非套用，反套路代表题"},
+     {t:"家庭电路与安全用电",d:"火线零线、三孔插座、触电防护，2025 以安全用电浸润情境。",f:3,cd:"2025 A卷以“安全用电”提升安全意识入题"}
+   ]},
+   {t:"电与磁",wt:"约8分",kps:[
+     {t:"磁场与电流磁效应",d:"磁感线、奥斯特实验、安培定则。",f:3},
+     {t:"电磁铁·电动机",d:"电磁继电器、通电导体受力；2026 考“电动机转动”原理。",f:4,cd:"2026真题考电动机转动，探究性设问"},
+     {t:"电磁感应",d:"感应电流条件、发电机原理。",f:4}
+   ]},
+   {t:"热学与能源",wt:"约10分",kps:[
+     {t:"内能与比热容",d:"分子动理论、改变内能方式、Q=cmΔt 计算，必考。",f:5},
+     {t:"热机与热值",d:"四冲程、热值、热机效率；氢燃料电池是成都前沿情境。",f:4,cd:"氢燃料电池、成都地铁等本地/前沿情境反复出现"},
+     {t:"能量守恒与能源",d:"转化守恒、能源分类、核能，较轻。",f:2}
+   ]},
+   {t:"实验操作(15分·成都特色)",wt:"升学分直计",kps:[
+     {t:"力学必做实验操作",d:"测密度、测滑轮组机械效率、探究杠杆平衡等，操作规范拿满分。",f:5,cd:"成都物理含实验操作考试15分，直接计入A卷，必拿满"},
+     {t:"电学必做实验操作",d:"伏安法测电阻/测小灯泡功率、连接电路规范，操作规范拿满分。",f:5,cd:"电学实验操作是失分敏感区，接线/量程/读数规范是重点"}
+   ]}
+  ]
+ },
+ chem:{intro:"成都中考化学 <b>只设A卷100分（笔试85+实验操作15），升学按 ×50% 计 50 分</b>。近三年情境化极强：侯氏制碱、酱油酿造、天然海盐发酵粉、北斗/嫦娥/天问、双碳——<b>课本知识要“活”用</b>。",
+  insight:[
+    "<b>压轴爱考“工业流程/制碱”</b>：2026 压轴为<b>侯氏制碱法</b>，考工艺流程+原理迁移，是成都化学标志性难点。",
+    "<b>图表是“隐性第三科”</b>：溶解度曲线、工艺流程图、微观示意图、p-t 图像、数据表——从非文本信息<b>定位→转译→代入模型</b>是通用硬能力。",
+    "<b>考法从“写方程式”升级为“过量滴加后溶液里有哪些离子、图像怎么变”</b>：酸碱盐由记忆题变成图像推理题，这是最大转型点。",
+    "<b>跨学科实践常态化</b>：2026 用<b>压强传感器</b>把物理压强+数学图像融进化学探究，物理/数学不好会直接拖累化学。",
+    "<b>实验操作 15 分 + 气体制取</b>是必拿基础分，装置选择/检验验满年年考。"
+  ],
+  modules:[
+   {t:"物质构成与化学用语",wt:"基础 · 约15分",kps:[
+     {t:"分子原子离子·原子结构",d:"微粒性质、原子构成、元素符号、地壳含量。",f:3},
+     {t:"化合价与化学式",d:"常见化合价、与化学式互求、相对分子质量与质量分数。",f:5},
+     {t:"化学方程式与质量守恒",d:"配平、方程式计算，全卷核心，所有计算的底座。",f:5}
+   ]},
+   {t:"空气·氧·水·碳",wt:"约25分",kps:[
+     {t:"空气成分与氧气性质",d:"体积分数、测氧含量实验、碳硫磷铁镁燃烧现象描述。",f:4},
+     {t:"氧气制取(实验必考)",d:"三种制法、装置选择、催化剂、验满；实验操作考试重点。",f:5},
+     {t:"水的组成与净化",d:"电解水、硬水软水、净化方法、溶解度起步。",f:4},
+     {t:"碳的氧化物(CO₂/CO)",d:"CO₂性质制取检验、温室效应与双碳、CO还原性；<b>双碳目标</b>是成都热点情境。",f:5,cd:"“双碳目标”+航天燃料情境在近年成都卷高频出现"},
+     {t:"微观示意图辨识",d:"从微观模型判断反应类型、分子个数比，图表题常客。",f:4,cd:"微观示意图是成都卷“图表第三科”的固定题型之一"}
+   ]},
+   {t:"金属与溶液",wt:"约20分",kps:[
+     {t:"金属化学性质与活动性顺序",d:"与氧气/酸/盐反应、活动性判断、置换规律，高频。",f:5},
+     {t:"铁的冶炼与锈蚀",d:"冶炼原理、生锈条件与防锈、炼铁流程。",f:4},
+     {t:"溶解度曲线",d:"饱和判断、曲线读图、结晶方法、溶质质量分数变化——图表题核心。",f:5,tag:"hard",cd:"溶解度曲线是成都卷必考图表，常结合“降温/蒸发后溶质质量分数”设问"},
+     {t:"溶液的配制与计算",d:"溶质质量分数计算、配制步骤；实验操作考试常考。",f:5}
+   ]},
+   {t:"酸碱盐(转型重点)",wt:"最重 · 约25分",kps:[
+     {t:"常见的酸与碱",d:"盐酸硫酸/氢氧化钠氢氧化钙通性、浓硫酸稀释。",f:4},
+     {t:"中和反应与pH",d:"中和实质、pH测定与应用、图像判断，必考。",f:5},
+     {t:"复分解反应与离子共存",d:"复分解条件、离子共存与鉴别、化肥鉴别；<b>“过量滴加后剩哪些离子”</b>是成都新考法。",f:5,tag:"hard",cd:"成都已从“写方程式”转向“过量滴加后溶液成分+图像趋势”的推理考法"},
+     {t:"盐与物质推断",d:"常见盐性质、推断题、除杂探究，大题难点。",f:5,tag:"hard"}
+   ]},
+   {t:"化学与社会·流程·探究(成都特色)",wt:"压轴区 · 约15分",kps:[
+     {t:"工业流程题(侯氏制碱等)",d:"工艺流程解读、原理迁移、循环利用；<b>2026 压轴即侯氏制碱法</b>。",f:5,tag:"hard",cd:"2026成都中考化学压轴考“侯氏制碱法”，流程+原理迁移是标志难点"},
+     {t:"化学与生活(酿造/发酵/材料)",d:"酱油酿造、天然海盐、发酵粉、催化剂、缓慢氧化、六大营养素、合成材料。",f:5,cd:"2026以“酱油酿造/天然海盐/发酵粉”为素材，串联缓慢氧化+催化剂"},
+     {t:"科技前沿情境(航天/双碳)",d:"神舟/嫦娥/天问的燃料、材料、能源、电池，把考点嵌进国家科技叙事。",f:4,cd:"北斗、天宫、嫦娥、天问二号是近年成都卷固定“文化自信”情境载体"},
+     {t:"跨学科探究(传感器等)",d:"压强传感器+图像分析、实验方案设计与误差分析，压轴探究题。",f:5,tag:"hard",cd:"2026第19题压强传感器：物理压强+数学图像融入化学探究，跨学科必考"},
+     {t:"气体制取与实验操作(15分)",d:"O₂/CO₂/H₂制取检验验满、装置选择、基本操作规范，实验操作考试直接计分。",f:5,cd:"化学含实验操作15分计入A卷，气体制取是操作+笔试双高频"}
+   ]}
+  ]
+ },
+ eng:{intro:"成都中考英语 150 分 = <b>A卷100（含听力30）+ B卷50</b>。<b>毕业等级只看A卷，升学 A、B 卷全算</b>。2026 微调：听力对话单题 1→1.5 分、听短文填空“一词一空”、<b>B卷表格答案≤3词</b>、任务型阅读要完整句。",
+  insight:[
+    "<b>B卷是失分重灾区，也是最大提分空间</b>：十二选十、六选五、完成表格、任务型阅读（35分）+ 书面表达（15分）；<b>“要点齐全 &gt; 语法完美”</b>，敢写对信息点就得分。",
+    "<b>听力“从听懂变抓准”</b>：对话题分值上涨，必须精准捕捉数字、地点、态度、转折词，错 3 题=丢一道阅读大题。",
+    "<b>阅读成隐形拉分王</b>：A卷阅读跨学科增多、同义替换强化；细节题减少，<b>推断/主旨/结构/写作意图题</b>增加。高频话题：传统文化（兵马俑/苏轼）、前沿科技（AI识森林声/闪电）、代际沟通、生态环境。",
+    "<b>语法语篇化</b>：完成短文考时态+非谓语+连词综合；短文填空考“先定词性再变形式”；B卷已出现<b>高中衔接词</b>，词汇漏洞进高一会原形毕露。",
+    "<b>书面表达锚定成都</b>：2026 题“Good Manners, Beautiful Parks”直指公园城市；约 80 词但需“阐述重要性—两条建议—发出号召”三层，<b>写准不写多</b>。"
+  ],
+  modules:[
+   {t:"语音知识(曾漏)",wt:"听力+拼读地基",kps:[
+     {t:"音标与拼读规则",d:"48个音标、元音/辅音字母及组合发音、音节，见词能读、听音能写。",f:3,cd:"成都中考设语音辨析小题；拼读不准直接拖累2026提权后的听力"},
+     {t:"重音·连读·语调",d:"单词重音、句子升降调、连读与失去爆破，听力辨音与朗读。",f:2}
+   ]},
+   {t:"核心词汇与构词",wt:"贯穿全卷",kps:[
+     {t:"核心词汇与固定搭配",d:"高频词、动词短语、固定搭配，A卷保底B卷攻坚的地基。",f:5},
+     {t:"构词法与词性转换",d:"前后缀、名动形副互转；<b>短文填空“先定词性再变形”</b>的核心能力。",f:5,cd:"B卷短文填空(如兵马俑篇)专考词形变化，光认识单词不够"},
+     {t:"高中衔接词(B卷)",d:"B卷阅读出现高中常见词汇，为高一衔接埋伏笔，尖子生需提前储备。",f:4,tag:"exp",cd:"成都卷B卷词汇已越课标，高一衔接压力前置"}
+   ]},
+   {t:"名词·冠词·代词·数词",wt:"A卷单选/填空",kps:[
+     {t:"名词",d:"可数不可数、复数、所有格，短文填空常考复数变形。",f:4},
+     {t:"冠词",d:"a/an/the 与零冠词，B卷填空高频设空点。",f:4},
+     {t:"代词",d:"人称/物主/反身/不定/指示代词辨析。",f:4},
+     {t:"数词",d:"基数/序数词、年份日期时刻、分数与编号表达。",f:3}
+   ]},
+   {t:"形容词·副词·介词·连词",wt:"A+B卷",kps:[
+     {t:"形容词副词与比较等级",d:"比较级最高级、as…as、倍数，填空与改错常考。",f:5},
+     {t:"介词与动词短语",d:"时间/地点/方式介词、固定短语，完形高频。",f:4},
+     {t:"连词与逻辑衔接",d:"并列从属连词、<b>however/in addition/for example</b> 等逻辑词——补全短文全靠它。",f:5,cd:"补全短文(如老龄化篇)完全依赖逻辑衔接词解题"}
+   ]},
+   {t:"动词与时态",wt:"A卷必考",kps:[
+     {t:"动词基本形式",d:"三单、过去式、现在分词、动词分类。",f:4},
+     {t:"一般三时态",d:"一般现在/过去/将来，标志词辨析，基础必拿。",f:5},
+     {t:"进行时",d:"现在/过去进行时与 when/while 辨析。",f:4,cd:"成都语法明确点名“过去进行时”为高频考点"},
+     {t:"现在完成时",d:"since/for/already/yet、与一般过去辨析，易错高频。",f:5,cd:"现在完成时是成都卷点名的时态重点"},
+     {t:"情态动词",d:"can/must/should 及<b>表推测(can't/must)</b>，单选情境题常考。",f:5,cd:"情态动词表推测是成都语法高频点"}
+   ]},
+   {t:"语态与非谓语",wt:"语法重点",kps:[
+     {t:"被动语态",d:"be+过去分词、各时态被动、一般将来时被动，必考。",f:5,cd:"被动语态(含一般将来时被动)为成都卷点名考点"},
+     {t:"非谓语初步",d:"不定式/动名词常见搭配；完成短文(苏轼篇)考时态+非谓语+连词综合判断。",f:4,tag:"hard",cd:"A卷完成短文以苏轼“逆境豁达”为语篇，综合考非谓语"}
+   ]},
+   {t:"三大从句",wt:"语法核心",kps:[
+     {t:"宾语从句",d:"引导词、<b>陈述语序</b>、时态呼应，必考。",f:5,cd:"宾语从句“语序/引导词”为成都卷点名考点"},
+     {t:"状语从句",d:"时间/条件/原因/让步，<b>so that / although</b> 等高频连词。",f:5,cd:"状语从句点名 so that、although"},
+     {t:"定语从句初步",d:"who/which/that 基本用法，单选与填空稳定出现。",f:4,cd:"定语从句点名 who/which"}
+   ]},
+   {t:"简单句句型·主谓一致·交际(曾漏)",wt:"基础必拿",kps:[
+     {t:"句子种类(陈述/疑问/祈使/感叹)",d:"一般/特殊/选择/反意疑问句、what/how 感叹句、祈使句。",f:4,cd:"反意疑问句、感叹句是成都单选固定小点"},
+     {t:"There be 与主谓一致",d:"there be 就近原则、主谓一致基本规则，填空与改错常考。",f:4},
+     {t:"情景交际(补全对话)",d:"问路/就医/购物/邀请/建议/道歉等功能话题应答，补全对话必考。",f:4,cd:"补全对话专考情景交际功能句与应答习惯"}
+   ]},
+   {t:"听力(A卷30分)",wt:"2026提权",kps:[
+     {t:"听力对话(1.5分/题)",d:"抓数字/地点/态度/转折词，<b>单题 1.5 分，错3题=丢一阅读大题</b>。",f:5,cd:"2026听力对话单题由1分涨到1.5分，精度要求提高"},
+     {t:"听力表格填空(一词一空)",d:"表格题降为1分/空但要求“一词一空”，拼写与词形必严。",f:4,cd:"2026听短文填空明确“一词一空”规范"}
+   ]},
+   {t:"B卷专项(成都特色·50分)",wt:"最大提分区",kps:[
+     {t:"十二选十",d:"选词+词形变化，认识≠会用，B卷最难入门题型。",f:5,tag:"hard",cd:"十二选十考词形变化，是B卷失分重灾首题"},
+     {t:"六选五/补全短文",d:"逻辑衔接、上下文复现、代词指代。",f:5},
+     {t:"完成表格(≤3词)",d:"信息定位+“减法”概括，<b>答案不超过3词</b>，要点齐全优先于语法完美。",f:5,cd:"2026政策：B卷表格题答案限3词，敢写对信息点就得分"},
+     {t:"任务型阅读(完整句)",d:"按要点给分，<b>需用完整句子回答</b>，句式组织能力。",f:5,cd:"2026任务型阅读按要点给分、要求完整句作答"},
+     {t:"书面表达(约80词·锚定成都)",d:"“阐述重要性—提两条建议—发出号召”三层；2026 题 Good Manners, Beautiful Parks 呼应公园城市。",f:5,cd:"2026作文锚定成都公园城市，过程性写作+观点输出"}
+   ]}
+  ]
+ }
+},
+/* ============ 高中 · 四川新高考 ============ */
+gz:{
+ math:{intro:"四川 2025 首届新高考，数学用 <b>全国二卷</b>（150分）。成都四七九教研共识：<b>解析几何、立体几何、函数与导数</b>三大板块分年级主攻；B卷三大题常规为<b>统计、立体几何、解三角形</b>，压轴落在<b>圆锥曲线与导数</b>。",
+  insight:[
+    "<b>计算量是成都考生的共同痛点</b>：四七九考点考生普遍反映“最后两道大题有难度、计算量大、做不完”——<b>运算速度与准确性</b>要专项练。",
+    "<b>导数压轴最难</b>：19题函数导数常为全场最难题，含参讨论、恒成立、不等式证明是天花板。",
+    "<b>解析几何去“联立韦达”路径依赖</b>：石室教研明确要求打破机械套路，转向代数推演与逻辑探究（轨迹、动点、曲线类型探究）。",
+    "<b>立体几何重“无配图”</b>：平行垂直证明、空间角距离、球的切接、体积表面积为核心，无配图题考空间作图与想象。",
+    "<b>分层值策略</b>：中档题（统计、立几、解三角、概率）稳拿是上 120 的关键；压轴只搏前两问。"
+  ],
+  modules:[
+   {t:"集合·逻辑·复数",wt:"小题送分 · 约15分",kps:[
+     {t:"集合",d:"交并补运算、子集，年年小题首题。",f:5},
+     {t:"常用逻辑用语",d:"充分必要条件、全称存在量词否定。",f:4},
+     {t:"复数",d:"复平面、共轭、模、四则运算，年年 1 小题必送分。",f:5}
+   ]},
+   {t:"函数与基本初等函数",wt:"约20分",kps:[
+     {t:"函数概念与性质",d:"定义域值域、单调奇偶周期、图象变换，贯穿全卷。",f:5},
+     {t:"指数对数函数",d:"运算、图象性质、比较大小，小题高频。",f:4},
+     {t:"函数与方程·零点",d:"零点、二分法、函数模型应用。",f:4},
+     {t:"幂函数",d:"常见幂函数比较，较轻。",f:2}
+   ]},
+   {t:"三角函数与解三角形",wt:"B卷常规大题 · 约20分",kps:[
+     {t:"任意角·诱导·同角关系",d:"弧度、诱导公式，化简基础。",f:4},
+     {t:"恒等变换",d:"和差、二倍角、辅助角，必考工具。",f:5,tag:"hard"},
+     {t:"三角函数图象性质",d:"y=Asin(ωx+φ)、周期单调最值、图象变换，大题常客。",f:5},
+     {t:"解三角形",d:"正弦余弦定理、面积、实际应用；<b>B卷三大题之一（常规位）</b>。",f:5,cd:"成都教研归纳：B卷解答常按“统计→立体几何→解三角形”常规排布"}
+   ]},
+   {t:"数列",wt:"约17分",kps:[
+     {t:"等差等比",d:"通项、求和、性质，必考。",f:5},
+     {t:"数列求和与应用",d:"错位相减、裂项相消，解答题常规。",f:5,tag:"hard"},
+     {t:"an与Sn关系",d:"递推转化，小题常考。",f:3}
+   ]},
+   {t:"不等式",wt:"约15分",kps:[
+     {t:"基本不等式",d:"a+b≥2√ab 求最值、一正二定三相等，高频。",f:5},
+     {t:"一元二次不等式",d:"解法、含参讨论，常与函数综合。",f:4,tag:"hard"},
+     {t:"线性规划(已移出课标)",d:"可行域、最优解；新教材已删除，仅老题/拓展可用。",f:2,tag:"exp"},
+     {t:"不等式性质",d:"性质、作差比较，基础。",f:3}
+   ]},
+   {t:"平面向量",wt:"约12分",kps:[
+     {t:"向量运算与坐标",d:"加减数乘、共线、坐标运算。",f:4},
+     {t:"数量积",d:"数量积、夹角、模，必考工具。",f:5},
+     {t:"向量应用",d:"与几何三角综合，中档题。",f:3}
+   ]},
+   {t:"立体几何",wt:"B卷大题 · 约17分",kps:[
+     {t:"点线面位置关系",d:"平行垂直判定性质、线面角；<b>B卷大题常规位</b>。",f:5,cd:"石室教研：立几核心=平行垂直证明、空间角距离、球的切接、体积表面积"},
+     {t:"空间向量法",d:"建系求角求距离，压轴常用。",f:5,tag:"hard"},
+     {t:"球的切接·无配图题",d:"外接内切球半径、无图空间想象与作图，成都教研重点提示。",f:5,tag:"hard",cd:"近年立几突出“无配图”考空间作图与想象能力"},
+     {t:"表面积与体积",d:"三视图还原、割补法，小题常考。",f:3}
+   ]},
+   {t:"解析几何",wt:"压轴大题 · 约22分",kps:[
+     {t:"直线与圆",d:"方程、位置关系、弦长距离，工具基础。",f:4},
+     {t:"椭圆",d:"定义、方程、离心率，必考。",f:5},
+     {t:"双曲线",d:"方程、渐近线、离心率，小题高频。",f:5},
+     {t:"抛物线",d:"定义、焦点准线、性质。",f:4},
+     {t:"圆锥曲线综合(压轴)",d:"联立、韦达、弦长、定点定值；<b>成都要求打破“联立韦达”路径依赖</b>，重代数推演与轨迹/曲线探究。",f:5,tag:"hard",cd:"石室教研明确：破除联立韦达依赖，考动点轨迹、曲线类型探究等代数本质"}
+   ]},
+   {t:"导数及其应用",wt:"压轴最难 · 约17分",kps:[
+     {t:"导数概念与运算",d:"几何意义、求导法则，基础必会。",f:5},
+     {t:"单调性与极值最值",d:"导数判单调、求极值，大题主体。",f:5},
+     {t:"导数综合(含参·恒成立)",d:"含参讨论、恒成立、不等式证明，<b>成都考生公认最难，19题常在此</b>。",f:5,tag:"hard",cd:"2025四川卷19题为函数导数，四七九考生反馈最难、计算量大"},
+     {t:"定积分(已移出课标)",d:"微积分基本定理、求面积；2020修订已删，仅竞赛/强基拓展。",f:2,tag:"exp"}
+   ]},
+   {t:"概率与统计",wt:"B卷大题 · 约22分",kps:[
+     {t:"计数原理·排列组合",d:"分类分步、常见模型，概率基础。",f:5},
+     {t:"概率与随机变量",d:"古典概型、条件概率、<b>分布列期望方差、二项分布</b>，必考大题；<b>B卷首题常为统计/概率</b>。",f:5,cd:"成都B卷解答首题常设统计或概率，是中等生稳拿位"},
+     {t:"统计·回归·独立性检验",d:"抽样、回归分析、独立性检验、列联表，新高考高频。",f:5},
+     {t:"二项式定理",d:"通项、系数性质，小题常考。",f:4,tag:"hard"},
+     {t:"正态分布",d:"正态曲线与3σ，选学小题。",f:2}
+   ]},
+   {t:"推理证明",wt:"约5分",kps:[
+     {t:"数学归纳法",d:"归纳步骤、应用，解答题偶考。",f:3,tag:"hard"},
+     {t:"逻辑推理与新定义",d:"类比、归纳、新定义信息题，与成都中考B23一脉相承。",f:4}
+   ]},
+   {t:"数学建模·数学探究(课标主线·曾漏)",wt:"贯穿应用大题",kps:[
+     {t:"数学建模",d:"实际问题→假设建模→求解检验；函数/解三角/概率统计应用题皆建模，课标四大主线之一。",f:4,cd:"新高考应用题情境化，建模是成都卷应用大题的底层能力"},
+     {t:"数学探究与新情境",d:"开放探究、方案设计、跨学科情境（工程/经济/体育），新高考高频。",f:4}
+   ]}
+  ]
+ },
+ phys:{intro:"四川新高考<b>物理为首选科目，四川卷 100 分、原始分计入</b>（教科版教材）。四七九教研定调：<b>夯实力电基础</b>，单选压轴偏纯力学、多选压轴偏电磁、计算压轴“力电综合/电磁场粒子/电磁感应+力学”三足鼎立。2025 首届考生普遍反映<b>物理偏难</b>。",
+  insight:[
+    "<b>压轴三选一</b>：①力电综合 ②带电粒子在电磁场中运动 ③电磁感应+力学——<b>弹簧模型+电磁感应+电路功率</b>多模块整合是四川命题新方向。",
+    "<b>高频选择题考点</b>：机械振动与波、交变电流（多以选择题）、热学集中在气体（选+算各半）、近代物理考波粒二象性。",
+    "<b>直流电路在实验题考</b>：实验“一力一电”最普遍，教材改编/创新实验比例提高，开放题only三方向：<b>实验优化、原理分析、误差分析</b>。",
+    "<b>情境化+跨模块整合</b>：不考公式记忆，考<b>深度情境下的分析、论证、推导</b>；图像分析、建模迁移、实验探究是四大能力。",
+    "<b>大中衔接偶考</b>：配速法、涡旋电场、简谐近似、纯滚动、多物体关联——尖子生培优内容，不宜占用常规复习。"
+  ],
+  modules:[
+   {t:"运动学",wt:"基础 · 约10分",kps:[
+     {t:"匀变速直线运动",d:"三公式及推论、v-t图象、自由落体，必考基础。",f:5},
+     {t:"运动学概念",d:"位移速度加速度、矢量性。",f:3}
+   ]},
+   {t:"相互作用与力",wt:"全卷前提",kps:[
+     {t:"三种常见力·受力分析",d:"重力弹力摩擦力、受力分析，一切力学题起点。",f:5},
+     {t:"力的合成分解",d:"平行四边形、正交分解，必用工具。",f:5},
+     {t:"共点力平衡",d:"平衡条件、动态平衡、图解法。",f:4,tag:"hard"}
+   ]},
+   {t:"牛顿运动定律",wt:"压轴候选 · 约15分",kps:[
+     {t:"牛顿三定律",d:"F=ma、作用力反作用力、超重失重。",f:5},
+     {t:"牛顿定律综合",d:"连接体、传送带、临界、多物体关联；<b>纯力学常为单选压轴焦点</b>。",f:5,tag:"hard",cd:"四七九教研：单选压轴以力电为主，纯力学是焦点"}
+   ]},
+   {t:"曲线运动与万有引力",wt:"约15分",kps:[
+     {t:"平抛运动",d:"分解规律、推论，必考。",f:5},
+     {t:"圆周运动",d:"向心力、临界、竖直平面圆周，高频。",f:5},
+     {t:"万有引力与航天",d:"开普勒、天体质量、卫星变轨、宇宙速度，必考小题。",f:5},
+     {t:"运动合成与分解",d:"小船过河、绳端速度，中档。",f:3}
+   ]},
+   {t:"机械能·动量",wt:"压轴候选 · 约18分",kps:[
+     {t:"功和功率",d:"变力做功、机车启动、P=Fv。",f:4},
+     {t:"动能定理",d:"多过程应用，必考工具。",f:5},
+     {t:"机械能守恒",d:"条件判断、与圆周/弹簧综合。",f:5},
+     {t:"动量定理与动量守恒",d:"守恒条件、碰撞反冲；<b>力电综合压轴常与动量/弹簧联用</b>。",f:5,tag:"hard",cd:"四川命题：弹簧模型+电磁感应+动量常在同一压轴综合"}
+   ]},
+   {t:"静电场·恒定电流",wt:"约20分",kps:[
+     {t:"电场力性质",d:"库仑、场强、电场线、叠加。",f:4},
+     {t:"电场能性质",d:"电势、电势差、电势能、等势面。",f:5},
+     {t:"电容器与带电粒子",d:"平行板、粒子加速偏转，大题常客。",f:5,tag:"hard"},
+     {t:"恒定电流与电路实验",d:"欧姆定律、电功率、电表改装；<b>直流电路通常在实验题考</b>。",f:5,cd:"四七九教研：直流电路通常在实验题中考察，实验一力一电"}
+   ]},
+   {t:"磁场·电磁感应·交变电流",wt:"压轴核心 · 约25分",kps:[
+     {t:"安培力",d:"磁场、左手定则、安培力矩。",f:3},
+     {t:"洛伦兹力与圆周",d:"半径周期、临界，必考；<b>带电粒子在电磁场中运动=计算压轴之一</b>。",f:5,cd:"计算压轴三足鼎立之一：电磁场中粒子运动"},
+     {t:"复合场",d:"速度选择器、质谱仪、回旋加速器，压轴难点。",f:5,tag:"hard"},
+     {t:"楞次定律与法拉第定律",d:"感应电流判断、E=nΔΦ/Δt，必考。",f:5},
+     {t:"导体切割磁感线(压轴)",d:"E=BLv、杆导轨、<b>电磁感应+力学/电路功率综合</b>，四川压轴首选。",f:5,tag:"hard",cd:"四川命题：电磁感应+力学综合、弹簧模型+电路功率多模块整合，是压轴热门"},
+     {t:"交变电流·变压器",d:"有效值、变压器、远距离输电，<b>高频选择题</b>。",f:5,cd:"四七九教研：交变电流考查概率高，多以选择题为主"},
+     {t:"传感器实验",d:"利用传感器制作简单自动控制装置，创新实验开放题方向。",f:3,cd:"教研提示关注“传感器自动控制装置”实验与原理迁移"}
+   ]},
+   {t:"振动波·光·近代物理",wt:"选择题高频 · 约20分",kps:[
+     {t:"机械振动与机械波",d:"简谐、单摆、波图象、干涉衍射多普勒，<b>选择题高频</b>。",f:5,cd:"四七九教研：机械振动与波考查概率高，多以选择题为主"},
+     {t:"光学",d:"折射全反射、干涉衍射偏振，稳定考点。",f:5},
+     {t:"光电效应与原子结构",d:"光子说、玻尔模型、能级跃迁，小题必考。",f:5},
+     {t:"原子核与波粒二象性",d:"衰变、核反应方程、质能方程；<b>近代物理多考波粒二象性</b>。",f:4,cd:"四七九教研：近代物理多考察波粒二象性"},
+     {t:"电磁波与相对论",d:"电磁波谱、相对论结论，轻考。",f:2}
+   ]},
+   {t:"热学(选考向)",wt:"约12分",kps:[
+     {t:"分子动理论与气体实验定律",d:"理想气体状态方程、图象，<b>选择+计算各占一半</b>，注意热力综合。",f:5,cd:"四七九教研：热学集中考气体，选择计算各半，注意热力综合"},
+     {t:"热力学定律",d:"第一第二定律、能量耗散。",f:3}
+   ]},
+   {t:"实验(一力一电)",wt:"必考 · 约15分",kps:[
+     {t:"力学实验(教材改编)",d:"测速度加速度、验证牛顿定律、机械能守恒等，教材改编+创新实验比例提高。",f:5,cd:"教研：实验一力一电最普遍，教材改编/创新实验比例提高"},
+     {t:"电学实验(含伏安法)",d:"测电阻/测电源电动势内阻、电表改装；开放题三方向：优化/原理/误差。",f:5,cd:"实验开放问题仅三方向：实验优化、原理分析、误差分析"},
+     {t:"图像分析与误差处理",d:"U-I、a-F 等图象处理、系统误差分析，实验得分关键。",f:5}
+   ]}
+  ]
+ },
+ chem:{intro:"四川新高考<b>化学为再选科目，四川卷 100 分、等级赋分</b>（A等前15%→100-86分，人教版）。<b>等级赋分意味着“排名比绝对分更重要”</b>：既要拿稳基础分，又要在氧化还原、平衡、电化学、有机推断上拉开位次。",
+  insight:[
+    "<b>赋分博弈</b>：化学选考人群强手多，A 等仅约 15%；<b>中档题零失误</b>比搏压轴更能保等级，压轴题决定能否冲 A。",
+    "<b>四大主干</b>：氧化还原+离子反应（思维主线）、电化学、化学平衡/水溶液离子平衡、有机推断——构成四大题骨架。",
+    "<b>流程题与实验探究是压轴常客</b>：工艺流程图、物质制备方案、误差分析、Ksp 沉淀转化。",
+    "<b>NA 正误判断、离子共存、元素推断</b>是选择题固定送分/失分点，必须零失误。",
+    "<b>STSE 情境延续成都风格</b>：航天燃料材料、双碳、新能源电池会继续以情境入题。"
+  ],
+  modules:[
+   {t:"物质的量·化学计量",wt:"全卷底座 · 约12分",kps:[
+     {t:"物质的量·气体摩尔体积",d:"n、NA、摩尔质量、阿伏加德罗定律，全卷计算基础。",f:5},
+     {t:"NA正误判断",d:"阿伏加德罗常数类选择题，年年必考陷阱，须零失误。",f:5,tag:"hard"},
+     {t:"物质的量浓度",d:"配制、稀释混合、相关计算，必考。",f:5}
+   ]},
+   {t:"离子反应·氧化还原",wt:"思维主线 · 约15分",kps:[
+     {t:"物质分类与胶体",d:"分散系、胶体性质，小题常考。",f:3},
+     {t:"离子反应",d:"离子方程式、离子共存、离子检验，选择题+大题必考。",f:5},
+     {t:"氧化还原反应",d:"电子转移、配平、强弱规律、<b>陌生方程式书写</b>，全卷核心思维。",f:5,tag:"hard"}
+   ]},
+   {t:"元素化合物",wt:"约18分",kps:[
+     {t:"钠·铝·铁及其化合物",d:"Na₂O₂、铝两性图像、Fe²⁺/Fe³⁺转化与检验，必考。",f:5,tag:"hard"},
+     {t:"氯·硫·氮及其化合物",d:"氯气/次氯酸、SO₂与浓硫酸、<b>氨与硝酸工业流程</b>，大题高频。",f:5,tag:"hard"},
+     {t:"碳硅与无机材料",d:"硅、二氧化硅、硅酸盐、新型无机材料。",f:3},
+     {t:"元素推断(位构性)",d:"周期表+周期律+结构综合推断，选择题必考。",f:5}
+   ]},
+   {t:"物质结构与周期律",wt:"约15分",kps:[
+     {t:"原子结构与电子排布",d:"核素、能层能级、基态排布、电离能电负性。",f:4},
+     {t:"元素周期律",d:"半径/化合价/金属性递变、位构性推断，必考。",f:5},
+     {t:"化学键与分子间作用力",d:"离子/共价键、氢键、<b>熔沸点比较</b>、晶体类型，高频。",f:5},
+     {t:"分子空间结构与杂化",d:"VSEPR、杂化轨道、配合物，结构选考重点。",f:4,tag:"hard"},
+     {t:"晶体结构与晶胞计算(曾漏)",d:"四类晶体、晶胞均摊法、密度/粒子数/配位数计算，选必2难点常考。",f:5,tag:"hard"}
+   ]},
+   {t:"反应与能量·电化学",wt:"大题必考 · 约16分",kps:[
+     {t:"反应热与盖斯定律",d:"焓变、热化学方程式、盖斯定律计算，必考。",f:5,tag:"hard"},
+     {t:"原电池与电解池",d:"原理、化学电源（<b>锂电/燃料电池等新能源</b>）、电解应用、金属腐蚀防护。",f:5,cd:"新能源电池（锂电/氢燃料）常作情境，延续成都STSE风格"},
+     {t:"反应速率与化学平衡",d:"速率计算、平衡判断、勒夏特列、K 计算、三段式、等效平衡，必考大题。",f:5,tag:"hard"},
+     {t:"平衡图像分析",d:"转化率、多曲线图像、条件改变的趋势推理，拉分题。",f:5,tag:"hard"}
+   ]},
+   {t:"水溶液离子平衡",wt:"难点 · 约14分",kps:[
+     {t:"弱电解质与电离",d:"电离平衡、Kw、强弱电解质比较、稀释图像。",f:4},
+     {t:"pH与中和滴定",d:"pH计算、滴定曲线、指示剂选择、误差分析，实验必考。",f:5},
+     {t:"盐类水解",d:"水解规律、三大守恒、粒子浓度比较、双水解，高频难点。",f:5,tag:"hard"},
+     {t:"沉淀溶解平衡",d:"Ksp、沉淀转化、分步沉淀、图像，压轴小题。",f:4,tag:"hard"}
+   ]},
+   {t:"有机化学",wt:"大题必考 · 约16分",kps:[
+     {t:"有机基础与烃",d:"命名、同分异构体数目判断、烷烯炔苯、官能团性质，必考前提。",f:5},
+     {t:"烃的衍生物与转化",d:"卤代烃/醇/酚/醛/羧酸/酯转化网络，<b>有机推断大题核心</b>。",f:5,tag:"hard"},
+     {t:"有机合成路线设计",d:"官能团引入/保护、逆合成分析、条件书写，压轴难点。",f:5,tag:"hard"},
+     {t:"营养物质与高分子",d:"糖油脂蛋白、加聚缩聚、合成材料，小题常考。",f:4}
+   ]},
+   {t:"化学实验",wt:"压轴大题 · 约14分",kps:[
+     {t:"基本操作与分离提纯",d:"仪器、过滤蒸馏萃取、气密性检查，实验基础。",f:4},
+     {t:"气体制备与检验除杂",d:"装置选择、离子/气体检验、除杂干燥。",f:4},
+     {t:"实验方案设计与探究",d:"方案评价、控制系统变量、误差分析、<b>传感器/数字化实验</b>，压轴大题。",f:5,tag:"hard",cd:"数字化传感器实验延续成都中考跨学科风格，向上衔接"},
+     {t:"工艺流程题",d:"原料预处理、条件控制、循环利用、产率计算，与中考侯氏制碱一脉相承。",f:5,tag:"hard",cd:"工艺流程题由成都中考压轴上延，高中成常规大题"}
+   ]},
+   {t:"STSE·化学与技术",wt:"选择题 · 约6分",kps:[
+     {t:"资源环境与绿色化学",d:"海水综合利用、化工生产、大气/水污染治理、双碳。",f:3,tag:"exp"},
+     {t:"化学与材料·生活·科技",d:"航天燃料与材料、新能源、药物与食品添加剂、传统文化中的化学。",f:3,tag:"exp",cd:"航天(神舟/嫦娥/天问)+双碳是成都卷长期情境IP"}
+   ]}
+  ]
+ },
+ eng:{intro:"四川新高考<b>英语用全国二卷（150分），外研版教材</b>（成都家长买教辅最易踩坑点）。全国二卷特点是<b>语篇长、词汇要求高、读后续写压轴</b>；语法填空+短文改错考点规律性强，是稳分区。",
+  insight:[
+    "<b>教材版本坑</b>：成都高中英语是<b>外研版</b>不是人教版，词汇书/同步练习须认准“外研版”。",
+    "<b>读后续写/概要写作是新高考最大变量</b>：25 分档，考情节衔接+心理动作细节+语言风格一致性，决定英语能否上 130。",
+    "<b>语法填空考点高度规律</b>：谓语（时态语态）、非谓语、词性转换、连词/从句引导词、冠词介词代词——按考点清单刷，性价比最高。",
+    "<b>七选五与阅读重逻辑结构</b>：细节题减少，主旨/推断/观点/写作意图题增多；长难句（从句嵌套、非谓语）拆解是阅读关键。",
+    "<b>词汇跨度大</b>：全国二卷阅读常出现课标外高频学术词，3500 词要熟到“熟词生义+同义替换”层面。"
+  ],
+  modules:[
+   {t:"词汇与词法深化",wt:"全卷地基",kps:[
+     {t:"高考核心词汇(3500)",d:"熟词生义、同义替换、词块搭配，阅读与写作的共同地基。",f:5},
+     {t:"外研版教材词汇体系",d:"按外研版7册主题词汇推进，<b>勿买人教版词汇书</b>。",f:5,cd:"成都高中英语统一外研版，教辅/词汇书版本错配是常见坑"},
+     {t:"构词法与词性转换",d:"前后缀、名动形副互转，语法填空“给词填空”核心考点。",f:5},
+     {t:"名词·冠词·代词·介词",d:"抽象名词、it 用法、冠词特指泛指、介词固定搭配、with复合结构。",f:4},
+     {t:"形容词副词与比较等级",d:"倍数表达、比较级特殊结构、排序。",f:3},
+     {t:"情态动词",d:"对现在/过去推测、情态动词+have done。",f:4}
+   ]},
+   {t:"时态语态",wt:"语法填空必考",kps:[
+     {t:"时态体系(16时态语境)",d:"各时态语境辨析、时态呼应、标志词；语法填空谓语考点年年必考。",f:5},
+     {t:"被动语态深化",d:"各时态被动、主动表被动、get 被动。",f:4,tag:"hard"}
+   ]},
+   {t:"非谓语动词",wt:"语法填空难点",kps:[
+     {t:"不定式",d:"各成分用法、省略、完成式、only to do 结果。",f:5},
+     {t:"动名词",d:"作主宾、固定句型、与不定式意义区别。",f:4},
+     {t:"分词(现在/过去)",d:"作状语/定语/补语、独立主格、悬垂分词判断，语法填空最难点。",f:5,tag:"hard"}
+   ]},
+   {t:"三大从句",wt:"语法+阅读双核心",kps:[
+     {t:"名词性从句",d:"引导词选择、that/what 区别、语序、同位语从句。",f:5},
+     {t:"定语从句",d:"关系词选择、介词+which、非限制性、as 引导，语法填空高频。",f:5,tag:"hard"},
+     {t:"状语从句",d:"九类连词辨析、省略结构、特殊用法。",f:5}
+   ]},
+   {t:"特殊句式",wt:"写作提分点",kps:[
+     {t:"虚拟语气",d:"if 条件句、含蓄虚拟、 wish/suggest/insist 后从句，难点。",f:5,tag:"hard"},
+     {t:"倒装句",d:"完全/部分倒装、否定词与 only 置于句首。",f:4},
+     {t:"强调与省略",d:"It is … that 结构判断、各类省略（并列/不定式中）。",f:4},
+     {t:"主谓一致",d:"就近就远、集合名词、there be、量词短语。",f:3}
+   ]},
+   {t:"语篇理解",wt:"分值最大 · 约60分",kps:[
+     {t:"长难句分析",d:"句子成分划分、从句嵌套拆解、插入语剥离，阅读提速关键。",f:5,tag:"hard"},
+     {t:"阅读理解(ABCD篇)",d:"细节/主旨/推断/观点/写作意图；全国二卷推断与主旨题占比高。",f:5},
+     {t:"七选五",d:"段落逻辑、代词与连接词复现、首尾句呼应。",f:5},
+     {t:"完形填空",d:"上下文线索、情感态度、固定搭配、词汇辨析。",f:5},
+     {t:"语法填空",d:"谓语/非谓语/词性/连词/冠词介词代词，<b>考点规律清单化</b>，稳拿分。",f:5},
+     {t:"短文改错",d:"多词/少词/错词十大类错误类型，逐一排查。",f:4}
+   ]},
+   {t:"写作",wt:"约40分",kps:[
+     {t:"应用文写作",d:"书信/通知/演讲稿/申请/建议框架、高分句型、要点全覆盖，必考。",f:5},
+     {t:"读后续写(压轴)",d:"情节合理衔接、<b>心理+动作+环境细节描写</b>、语言风格与前文体一致，新高考最大变量。",f:5,tag:"hard",cd:"全国二卷读后续写25分，是135+与120+的分水岭"},
+     {t:"概要写作",d:"要点提炼、同义改写、字数控制、客观转述。",f:4,tag:"hard"}
+   ]}
+  ]
+ }
+}
+};
+
+/* ============ 考点视图数据 EXAM：按“题型战役”重组，应试作战地图 ============
+   q:怎么考(题型/关键)  y:成都/四川真题出处  f:考频 */
+const EXAM={
+ cz:{
+  math:{banner:"成都中考数学 = <b>A卷保基本盘(100) + B卷定生死(50)</b>。下面按<b>题型战役</b>重组：A卷四块稳拿，B卷三大关卡（几何填空B21-22、几何探究B25、二次函数压轴B26）决定能否上135+。",
+   groups:[
+    {t:"A卷 · 选择填空基础盘",d:"约30分，通性通法，进A卷优生的底线，务必零失误",items:[
+     {t:"实数与二次根式运算",f:4,q:"选择考概念辨析(√a非负/科学记数法)，填空考化简求值",y:"A卷1-3题常年固定"},
+     {t:"整式运算与乘法公式",f:5,q:"化简求值/整体代入，纯计算送分",y:"A卷必出"},
+     {t:"因式分解",f:4,q:"提公+公式+十字相乘，常作分式化简前置步骤",y:"A卷"},
+     {t:"分式化简求值",f:4,q:"先化简再代值，警惕“分母有意义”陷阱",y:"A卷填空/解答"},
+     {t:"三视图与展开图",f:4,q:"选择考空间还原、立方体展开图",y:"A卷基础题"}
+    ]},
+    {t:"A卷 · 方程与不等式解答题",d:"约20分，应用题建模为主，审题是关键",items:[
+     {t:"一元二次方程应用",f:5,q:"增长率/利润/面积建模，判别式定根取舍",y:"A卷解答必考"},
+     {t:"分式方程应用",f:5,q:"工程/行程问题，求解后<b>必验增根</b>",y:"A卷解答必考"},
+     {t:"二元一次方程组(古文情境)",f:5,q:"《九章算术》盈不足文言原文列方程组建模",y:"2026 A卷6题《九章算术》"},
+     {t:"一元一次不等式组",f:4,q:"方案设计型，求整数解/最优方案",y:"A卷解答"}
+    ]},
+    {t:"A卷 · 函数·统计概率·解直角",d:"约35分，读图读表能力是中等生命脉",items:[
+     {t:"一次函数实际应用",f:5,q:"公园路线/计费方案比较，从图象读信息",y:"B24高频 / A卷"},
+     {t:"反比例函数",f:4,q:"k的几何意义、与一次函数交点及线段比",y:"A卷/B卷"},
+     {t:"统计图表与加权平均数",f:5,q:"评委打分加权核算，审题陷阱多",y:"A卷解答必考·2026评委打分"},
+     {t:"概率(列表/树状图)",f:5,q:"与统计综合求概率，规范列举",y:"A卷解答必考"},
+     {t:"锐角三角函数解直角三角形",f:5,q:"仰俯角测高、坡度实际测量",y:"A卷解答常客"}
+    ]},
+    {t:"A卷 · 几何证明与圆",d:"约36分，几何大头，书写规范得分",items:[
+     {t:"全等三角形证明",f:5,q:"SSS/SAS/ASA/AAS规范书写证明",y:"A卷证明题"},
+     {t:"矩形·菱形·正方形",f:5,q:"性质判定相互转化，A卷证明高频",y:"A卷"},
+     {t:"圆的基本性质",f:5,q:"垂径/圆周角定理，弧弦圆心角简单计算",y:"A卷17题常考"},
+     {t:"切线判定与性质",f:5,q:"证相切/切线长，几何证明高频",y:"A卷"},
+     {t:"圆的计算",f:4,q:"弧长、扇形面积、圆锥侧面积、阴影面积",y:"A卷"}
+    ]},
+    {t:"B卷 · 几何填空压轴 (B21-22)",d:"拉分第一关，反背模型、灵活倒角",items:[
+     {t:"相似三角形构造",f:5,q:"等腰+相似基底，一题多解灵活倒角",y:"B22几何填空压轴·反背模型",tag:"hard"},
+     {t:"几何最值(已去套路化)",f:3,q:"胡不归/阿氏圆/将军饮马弱化，回归课本定理论证",y:"近三年网红模型持续弱化"},
+     {t:"辅助线/导角拓展",f:4,q:"旋转构造、梅涅劳斯雏形，冲140+必备",y:"B22",tag:"exp"}
+    ]},
+    {t:"B卷 · 几何探究(B25) + 二次函数压轴(B26)",d:"决定上限，计算量大，尖子生主战场",items:[
+     {t:"等腰+相似几何探究",f:5,q:"层层递进设问，前一问结论供后一问用",y:"B25核心基底",tag:"hard"},
+     {t:"二次函数交点/含参/参数范围",f:5,q:"代几综合，弱化几何拼接、强化代数本质，计算量极大",y:"B26固定压轴·近三年转向多参数",tag:"hard"},
+     {t:"新定义/阅读理解探究",f:4,q:"现场学新概念并迁移应用",y:"B23/B27新定义",tag:"exp"}
+    ]}
+   ]},
+  phys:{banner:"成都中考物理 = <b>A卷×50% + B卷20 + 实验操作15</b>，共70分计入升学。<b>浮力压强是B卷压轴、电学是主战场、黑箱是成都特色</b>，实验操作15分直接计分不可丢。",
+   groups:[
+    {t:"声·光·热 (选择填空盘)",d:"约20分，现象辨析与作图为主",items:[
+     {t:"声现象",f:3,q:"音调/响度/音色辨析、噪声控制途径",y:"A卷选择"},
+     {t:"光现象(直线传播/反射/折射)",f:4,q:"现象归类、光路作图",y:"A卷"},
+     {t:"平面镜成像",f:4,q:"成像特点、对称作图、像距计算",y:"A卷/实验"},
+     {t:"透镜成像规律",f:5,q:"u与f关系、照相机/投影仪/放大镜应用",y:"A卷必考"},
+     {t:"物态变化与比热",f:4,q:"六变化吸放热判断、比热计算、沸腾图象",y:"A卷"}
+    ]},
+    {t:"力学基础与压强",d:"约18分，压强是浮力压轴的前置",items:[
+     {t:"力与运动·摩擦·惯性",f:4,q:"受力分析、二力平衡、惯性现象解释",y:"A卷"},
+     {t:"压强(固/液/大气)",f:5,q:"固体压强、液体p=ρgh、大气压应用(船闸/地铁)",y:"A/B卷必考"},
+     {t:"质量与密度",f:5,q:"ρ=m/V、天平量筒测密度，与压强浮力联动",y:"实验+计算必考"}
+    ]},
+    {t:"浮力 · 成都压轴必争",f:5,d:"约12分，B卷压轴常年载体",items:[
+     {t:"浮力与阿基米德原理",f:5,q:"浮力计算、浮沉条件、<b>液面变化论证</b>",y:"B卷压轴必是浮力/液面论证",tag:"hard"}
+    ]},
+    {t:"电学 · 成都主战场",d:"约25分，电学计算+黑箱决定B卷",items:[
+     {t:"电路识别与电表",f:4,q:"串并联判断、电流表电压表、滑动变阻器作用",y:"A卷"},
+     {t:"欧姆定律",f:5,q:"动态电路分析、I-U图象、综合计算",y:"A/B卷必考"},
+     {t:"电功与电功率",f:5,q:"额定/实际功率、多挡位电器、焦耳热计算",y:"B卷必考压轴"},
+     {t:"电学黑箱(成都特色)",f:5,q:"据外部现象反推隐藏电路结构",y:"成都特色题",tag:"hard"}
+    ]},
+    {t:"电与磁",d:"约8分",items:[
+     {t:"电生磁·磁场·电动机发电机",f:4,q:"奥斯特实验、安培定则、电磁感应现象辨析",y:"A卷"}
+    ]},
+    {t:"实验探究 (含操作15分)",d:"实验操作15分直计升学，务必动手过关",items:[
+     {t:"测量类实验",f:5,q:"伏安法测电阻/测电功率、天平量筒测密度",y:"实验操作15分·直计升学"},
+     {t:"探究类实验",f:4,q:"探究浮力/欧姆定律/透镜，控制变量+结论表述",y:"A卷实验题"}
+    ]}
+   ]},
+  chem:{banner:"成都中考化学 = <b>只考A卷 ×50%</b>，共50分 + 实验操作15分。<b>酸碱盐是拉分核心、计算靠溶液质量分数、压轴常玩跨学科(压强+图像)</b>，2026压轴为侯氏制碱。",
+   groups:[
+    {t:"物质构成与化学用语",d:"约12分，全卷工具，必须零错",items:[
+     {t:"元素·原子·分子·离子",f:5,q:"概念辨析、粒子结构示意图判读",y:"A卷选择"},
+     {t:"化合价与化学式",f:5,q:"标价写化学式、判断正误",y:"必考"},
+     {t:"化学方程式书写配平",f:5,q:"配平、质量守恒、信息给予式方程式",y:"卷卷必考"}
+    ]},
+    {t:"身边的化学物质",d:"约16分，气体制取实验是重点",items:[
+     {t:"空气与氧气",f:5,q:"成分、氧气的性质与制取(装置选择)",y:"必考"},
+     {t:"水",f:4,q:"电解、硬软水、溶解度概念",y:"A卷"},
+     {t:"碳和碳的氧化物",f:5,q:"CO₂制取与性质、CO还原氧化铁、温室效应",y:"必考实验"},
+     {t:"金属与金属材料",f:5,q:"金属活动性顺序、炼铁、防锈",y:"必考"}
+    ]},
+    {t:"溶液",d:"约8分，计算必考",items:[
+     {t:"溶解度与溶质质量分数",f:5,q:"溶解度曲线判读、质量分数计算、配制",y:"A卷必考计算"}
+    ]},
+    {t:"酸碱盐 · 成都拉分核心",d:"约14分，压轴常在此，考法已升级为图像化",items:[
+     {t:"酸碱性质与pH",f:5,q:"指示剂变色、中和反应、pH与酸碱度",y:"必考"},
+     {t:"复分解与离子共存",f:5,q:"反应条件、<b>过量滴加后剩哪些离子+图像</b>",y:"2026考法升级·图像化",tag:"hard"},
+     {t:"酸碱盐综合推断/除杂",f:5,q:"推断题、除杂鉴别、<b>压强传感器跨学科(物理压强+数学图像)</b>",y:"压轴·跨物理数学",tag:"hard"},
+     {t:"化学与生活",f:4,q:"化肥/材料/双碳，酱油酿造·双碳·航天情境",y:"本土情境载体"}
+    ]},
+    {t:"科学探究与实验",d:"约10分+操作15分",items:[
+     {t:"常见仪器与基本操作",f:5,q:"气密性检查、气体制取-净化-干燥装置",y:"实验必考"},
+     {t:"实验探究设计",f:4,q:"控制变量、猜想、证据推理、<b>侯氏制碱</b>跨学科",y:"2026压轴·侯氏制碱",tag:"hard"}
+    ]}
+   ]},
+  eng:{banner:"成都中考英语 = <b>A卷100(含听力30) + B卷50</b>。<b>B卷是分水岭</b>：十二选十(词形变化)、任务型阅读(要完整句)、完成句子最具蓉城特色；作文锚定“公园城市”情境。2026起听力提权、B卷表格答案≤3词。",
+   groups:[
+    {t:"听力与语音",d:"约30分，2026提权、语速略增",items:[
+     {t:"语音知识(48音标/拼读/重音语调)",f:4,q:"语音小题辨析、拼读是听力基础",y:"成都中考设语音小题"},
+     {t:"听力理解",f:4,q:"情景反应、对话/独白细节与推断",y:"必考"}
+    ]},
+    {t:"单项选择 · 语法点密集区",d:"约15分，纯语法点逐个落地",items:[
+     {t:"名词·冠词·代词·数词",f:5,q:"可数不可数、冠词辨析、代词、数词表达",y:"单选必考"},
+     {t:"形容词副词(比较等级)",f:5,q:"比较级/最高级变化、多音节、修饰关系",y:"单选必考"},
+     {t:"八大时态",f:5,q:"现在完成vs一般过去、进行时、将来时语境辨析",y:"单选核心必考"},
+     {t:"被动语态",f:5,q:"各时态被动结构、主动变被动",y:"单选/完成句子必考"},
+     {t:"情态动词",f:4,q:"can/must/should/may表推测与义务",y:"单选"},
+     {t:"非谓语动词",f:4,q:"不定式作宾补、enjoy doing、感官动词",y:"单选"},
+     {t:"三大从句初步(宾/状/定)",f:5,q:"宾语从句语序时态、状语从句、定语that/which/who",y:"单选必考"},
+     {t:"简单句·主谓一致·反意疑问·感叹",f:4,q:"there be、反意疑问句、what/how感叹句",y:"单选"}
+    ]},
+    {t:"完形填空",d:"约15分，语篇+词汇+逻辑",items:[
+     {t:"完形填空",f:5,q:"语篇理解、词汇辨析、上下文逻辑连贯",y:"必考"}
+    ]},
+    {t:"阅读理解 (A卷4篇 + B卷任务型)",d:"约40分，全卷大头",items:[
+     {t:"阅读理解(细节/主旨/推断/猜词)",f:5,q:"四篇阅读，长难句拆解、图表信息",y:"必考大头"},
+     {t:"B卷任务型阅读",f:5,q:"<b>答案须用完整句</b>，信息定位与转述",y:"2026新政·要完整句",tag:"hard"}
+    ]},
+    {t:"B卷词汇运用 (蓉城特色)",d:"约20分，B卷成败在此",items:[
+     {t:"十二选十/词形变化",f:5,q:"选词填空+词形变化，<b>表格答案≤3词</b>",y:"成都B卷特色·2026≤3词",tag:"hard"},
+     {t:"完成句子/句型转换",f:4,q:"按提示词改写、汉译英句子",y:"B卷"}
+    ]},
+    {t:"书面表达",d:"约15分，锚定公园城市",items:[
+     {t:"话题作文",f:5,q:"要点齐全、时态人称一致、连接词；公园城市·Good Manners, Beautiful Parks",y:"必考·锚定公园城市"}
+    ]}
+   ]}
+ },
+ gz:{
+  math:{banner:"四川新高考数学(<b>全国Ⅱ卷·150分</b>) = 选填(多选/单选/填空) + 5道解答题。<b>选填抓集合·复数·向量送分，解答题三角/数列/立体/概率各一道，圆锥曲线与导数双压轴</b>定上限。",
+   groups:[
+    {t:"选填 · 集合·复数·逻辑·向量 (送分区)",d:"约35分，务必全拿",items:[
+     {t:"集合运算",f:5,q:"交并补+含参分类讨论",y:"全国Ⅱ卷首题常客"},
+     {t:"复数",f:5,q:"四则运算、几何意义、共轭，纯送分",y:"必考选择"},
+     {t:"常用逻辑用语",f:4,q:"充要条件与不等式/命题结合判断",y:"选填"},
+     {t:"平面向量",f:5,q:"坐标运算、数量积、夹角与投影",y:"选填/嵌入大题"}
+    ]},
+    {t:"函数与基本初等函数",d:"约15分",items:[
+     {t:"函数性质综合",f:5,q:"单调/奇偶/周期/对称综合、图象辨识",y:"必考选填"},
+     {t:"指对幂函数与比较大小",f:4,q:"单调性比较大小、零点",y:"选填"},
+     {t:"函数零点与图象",f:4,q:"零点个数、数形结合",y:"选填/压轴前问"}
+    ]},
+    {t:"三角函数与解三角形 (解答题)",d:"约17分，稳定得分题",items:[
+     {t:"三角恒等变换",f:5,q:"化简求值、给值求角",y:"解答题前问"},
+     {t:"正弦/余弦定理应用",f:5,q:"边角互化、面积、实际测量",y:"解答题必考"},
+     {t:"三角函数图象性质(ω,φ)",f:5,q:"五点法、平移变换、求ω取值范围",y:"解答/选填压轴"}
+    ]},
+    {t:"数列 (解答题)",d:"约17分",items:[
+     {t:"等差等比基本量",f:5,q:"通项与求和公式灵活运用",y:"解答题"},
+     {t:"递推求通项",f:4,q:"aₙ与Sₙ关系、累加/构造等比",y:"解答题"},
+     {t:"数列求和",f:5,q:"错位相减、裂项相消，计算量大",y:"解答题后问"}
+    ]},
+    {t:"立体几何 (解答题)",d:"约17分，建系套路成熟",items:[
+     {t:"空间线面关系证明",f:5,q:"平行垂直判定，建系前必先几何证明",y:"解答第1问"},
+     {t:"空间向量求角",f:5,q:"建系求法向量、线面角/二面角",y:"解答第2问必考"},
+     {t:"表面积体积·外接球",f:4,q:"选择考外接球半径、截面问题",y:"选填压轴"}
+    ]},
+    {t:"概率统计 (解答题)",d:"约17分，读数据+算期望",items:[
+     {t:"统计(抽样/回归/独立性检验)",f:5,q:"图表+回归方程+K²，规范表述结论",y:"解答题必考"},
+     {t:"概率(条件概率/分布列/期望)",f:5,q:"离散型分布列、二项/超几何分布期望",y:"解答题必考"}
+    ]},
+    {t:"解析几何 · 圆锥曲线 (压轴)",d:"约17分，运算量压轴",items:[
+     {t:"圆锥曲线定义与性质",f:5,q:"选择考离心率、定义、焦点三角形",y:"选填"},
+     {t:"直线与圆锥曲线综合",f:5,q:"联立、弦长、定点定值、范围，运算为王",y:"解答压轴·必考",tag:"hard"}
+    ]},
+    {t:"导数 (压轴)",d:"约17分，决定顶尖分段",items:[
+     {t:"导数与单调性·极值",f:5,q:"含参讨论单调区间、极值最值",y:"解答第1问"},
+     {t:"恒成立/零点/极值点偏移",f:5,q:"分离参数、构造函数、放缩证明",y:"解答压轴·必考",tag:"hard"}
+    ]},
+    {t:"拓展(已移出课标)",d:"仅供老题/强基参考，不必投入",items:[
+     {t:"线性规划·算法框图·定积分",f:2,q:"2020修订版已删除，遇到老题了解即可",y:"已移出新课标"}
+    ]}
+   ]},
+  phys:{banner:"四川新高考物理(<b>四川卷·100分·原始分</b>) = 单选+多选+实验(2题)+计算(3题)。<b>力学(牛二/能量/动量)是计算题根基，电磁感应是压轴</b>，实验题重原理与数据处理。",
+   groups:[
+    {t:"运动与力 (力学根基)",d:"计算题必考底层",items:[
+     {t:"匀变速直线运动",f:5,q:"公式链、v-t图象、追及相遇",y:"选择/计算"},
+     {t:"相互作用与受力分析",f:5,q:"弹力摩擦力、共点力平衡、整体隔离",y:"必考基础"},
+     {t:"牛顿运动定律",f:5,q:"连接体、临界问题、图象、动力学综合",y:"计算题必考"}
+    ]},
+    {t:"曲线运动·能量·动量",d:"计算题主战场",items:[
+     {t:"平抛与圆周运动",f:5,q:"运动合成分解、竖直面圆周临界(绳/杆/拱桥)",y:"计算/选择"},
+     {t:"万有引力与航天",f:5,q:"天体质量密度、卫星变轨、双星",y:"选择必考"},
+     {t:"机械能守恒",f:5,q:"功与功率、动能定理、机械能守恒应用",y:"计算题必考"},
+     {t:"动量",f:4,q:"动量定理、动量守恒、碰撞、动量和能量综合",y:"选必1计算压轴"}
+    ]},
+    {t:"电场·电流·磁场·电磁感应",d:"电学主体，电磁感应压轴",items:[
+     {t:"静电场",f:5,q:"场强电势、电容器、带电粒子偏转",y:"选择/计算"},
+     {t:"恒定电流",f:4,q:"闭合电路欧姆定律、电表改装、实验",y:"实验/选择"},
+     {t:"磁场与安培力·洛伦兹力",f:5,q:"磁场中运动、质谱仪/回旋加速器、临界",y:"计算必考"},
+     {t:"电磁感应",f:5,q:"法拉第定律、切割、动生电动势、单杆双杆、图象",y:"压轴必考·切割",tag:"hard"},
+     {t:"交变电流",f:4,q:"有效值、理想变压器、远距离输电",y:"选择"}
+    ]},
+    {t:"振动·波·光·近代·热 (小模块)",d:"以选择/实验为主",items:[
+     {t:"机械振动与机械波",f:4,q:"振动图象与波动图象、多普勒、干涉衍射",y:"选择"},
+     {t:"光学",f:4,q:"折射全反射、干涉衍射偏振",y:"选择/实验"},
+     {t:"近代物理",f:4,q:"光电效应、原子能级、核反应、质能方程",y:"选择必考"},
+     {t:"热学",f:3,q:"分子动理论、气体实验定律、热力学定律",y:"选考/选择"}
+    ]}
+   ]},
+  chem:{banner:"四川新高考化学(<b>四川卷·100分·等级赋分</b>，A等仅前15%→100-86)。<b>反应原理(速率平衡/水溶液离子平衡/电化学)是大题核心，有机推断必考，图象分析贯穿全卷</b>。",
+   groups:[
+    {t:"化学基础概念与计算",d:"选择必考，全卷工具",items:[
+     {t:"物质的量与浓度",f:5,q:"n/NA/c换算、溶液配制、阿伏加德罗判断",y:"必考选择"},
+     {t:"离子反应与离子方程式",f:5,q:"书写、共存、过量少量问题",y:"必考"},
+     {t:"氧化还原反应",f:5,q:"配平、强弱比较、电子转移、计算",y:"必考贯穿"}
+    ]},
+    {t:"元素化合物与周期律",d:"大题载体",items:[
+     {t:"元素周期表与周期律",f:5,q:"位-构-性、递变规律、元素推断",y:"必考"},
+     {t:"金属元素(钠铝铁)",f:4,q:"性质转化、图象、工艺流程题",y:"大题"},
+     {t:"非金属(氯硫氮硅)",f:4,q:"性质、环境影响、工业制法",y:"大题"},
+     {t:"晶体结构与晶胞计算",f:4,q:"四类晶体、均摊法、密度/配位数计算",y:"选必2难点·结构题",tag:"hard"}
+    ]},
+    {t:"化学反应原理 (大题核心)",d:"决定赋分档位",items:[
+     {t:"反应热与盖斯定律",f:4,q:"△H计算、能量图分析",y:"原理大题前问"},
+     {t:"反应速率与化学平衡",f:5,q:"速率计算、平衡移动、转化率、K",y:"原理大题必考"},
+     {t:"水溶液离子平衡",f:5,q:"弱电解/水解/Ksp、<b>Ka·pH·滴定曲线图象分析</b>",y:"大题压轴·图象",tag:"hard"},
+     {t:"电化学(原/电解池)",f:5,q:"电极判断、方程式书写、计算、新型电池",y:"必考"}
+    ]},
+    {t:"有机化学",d:"大题必考推断合成",items:[
+     {t:"有机物结构与同分异构",f:4,q:"官能团、命名、异构体数目判断",y:"选择/推断"},
+     {t:"有机反应与推断合成",f:5,q:"转化关系、官能团推演、合成路线设计",y:"大题必考"}
+    ]},
+    {t:"化学实验",d:"实验大题",items:[
+     {t:"分离提纯与物质检验",f:4,q:"除杂、离子检验、实验方案评价",y:"实验大题"},
+     {t:"定量实验与滴定",f:4,q:"滴定操作、误差分析、数据处理",y:"实验大题"}
+    ]}
+   ]},
+  eng:{banner:"四川新高考英语(<b>全国Ⅱ卷·150分</b>) = 听力 + 阅读(4篇)+七选五 + 完形 + 语法填空 + 应用文 + <b>读后续写(25分)</b>。<b>读后续写是拉分王，语法填空是语法点落地，长难句/特殊句式是提分底层</b>。",
+   groups:[
+    {t:"听力",d:"约30分，首战稳心态",items:[
+     {t:"听力理解",f:4,q:"短对话/长对话/独白，细节捕捉+意图推断，语速略快",y:"高考首战"}
+    ]},
+    {t:"阅读四部曲 (阅读+七选五)",d:"约50分，全卷大头",items:[
+     {t:"阅读理解(4篇)",f:5,q:"细节/主旨/推断/猜词/态度，长难句拆解",y:"40分大头"},
+     {t:"七选五",f:4,q:"语篇逻辑、指代衔接、段首段尾定位",y:"必考"}
+    ]},
+    {t:"语言运用 (完形+语法填空)",d:"约40分",items:[
+     {t:"完形填空",f:5,q:"语篇理解、词汇辨析、逻辑连贯",y:"必考"},
+     {t:"语法填空",f:5,q:"有提示词(词形变化)vs无提示词(冠介连代)，谓语/非谓语判断",y:"必考·纯语法点落地"}
+    ]},
+    {t:"应用文写作",d:"约15分",items:[
+     {t:"应用文(书信/通知/演讲稿)",f:5,q:"格式+要点齐全+时态人称；公园城市/中国文化情境",y:"必考15分"}
+    ]},
+    {t:"读后续写 (四川新高考特色)",d:"25分·拉分王",items:[
+     {t:"读后续写",f:5,q:"情节衔接、语言协同、两段首句给定、动作与心理描写",y:"25分拉分王·必考",tag:"hard"},
+     {t:"长难句与特殊句式",f:5,q:"虚拟/倒装/强调/非谓语，续写+语法填空底层能力",y:"贯穿全卷·提分关键"}
+    ]}
+   ]}
+ }
+};
+
+const DRILL={"cz":{"math":{"二次函数交点/含参/参数范围":{"real":[{"y":"2025成都中考T26（12分）","q":"抛物线y=ax²+bx过A(-1,3)、对称轴x=1；(2) y=(x-h)²-1与线段DE（D(0,-1)、E(2,1)）有公共点，求h范围；(3)对称轴上是否存在定点T使TC平分∠MTN","a":"(1) y=x²-2x；(2) 相切临界h=-1/2，过端点h=2±√2，故-1/2≤h≤2+√2；(3) 存在，T(1,-1/2)","trap":"(2)既要考虑「过端点」又要考虑「与线段所在直线相切」的临界；h范围不是只代两个端点；(3)角平分用「到两边距离相等」或对称点转化，别硬算角度"},{"y":"2026成都中考B26","q":"二次函数综合，第(2)问为「限定区间内的最值」，需判断对称轴与给定区间的相对位置","a":"对对称轴x=-b/2a与区间[l,r]的位置分类：轴在区间左/内/右","trap":"成都已明确「去套路化」：不再考胡不归、阿氏圆等模型，回归含参代数本质，必须分类讨论写全"},{"y":"2024成都中考B26","q":"二次函数与几何图形交点、存在性问题，末问常为「点/线段存在并证明」","a":"联立方程→判别式→根的分布；存在性先设坐标再验证","trap":"注意自变量取值范围（线段≠直线、射线），解出参数后要回代检验"}],"drill":[{"q":"y=x²-2x在t≤x≤t+1上最小值为-1，求t的取值范围。","a":"y=(x-1)²-1，顶点(1,-1)。最小值取到顶点需t≤1≤t+1，即0≤t≤1。"},{"q":"上题中若最小值为2，求t。","a":"x²-2x=2→x=1±√3。区间在顶点右侧：t=1+√3；在左侧：t+1=1-√3→t=-√3。故t=1+√3或t=-√3。"}],"tpl":"①定解析式（待定系数）→ ②画草图标顶点/对称轴/交点 → ③判位置（动点、动区间、动线）→ ④列临界（端点、相切、过定点）→ ⑤分类写范围并回代检验。"},"等腰+相似几何探究":{"real":[{"y":"2026成都中考B25","q":"几何综合题：全等+相似+旋转组合，多问递进（猜想→证明→拓展）","a":"旋转得等角、等腰得等边，构造「一线三等角」或「手拉手」证相似","trap":"第(2)(3)问的图形往往由第(1)问旋转/翻折得到，前面的结论可迁移，不要每问重新画图"},{"y":"成都中考B25（常年）","q":"以等腰三角形/正方形/矩形为背景的探究题，末问常求线段比或最值","a":"设未知边长为x，用相似比列方程；最值用二次函数或「垂线段最短」","trap":"动点题要标清「起点、终点、运动方向」，分类临界点常在「点到达顶点/中点」处"}],"drill":[{"q":"△ABC中AB=AC=5，BC=6，P在BC上运动，求AP的取值范围。","a":"A到BC的高AD=4（BD=3）。AP最小=4（P与D重合），最大=5（P在B或C）。故4≤AP≤5。"},{"q":"上题中若BP=2，求AP。","a":"BD=3，PD=1，AP=√(AD²+PD²)=√(16+1)=√17。"}],"tpl":"①标已知（等腰标等边等角，旋转标等角）→ ②找相似（AA最常用，找「公共角+一组等角」）→ ③列比例（对应边别写反）→ ④代入求解并检验取值范围。"},"相似三角形构造":{"real":[{"y":"成都中考（高频）","q":"圆中相似：切线+弦、直径所对圆周角，结合相似求线段长","a":"连半径得垂直，连直径得直角，再找一组等角证相似","trap":"「见切线连圆心」是第一步；别漏掉弦切角等于所夹弧对的圆周角"},{"y":"2026成都中考B22","q":"几何填空压轴：直角三角形中线+全等+相似+勾股，需添加辅助线","a":"遇中线可「倍长中线」或作平行线构造中位线，再结合勾股列方程","trap":"填空压轴只给2-3分钟，辅助线方向不对就先跳过，回头用「特殊值/特殊位置」验证"}],"drill":[{"q":"Rt△ABC中∠C=90°，AC=6，BC=8，CD为中线，求CD。","a":"AB=10，直角三角形斜边中线等于斜边一半，CD=5。"},{"q":"上题中作DE⊥AB交BC于E（D为AB中点），求CE。","a":"△BDE∽△BCA，BD/BC=5/8=BE/BA→BE=25/4，CE=8-25/4=7/4。"}],"tpl":"①见中线→倍长或中位线；②见直角+斜边→中线=斜边一半；③见平行→A字/X字相似；④见切线→连半径+弦切角。证完相似先写「对应顶点顺序」再列比例。"},"新定义/阅读理解探究":{"real":[{"y":"2026成都中考B23","q":"「曼哈顿距离」新定义填空压轴：按给定定义求点的轨迹/最值","a":"现场读懂定义→翻译成熟悉的距离/坐标表达→画图找临界","trap":"新定义题「纸老虎」：定义读完先自己举一个简单例子验证，再套用到题目；别被陌生名词吓住"},{"y":"2026成都中考A6","q":"《九章算术》「盈不足术」为背景的古代数学文化题","a":"按题意列一元一次方程/方程组，本质是「两种假设差额求真值」","trap":"数学文化题素材再古，考点仍是课内的方程、比例、几何，先「翻译」成现代语言"}],"drill":[{"q":"定义两点「曼哈顿距离」d=|x₁-x₂|+|y₁-y₂|。求点P在直线y=x上时，P到O(0,0)与A(2,2)的曼哈顿距离之和的最小值及此时P的范围。","a":"P(t,t)：d₀=2|t|，dₐ=2|t-2|，和=2(|t|+|t-2|)≥4，当0≤t≤2时取等号，即P在线段OA上（含端点）。"},{"q":"《九章算术》今有共买物，人出8盈3，人出5不足4，问人数、物价各几何？","a":"设人数为x，物价为y：8x-y=3（盈），7x-y=-4（不足）。两式相减得x=7，代人得y=53。即7人，物价53。通用公式：人数=(盈+不足)/(两次每人出钱之差)=(3+4)/(8-7)=7。"}],"tpl":"①读定义，逐字拆解（谁是输入、谁是输出）；②举一个最简例子「试算」；③翻译成坐标/方程/几何语言；④用课内方法求解；⑤回定义检验。"}},"phys":{"电学黑箱(成都特色)":{"real":[{"y":"2025成都中考T5（4分）","q":"4个相同定值电阻（各约10~20Ω）、电源12V、小灯泡「4.8V 0.4A」，已知U₂:U₁=5:8，判断I₃:I₁、U₃:U₂、电路最小功率等（答案BD）","a":"先由「灯正常发光」定R灯=12Ω及各档总电阻，再画出箱内「先桥后腿」结构，逐选项验证；最小功率约2.18W","trap":"黑箱题不能猜图：每种接线状态单独画等效电路；「功率最小」对应总电阻最大（串联最多）"}],"drill":[{"q":"灯「4.8V 0.4A」，电源12V，要使灯正常发光需串联一个多大电阻？","a":"R灯=4.8/0.4=12Ω，串联分压：R串=(12-4.8)/0.4=18Ω。"},{"q":"两个相同电阻R，接法①串联、②并联，接在同一电源上，总功率之比P串:P并=?","a":"R串=2R，R并=R/2，P=U²/R总，故P串:P并=(U²/2R):(2U²/R)=1:4。"}],"tpl":"①定标：由「灯正常发光」求R灯和该档位总电阻 → ②定差：比较两组接线柱电阻差，结合「每个电阻范围」定单阻值 → ③画图：画出箱内结构（先桥后腿）→ ④逐项验：每个选项单独列式，功率极值取总电阻最大/最小。"},"浮力与阿基米德原理":{"real":[{"y":"2025成都中考B7（压轴）","q":"深海科考情境：科考船质量计算、潜水器浸没过程压强变化量（需从图像读深度）、无动力悬浮时压载物质量推导","a":"阿基米德原理+受力平衡+ρ=m/V+p=ρgh综合，从图像提取深度信息","trap":"「悬浮」是F浮=G总；压强变化要读Δh而非h"},{"y":"2024成都中考B7（压轴）","q":"船底漏水模型：容器底1800cm²、水深9cm，船质量2.2kg、底800cm²、高16cm、7个隔舱，载货5kg，漏入水的质量0<m≤4000g","a":"双变量（进水+液面变化）建模，分阶段讨论船的浮沉状态","trap":"进水后船总重增加→吃水加深→液面上升，两个变量联动，必须分阶段"},{"y":"2026成都中考B7（压轴）","q":"零数值纯字母推导浮力压强综合；第(3)问改为开放性验证类题目","a":"用符号推导出关系式，再对结论作验证说明","trap":"反套路：没有数字可代，只能靠物理量关系推导；开放问要写清「验证逻辑」而非只给结果"}],"drill":[{"q":"底面积800cm²、质量2.2kg的船浮于底面积1800cm²的容器中，求船吃水深度与水面升高多少。（ρ水=1g/cm³）","a":"F浮=G=22N→V排=2200cm³，吃水h=2200/800=2.75cm；水面升高Δh=V排/S容=2200/1800≈1.22cm。"},{"q":"上船载货5kg后，船是否沉没？（船高16cm）","a":"总重72N→V排=7200cm³，所需吃水9cm<16cm，未沉；水面共升高7200/1800=4cm，总水深13cm。"}],"tpl":"①受力：画浮体受力图，漂浮/悬浮写F浮=G总 → ②排液：V排=F浮/(ρ液g) → ③液面：Δh液面=V排/S容器 → ④分阶段：进水/加载/卸载类题按临界状态分段。"},"测量类实验":{"real":[{"y":"成都中考·实验操作（15分）","q":"测量小石块的密度（天平+量筒）、测量小灯泡电功率等，操作考试直计升学分","a":"天平调平→测质量→量筒测体积→ρ=m/V；电功率用伏安法","trap":"天平「左物右码」、量筒读数视线与凹液面相平、先测质量后测体积（防沾水误差），操作细节逐项给分"}],"drill":[{"q":"天平指针偏右，应如何调节？石块放右盘、砝码放左盘（20g+5g），游码2.4g，石块真实质量？","a":"测量前指针偏右→平衡螺母向左调；放反时：砝码质量=物体质量+游码，故m=25-2.4=22.6g。"},{"q":"量筒中水20mL，放入石块后液面升至28mL，石块质量22.6g，求密度。","a":"V=8cm³，ρ=22.6/8=2.825g/cm³=2.825×10³kg/m³。"}],"tpl":"①调平（游码归零→调螺母）→ ②测质量（左物右码，砝码从大到小）→ ③测体积（量筒/排水法/针压法）→ ④计算ρ=m/V → ⑤误差分析（先测体积会偏大/偏小）。"}},"chem":{"酸碱盐综合推断/除杂":{"real":[{"y":"成都中考A卷（常年）","q":"以「标签破损/废液成分/污水处理」为情境，推断溶液中溶质成分，设计除杂方案","a":"离子共存+反应顺序+过量判断，用「加试剂→现象→结论」三步写","trap":"推断题必须考虑「过量」：反应后溶液中一定含生成物，可能含某反应物剩余；除杂不能引入新杂质"}],"drill":[{"q":"某溶液含NaCl和Na₂CO₃，要除去Na₂CO₃得到纯净NaCl溶液，加什么试剂？如何判断已除尽？","a":"加适量稀盐酸（或滴加至不再产生气泡）；取少量加酸无气泡即除尽。过量盐酸可加热蒸发除去。"},{"q":"向含HCl和CaCl₂的混合溶液中逐滴加入Na₂CO₃溶液，写出反应先后顺序及现象。","a":"先与HCl反应：Na₂CO₃+2HCl=2NaCl+H₂O+CO₂↑（有气泡）；HCl耗尽后Na₂CO₃+CaCl₂=CaCO₃↓+2NaCl（有白色沉淀）。"}],"tpl":"①列离子（把溶质拆成离子）→ ②判共存（生成沉淀/气体/水的不能共存）→ ③定顺序（酸碱中和优先，再沉淀）→ ④写过量的影响（先/后反应）→ ⑤验证方案：取样+试剂+现象+结论。"},"复分解与离子共存":{"real":[{"y":"成都中考（高频）","q":"判断离子能否大量共存、溶液颜色、pH条件（酸性/碱性/无色）","a":"记牢「沉淀、气体、水」三类不共存；注意Cu²⁺蓝、Fe³⁺黄、Fe²⁺浅绿、MnO₄⁻紫红","trap":"「无色」排除有色离子；「酸性」隐含大量H⁺，「碱性」隐含大量OH⁻；HCO₃⁻与H⁺、OH⁻都不共存"}],"drill":[{"q":"无色溶液中能大量共存的一组：A. K⁺ Cu²⁺ NO₃⁻ SO₄²⁻  B. Na⁺ H⁺ CO₃²⁻ Cl⁻  C. K⁺ Na⁺ NO₃⁻ Cl⁻  D. Ba²⁺ Na⁺ SO₄²⁻ OH⁻","a":"选C。A中Cu²⁺有色；B中H⁺与CO₃²⁻生成气体；D中Ba²⁺与SO₄²⁻生成沉淀。"},{"q":"pH=1的溶液中，下列离子能共存的是：Na⁺、Fe²⁺、Cl⁻、NO₃⁻ ？","a":"不能。酸性条件下NO₃⁻具有强氧化性，会把Fe²⁺氧化为Fe³⁺。（若忽略此点则错）"}],"tpl":"①看限定词（无色/酸性/碱性/pH）→ ②排有色 → ③两两组合查沉淀表/气体/水 → ④注意隐藏氧化还原（H⁺+NO₃⁻）→ ⑤选完再逐项验证。"}},"eng":{"话题作文":{"real":[{"y":"2025成都中考B卷（15分）","q":"以「你最喜欢的科学探究场所」为题写发言稿，给出调查数据（本校62%、在家6%、大学18%、其他14%），约80词","a":"开头点题→数据引用（As the survey shows, 62% of students…）→个人选择+两点理由→结尾号召","trap":"发言稿格式：有称呼（Dear classmates）、有开头问候、有结尾致谢；数据不能直接照抄中文标点，要用英文表达百分比"}],"drill":[{"q":"用3种不同句式表达「62%的学生选择在学校实验室探究」。","a":"① 62% of the students choose to do scientific exploration in the school lab. ② As the survey shows, the school lab is the most popular place, chosen by 62% of students. ③ More than half of the students (62%) prefer the school lab for their exploration."},{"q":"写出结尾「让我们一起在探究中发现科学的乐趣」的英文。","a":"Let's discover the joy of science through exploration together!（Let's + 动词原形，感叹号收尾）"}],"tpl":"①审题（体裁/人称/时态/字数）→ ②列要点（数据+观点+理由）→ ③套框架：开头点题→正文要点→结尾升华 → ④加连接词（First/Besides/What's more/In a word）→ ⑤检查三单、时态、标点。"},"B卷任务型阅读":{"real":[{"y":"2025成都中考B卷","q":"图表完成（应对压力主题表格填空）+ 回答问题（父亲节礼物）","a":"表格填空答案≤3词（找原文同义替换）；回答问题要写完整句，注意人称和时态转换","trap":"成都新规：表格题超词数扣分；回答问题只写短语不得分，必须完整句且主谓完整"}],"drill":[{"q":"原文：Teenagers can deal with pressure by talking to their parents. 表格填空：Ways to deal with pressure: ______","a":"Talking to parents（动名词短语，≤3词，与原文同义）"},{"q":"回答问题：What did the writer give his father on Father's Day?（原文：I made a card for my father.）","a":"He made a card for his father.（完整句，人称I→He，时态不变）"}],"tpl":"①先读表格/问题，划关键词 → ②回原文定位同义表达 → ③表格题：控制词数、词性匹配（名词对名词、动名词对动名词）→ ④问答题：完整句、人称时态转换、照应疑问词。"},"十二选十/词形变化":{"real":[{"y":"2025成都中考B卷","q":"10词选填（短文约200词，话题「关于天赋的讨论」），12选10，需变形","a":"先判空格词性，再变词形：名词单复数、动词时态语态、形容词副词、比较级、反义词","trap":"成都B卷要求「每词限用一次且需变形」，只填原形大多不得分；多余2词用排除法验证"}],"drill":[{"q":"用 succeed 的适当形式填空：He is a ______ man. / _______, he passed the exam. / Failure is the mother of ______.","a":"successful（形容词作定语）；Successfully（副词作状语）；success（名词作宾语）。"},{"q":"用 little 的适当形式：The ______ you worry, the happier you'll be.","a":"less（the+比较级，the+比较级；little→less→least）"}],"tpl":"①读全文知大意 → ②判空格词性（前后搭配：冠词后名词、be后形容词、动词后副词）→ ③变词形（时/数/格/级/性）→ ④多余词排除 → ⑤通读检验。"}}},"gz":{"math":{"导数与单调性·极值":{"real":[{"y":"2025全国二卷T18（17分）","q":"含参函数导数综合：讨论单调性 + 证明不等式/求参数范围","a":"求导→含参分类（a≤0、0<a<…、a≥…）→终点放缩/构造函数证不等式","trap":"分类讨论的「分界点」由导函数零点是否在定义域内、零点大小关系决定，漏一类扣2-3分"},{"y":"四川新高考（2025首届）","q":"导数稳定在第18题，第19题为概率统计压轴；导数末问常考「恒成立/极值点偏移」","a":"恒成立→分离参数或求最值；极值点偏移→对称构造x₁+x₂与2x₀的关系","trap":"全国二卷导数不再考「超纲技巧」，但要求分类写全、逻辑严密；「存在性」类要先写定义域"}],"drill":[{"q":"f(x)=lnx-ax，讨论f(x)的单调性。","a":"定义域x>0，f'(x)=1/x-a=(1-ax)/x。a≤0时f'(x)>0，在(0,+∞)递增；a>0时在(0,1/a)递增，(1/a,+∞)递减。"},{"q":"上题中若a=1，证明：lnx≤x-1。","a":"f(x)=lnx-x在x=1处取极大值也是最大值f(1)=-1，故lnx-x≤-1，即lnx≤x-1，当且仅当x=1取等。"}],"tpl":"①写定义域 → ②求导并通分/因式分解 → ③找零点，含参分类 → ④列表写单调区间 → ⑤极值/最值 → ⑥末问：恒成立分离参数；证明不等式用「切线放缩lnx≤x-1、eˣ≥x+1」。"},"直线与圆锥曲线综合":{"real":[{"y":"2025全国二卷T11（小题）","q":"圆锥曲线客观题考定义、离心率、焦点三角形，为多选中档题","a":"定义（到两焦点距离和/差为定值）+ 几何性质快速判断","trap":"多选「漏选得部分分、错选0分」；椭圆中焦点三角形面积S=b²tan(θ/2)可直接用"},{"y":"新高考（全国二卷）","q":"解答题第18/19题位置有时与圆锥曲线互换，设线联立+韦达定理仍是核心","a":"设直线y=kx+m→联立→韦达定理→把目标式（弦长/面积/斜率之和）转化为k,m","trap":"①讨论斜率不存在；②判别式Δ>0别忘；③定点问题最后要「与k无关」"}],"drill":[{"q":"椭圆x²/4+y²/3=1，过右焦点F(1,0)的直线交椭圆于A、B，求|AB|的最小值。","a":"通径最短：x=1时y=±3/2，|AB|=3。一般地弦长=2ab²/(a²)=2·2·3/4=3。"},{"q":"上题中若直线斜率为1，求弦长|AB|。","a":"y=x-1代入3x²+4(x-1)²=12→7x²-8x-8=0，x₁+x₂=8/7，x₁x₂=-8/7，|AB|=√2·√((8/7)²+32/7)=√2·√(240/49)=4√30/7。"}],"tpl":"①设线（注意斜率是否存在）→ ②联立化简成Ax²+Bx+C=0 → ③Δ>0 + 韦达定理 → ④目标式翻译（弦长√(1+k²)|x₁-x₂|、面积½|AB|·d）→ ⑤化简得结论（定点/定值/范围）。"},"概率(条件概率/分布列/期望)":{"real":[{"y":"2025全国二卷T19（压轴）","q":"概率统计升至压轴位置，常结合新定义/数列/函数，考查条件概率、全概率、期望","a":"理清「试验过程」→画树状图/列表→写分布列→求期望","trap":"新高考概率题情境包装重，先「翻译」成古典概型/独立重复试验；注意「放回/不放回」"},{"y":"四川新高考","q":"统计小题考「频率分布直方图、样本数字特征、成对数据相关系数」","a":"直方图面积=频率；中位数在面积各占0.5处；平均数=组中值×频率之和","trap":"直方图纵轴是「频率/组距」不是频率，求频率要乘组距"}],"drill":[{"q":"X~B(2,1/3)，写出X的分布列及E(X)。","a":"P(X=0)=4/9，P(X=1)=4/9，P(X=2)=1/9；E(X)=np=2/3。"},{"q":"甲袋3红2白，乙袋2红3白，从甲取一球放入乙再从乙取一球，求取到红球的概率。","a":"全概率：P=3/5·3/6+2/5·2/6=9/30+4/30=13/30。"}],"tpl":"①判模型（古典/几何/二项/超几何/条件概率）→ ②定随机变量取值 → ③逐个算概率（列表检验和为1）→ ④求期望方差 → ⑤结合情境作答。"},"计数原理与二项式定理@@概率(条件概率/分布列/期望)":{"real":[{"y":"新高考（全国二卷）","q":"多选/填空考「排列数组合数应用 + 二项展开式特定项、系数和」","a":"分类加法/分步乘法；二项式通项T_{r+1}=Cₙʳaⁿ⁻ʳbʳ","trap":"「项数」与「二项式系数」区别；赋值法令x=1/-1求系数和；三项式化成二项式或直接用多项式定理"}],"drill":[{"q":"(2x-1/x)⁶的展开式中的常数项。","a":"T_{r+1}=C₆ʳ(2x)⁶⁻ʳ(-1/x)ʳ=C₆ʳ2⁶⁻ʳ(-1)ʳx⁶⁻²ʳ，令6-2r=0→r=3，常数项=C₆³·2³·(-1)=-160。"},{"q":"5名同学排成一排，甲乙不相邻，有多少种排法？","a":"插空法：其余3人排列A₃³=6，产生4个空，甲乙插入A₄²=12，共6×12=72种。"}],"tpl":"①排/n选/分组→先判是否讲顺序 → ②特殊元素/位置优先 → ③相邻捆绑、不相邻插空、至多至少用间接法 → ④二项式用通项公式，含「系数」先化简再令幂指数=0。"}},"phys":{"电磁感应":{"real":[{"y":"2025全国二卷（四川首年）T14","q":"导轨+定滑轮+金属杆，杆匀速运动三问（受力平衡/电路/能量）","a":"E=BLv → I=E/R总 → F安=BIL → 平衡条件；能量：外力做功=焦耳热+动能变化","trap":"「匀速」是关键：合外力为零；杆与重物用绳连接时两者速度、加速度大小相等"},{"y":"新高考（全国卷）","q":"电磁感应常与动力学、能量、图像结合，压轴或次压轴位置","a":"「单杆+电容/单杆+双杆」模型；q=ΔΦ/R总求电量；图像题看斜率（a）和面积（位移/电量）","trap":"安培力方向用楞次定律「阻碍相对运动」判断；双杆问题注意动量守恒条件"}],"drill":[{"q":"水平导轨间距L=0.5m，B=1T，R=2Ω，杆以v=4m/s匀速运动，求感应电流和安培力。","a":"E=BLv=2V，I=E/R=1A，F安=BIL=0.5N，方向与运动方向相反。"},{"q":"上题中若杆质量0.1kg，撤去外力后杆滑行多远停下？（无摩擦）","a":"动量定理：-BIL·t=mv→BLq=mv，q=ΔΦ/R=BLx/R，故B²L²x/R=mv，x=mvR/(B²L²)=0.1×4×2/(1×0.25)=3.2m。"}],"tpl":"①判磁通量变化 → ②E=BLv或nΔΦ/Δt → ③画等效电路求I → ④F安=BIL定方向 → ⑤力学：牛顿定律/平衡/动量定理 → ⑥能量：Q=I²Rt=克服安培力做功。"},"牛顿运动定律":{"real":[{"y":"新高考（全国卷）","q":"选择题/实验题考「连接体、传送带、板块模型」，常与图像（v-t、a-F）结合","a":"整体法求a、隔离法求内力；v-t图斜率=a、面积=位移","trap":"摩擦力方向判断是失分点：相对运动/相对运动趋势方向相反；静摩擦力大小由平衡/牛顿第二定律求，不等于μN"}],"drill":[{"q":"质量2kg的物体放在水平面上，μ=0.2，受F=10N水平拉力，求加速度。（g=10）","a":"f=μN=0.2×20=4N，a=(10-4)/2=3m/s²。"},{"q":"上题中F与水平方向成37°斜向上（sin37°=0.6），求加速度。","a":"N=mg-Fsin37°=20-6=14N，f=0.2×14=2.8N，a=(Fcos37°-f)/2=(8-2.8)/2=2.6m/s²。"}],"tpl":"①确定研究对象（整体/隔离）→ ②画图受力（重力、弹力、摩擦力、已知力）→ ③正交分解 → ④列牛顿第二定律方程 → ⑤结合运动学公式（v=v₀+at、x=v₀t+½at²）求解。"},"恒定电流":{"real":[{"y":"新高考（全国卷）","q":"电学实验考「伏安法测电阻/测电源E、r」，要求选器材、连图、误差分析、U-I图像处理","a":"内接法（大电阻）R测偏大；外接法（小电阻）R测偏小；测E、r：U=E-Ir，纵截距E、斜率绝对值r","trap":"滑动变阻器「分压/限流」选择：要求电压从0开始或R滑≪Rx时用分压；电表量程要「指针过半」"}],"drill":[{"q":"伏安法测约5Ω电阻，电流表内阻0.5Ω、电压表内阻5kΩ，应选内接还是外接？","a":"Rx²=25 ≪ Rv·Ra=2500，Rx属小电阻，选外接法（电压表分流误差小）。"},{"q":"测电源E、r的U-I图线，纵轴截距1.5V，过(0,1.5)和(0.5,1.0)，求E、r。","a":"E=1.5V，r=|ΔU/ΔI|=(1.5-1.0)/0.5=1.0Ω。"}],"tpl":"①明确实验目的 → ②选电路（内/外接、分压/限流）→ ③选器材（量程、安全、精确）→ ④数据处理（图像法：化曲为直）→ ⑤误差分析（系统误差来源+偏大偏小）。"}},"chem":{"反应速率与化学平衡":{"real":[{"y":"新高考（四川/全国卷）","q":"选必1核心：平衡移动判断、转化率比较、平衡常数计算、图像分析（速率-时间、含量-温度/压强）","a":"勒夏特列原理+Q与K比较；「先拐先平数值大」读图；三段式计算","trap":"「恒温恒容充入惰性气体」平衡不移动；催化剂只改速率不改平衡；K只与温度有关"},{"y":"四川新高考","q":"常结合「工业流程/真实化工情境」考平衡与速率的综合分析","a":"从流程图中提取温度、压强、催化剂条件，用「速率+平衡+成本」三角度解释","trap":"工业条件选择题要答全：速率快、转化率高、催化剂活性、设备耐压、经济成本"}],"drill":[{"q":"N₂+3H₂⇌2NH₃，恒温恒容下充入Ar，平衡是否移动？恒压下呢？","a":"恒容：各组分浓度不变，平衡不移动；恒压：体积增大，各组分分压减小，平衡向气体分子数增多的方向（逆向）移动。"},{"q":"某温度下，2SO₂+O₂⇌2SO₃，起始c(SO₂)=0.4mol/L、c(O₂)=0.2mol/L，平衡时SO₂转化80%，求K。","a":"SO₂反应0.32，平衡：SO₂=0.08、O₂=0.2-0.16=0.04、SO₃=0.32。K=0.32²/(0.08²×0.04)=0.1024/0.000256=400。"}],"tpl":"①写方程式标状态 → ②三段式（起始/转化/平衡）→ ③算K或转化率 → ④判移动（浓度/压强/温度/Q与K）→ ⑤图像题「先拐先平、定一议二」。"},"电化学(原/电解池)":{"real":[{"y":"四川新高考（高频）","q":"新型二次电池、燃料电池、电解精炼、膜电解池，考电极判断、方程式书写、离子移动","a":"负极/阳极氧化失电子，正极/阴极还原得电子；阳离子向正极（阴极）移动","trap":"写电极反应先定「介质」：酸性用H⁺/H₂O配平，碱性用OH⁻/H₂O配平；熔融碳酸盐用CO₃²⁻传导"}],"drill":[{"q":"写出氢氧燃料电池（KOH溶液）正、负极反应式。","a":"负极：H₂+2OH⁻-2e⁻=2H₂O；正极：O₂+2H₂O+4e⁻=4OH⁻（总：2H₂+O₂=2H₂O）。"},{"q":"电解CuSO₄溶液（惰性电极），阴极增重3.2g，求转移电子数和阳极产生O₂体积（标况）。","a":"n(Cu)=0.05mol，转移e⁻=0.1mol；阳极4OH⁻-4e⁻=O₂↑+2H₂O，n(O₂)=0.025mol，V=0.56L。"}],"tpl":"①判池型（无电源原电池/有电源电解池）→ ②定电极（负极氧化/阴极还原）→ ③写反应（先主后次、介质配平、电荷守恒）→ ④离子移动（阳正阴负）→ ⑤计算：电子守恒串联各池。"},"有机反应与推断合成":{"real":[{"y":"新高考（四川/全国卷）","q":"选必3：以流程框图推断有机物结构，考官能团识别、反应类型、同分异构体数目、合成路线设计","a":"从「分子式+条件+特征现象」破题：NaOH/水→水解、NaOH/醇→消去、[O]→氧化","trap":"同分异构体要按「类别异构→位置异构→碳链异构」有序数；限定条件（如「能发生银镜反应+含苯环」）先翻译成官能团"}],"drill":[{"q":"分子式C₄H₈O₂，能发生银镜反应且属于酯类的同分异构体有几种？","a":"甲酸酯：HCOOCH₂CH₂CH₃、HCOOCH(CH₃)₂，共2种。"},{"q":"由乙醇合成乙酸乙酯，写出两步方程式及反应类型。","a":"①2CH₃CH₂OH+O₂→(Cu,△)2CH₃CHO+2H₂O（氧化）；②2CH₃CHO+O₂→2CH₃COOH（氧化）；③CH₃COOH+CH₃CH₂OH⇌(浓H₂SO₄,△)CH₃COOCH₂CH₃+H₂O（酯化/取代）。"}],"tpl":"①找突破口（分子式、特征条件、已知信息）→ ②推官能团转化链 → ③验证分子式 → ④写方程式注意条件 → ⑤同分异构体有序枚举；合成路线「逆推法」：目标物→前体→原料。"}},"eng":{"读后续写":{"real":[{"y":"新高考（全国二卷，25分）","q":"约350词故事+两段段首句，续写150词左右，考查情节衔接与语言质量","a":"两段法：段1承接危机→发展（动作+心理）；段2解决→升华（主题句）","trap":"①段首句必须照抄且衔接自然；②「动作链+情绪变化+环境烘托」缺一不可；③结尾点题但不要说教；④人称时态全程统一（一般过去时为主）"}],"drill":[{"q":"写出「他又紧张又害怕，缓缓走向门口」的高级表达（用独立主格/分词）。","a":"Trembling with fear and nervousness, he inched his way towards the door, his heart pounding wildly."},{"q":"写出结尾升华句「那一刻我明白了：善意从不白费」。","a":"It was at that very moment that I realized kindness is never wasted.（强调句+抽象名词作主语）"}],"tpl":"①读文：标人物、冲突、伏笔 → ②看两段首句，定「段1怎么发展、段2怎么收」→ ③列动作链（5-6个动作）+情绪线 → ④写：动作细节+对话+心理+环境呼应 → ⑤检查：时态、人称、段首句抄对、字数150±20。"},"语法填空":{"real":[{"y":"新高考（全国二卷，15分）","q":"10空，约200语篇，有提示词（词形变化）7空左右+无提示词3空左右","a":"有提示：谓语（时态语态主谓一致）/非谓语/词性转换/比较级；无提示：冠词、介词、连词、代词","trap":"①句中无谓语且无连词→必填非谓语；②并列结构前后词性一致；③名词注意单复数；④「the+最高级」「than→比较级」信号词"}],"drill":[{"q":"The ______ (hard) you work, the luckier you will be.","a":"harder（the+比较级，the+比较级）。"},{"q":"______ (locate) at the foot of the mountain, the village attracts many tourists.","a":"Located（be located in/at固定搭配，过去分词作状语）。"}],"tpl":"①通读知大意 → ②判空：有提示→定词性/谓语非谓语；无提示→「冠介连代」四选一 → ③变形：时/数/格/级 → ④代入复读，检查主谓一致和拼写。"},"七选五":{"real":[{"y":"新高考（全国二卷）","q":"七选五重「篇章结构+指代衔接」；阅读D篇多为科普/研究类长难句","a":"空前后找「指代词、同义复现、逻辑连接词」；长难句先找主干","trap":"七选五先做「段首/段尾」明显位置，再回填空中；选项出现this/these/such必指代前文"}],"drill":[{"q":"七选五选项中出现「This shift…」，其前文必须包含什么信息？","a":"一个「变化/转变」的内容（过去的做法→现在的做法），this shift 指代该转变。"},{"q":"长难句拆主干：The researchers, who had tracked 3,000 children for a decade, found that those reading daily performed better.","a":"主干：The researchers found that…（主语researchers+谓语found+宾语从句）。who引导定语从句作插入，that从句中those为主语，reading daily作定语。"}],"tpl":"①读标题/首段定主题 → ②圈选项中的「指代词、连接词、同义复现词」→ ③空前空后各读一句找逻辑（并列/转折/因果/举例）→ ④代入通读验证。"}}}};
+const FINFO={5:{n:"必考",c:"var(--f5)",bg:"var(--f5bg)"},4:{n:"高频",c:"var(--f4)",bg:"var(--f4bg)"},3:{n:"中频",c:"var(--f3)",bg:"var(--f3bg)"},2:{n:"低频",c:"var(--f2)",bg:"var(--f2bg)"}};
+const stars=(f)=>"★".repeat(f)+"☆".repeat(5-f);
+let curStage="cz",curSub="math",curFilter="all",expanded=false,curView="textbook";
+const $=(s)=>document.querySelector(s);
+const contentEl=$("#content"),introEl=$("#intro"),insightEl=$("#insight"),subjEl=$("#subjects"),statsEl=$("#stats");
+
+function buildSubjectTabs(){
+  subjEl.innerHTML="";
+  Object.keys(SUBJECTS).forEach(key=>{
+    const s=SUBJECTS[key],ver=curStage==="cz"?s.cz:s.gz,b=document.createElement("button");
+    b.className="sub-btn"+(key===curSub?" active":"");b.dataset.s=key;
+    b.innerHTML=`<span class="dot" style="background:${s.color}"></span>${s.name}<span class="ver">${ver}</span>`;
+    b.onclick=()=>{curSub=key;expanded=false;$("#expandAll").textContent="展开全部";buildSubjectTabs();render();};
+    subjEl.appendChild(b);
+  });
+}
+function renderCDBar(){
+  const c=CDBAR[curStage];
+  $("#cdFlag").textContent=c.flag;$("#cdTxt").innerHTML=c.txt;
+  $("#cdScore").innerHTML=c.score.map(s=>`<span class="chip">${s}</span>`).join("");
+}
+function countFreq(data){const c={5:0,4:0,3:0,2:0};let total=0,cd=0;
+  data.modules.forEach(m=>m.kps.forEach(k=>{c[k.f]++;total++;if(k.cd)cd++;}));
+  return {c,total,cd};}
+function renderStats(){
+  const data=DATA[curStage][curSub],{c,total,cd}=countFreq(data);
+  const seg=(v,col)=>`<span style="width:${(v/total*100).toFixed(1)}%;background:${col}"></span>`;
+  statsEl.innerHTML=`
+    <div class="stat s5"><div class="n" style="color:var(--f5)">${c[5]}</div><div class="k">★★★★★ 必考</div></div>
+    <div class="stat s4"><div class="n" style="color:var(--f4)">${c[4]}</div><div class="k">★★★★ 高频</div></div>
+    <div class="stat s3"><div class="n" style="color:var(--f3)">${c[3]}</div><div class="k">★★★ 中频</div></div>
+    <div class="stat s2"><div class="n" style="color:var(--f2)">${c[2]}</div><div class="k">★★ 低频</div></div>
+    <div class="stat cd"><div class="n">${cd}</div><div class="k">🔴 成都特色考点</div></div>
+    <div class="stat" style="border-color:#5b6474"><div class="n">${total}</div><div class="k">知识点总数</div>
+      <div class="statbar">${seg(c[5],"var(--f5)")}${seg(c[4],"var(--f4)")}${seg(c[3],"var(--f3)")}${seg(c[2],"var(--f2)")}</div></div>`;
+}
+function avgFreq(m){return (m.kps.reduce((a,k)=>a+k.f,0)/m.kps.length).toFixed(1);}
+function render(){
+  const data=DATA[curStage][curSub];
+  const stageName=curStage==="cz"?"成都中考":"四川新高考";
+  renderCDBar();
+  introEl.innerHTML=`<h2>${stageName} · ${SUBJECTS[curSub].name}<em>${curView==="exam"?"应试作战地图 · "+stageName+"题型战役":"教材："+(curStage==="cz"?SUBJECTS[curSub].cz:SUBJECTS[curSub].gz)}</em></h2><p>${curView==="exam"?EXAM[curStage][curSub].banner:data.intro}</p>
+    <div class="legend">
+      <span><i style="background:var(--f5)"></i>★★★★★ 必考</span>
+      <span><i style="background:var(--f4)"></i>★★★★ 高频</span>
+      <span><i style="background:var(--f3)"></i>★★★ 中频</span>
+      <span><i style="background:var(--f2)"></i>★★ 低频</span>
+      <span><i style="background:var(--cd)"></i>🔴 成都特色考点</span>
+      <span><i style="background:#eef0fd"></i>难点</span>
+      <span><i style="background:#eaf6ee"></i>拓展</span>
+    </div>`;
+  introEl.style.borderLeftColor=SUBJECTS[curSub].color;
+  insightEl.innerHTML=`<h3>🎯 ${stageName} ${SUBJECTS[curSub].name} · 本地命题洞察</h3><ul>${data.insight.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+  renderStats();
+  if(curView==="exam") renderExam(); else renderTextbook(data);
+  $("#noResult").style.display="none";$("#q").value="";
+}
+/* 教材视图：按课本章节铺开 */
+function renderTextbook(data){
+  contentEl.innerHTML="";
+  data.modules.forEach((m,i)=>{
+    const color=SUBJECTS[curSub].color,avg=+avgFreq(m),fi=FINFO[Math.round(avg)];
+    const visible=m.kps.filter(k=>(curFilter==="all")||(curFilter==="cd"&&k.cd)||(k.f==curFilter));
+    if(visible.length===0)return;
+    const kpHTML=m.kps.map(k=>{
+      const hide=(curFilter!=="all"&&!(curFilter==="cd"&&k.cd)&&k.f!=curFilter)?" style=\"display:none\"":"";
+      const tags=(k.tag?`<span class="tag ${k.tag}">${k.tag==="hard"?"难点":"拓展"}</span>`:"")+(k.cd?`<span class="tag local">🔴 成都特色</span>`:"");
+      const cdBox=k.cd?`<div class="kp-cd">📍 ${k.cd}</div>`:"";
+      return `<div class="kp f${k.f}" data-f="${k.f}" data-cd="${k.cd?1:0}"${hide}>
+        <div class="kp-badge"><div class="kp-stars">${stars(k.f)}</div><div class="kp-lv">${FINFO[k.f].n}</div></div>
+        <div class="kp-main"><div class="kp-t">${k.t}${tags}</div><div class="kp-d">${k.d}</div>${cdBox}</div></div>`;
+    }).join("");
+    const mod=document.createElement("div");
+    mod.className="module"+(expanded||curFilter!=="all"?" open":"");mod.dataset.mod=i;
+    mod.innerHTML=`
+      <div class="m-head">
+        <div class="m-idx" style="background:${color}">${i+1}</div>
+        <div class="m-title">${m.t}</div>
+        <div class="m-meta">
+          ${m.wt?`<span class="m-wt">${m.wt}</span>`:""}
+          <span class="m-avg" style="background:${fi.bg};color:${fi.c}">均★${avg}</span>
+          <span class="m-count">${m.kps.length} 点</span>
+          <span class="arrow">▶</span>
+        </div>
+      </div>
+      <div class="m-body">${kpHTML}</div>`;
+    mod.querySelector(".m-head").onclick=()=>mod.classList.toggle("open");
+    contentEl.appendChild(mod);
+  });
+}
+/* 考点视图：按题型战役重组，应试作战地图 */
+const isCD=(y)=>y&&/成都|20\d\d|九章|蓉|公园|特色|压轴|侯氏/.test(y);
+/* 把考点视图的考点项 it 按标题关联到 DRILL 实战卡字典（支持 @@ 合并键、括号归一化） */
+/* 考点标题 → 实战卡键 的显式别名（自动匹配覆盖不到的压轴/拆分栏） */
+const DRILL_ALIAS={
+  "gz>math>恒成立/零点/极值点偏移":"导数与单调性·极值"
+};
+function getDrill(stage,sub,title){
+  const bag=(DRILL[stage]&&DRILL[stage][sub])||null; if(!bag) return null;
+  const keys=[];
+  const alias=DRILL_ALIAS[stage+">"+sub+">"+title];
+  if(alias&&bag[alias]&&keys.indexOf(alias)<0) keys.push(alias);
+  if(bag[title]) keys.push(title);
+  /* 合并键形如 "A@@B"：若其中一段等于当前考点标题，则一并并入 */
+  for(const k in bag){ if(k!==title&&k.indexOf("@@")>-1&&k.split("@@").indexOf(title)>-1) keys.push(k); }
+  /* 括号/空格归一化兜底匹配 */
+  if(!keys.length){
+    const nt=String(title).replace(/[（）()\s·]/g,"");
+    for(const k in bag){ if(String(k).replace(/[（）()\s·]/g,"")===nt){ keys.push(k); break; } }
+  }
+  if(!keys.length) return null;
+  const real=[],drill=[]; let tpl="";
+  keys.forEach(function(k){ const d=bag[k]||{};
+    (d.real||[]).forEach(function(r){ real.push(r); });
+    (d.drill||[]).forEach(function(x){ drill.push(x); });
+    if(d.tpl&&!tpl) tpl=d.tpl;
+  });
+  return {real:real,drill:drill,tpl:tpl,label:title};
+}
+function drillHTML(it){
+  const d=getDrill(curStage,curSub,it.t); if(!d) return "";
+  const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const reals=d.real.map(r=>`<div class="dr-real"><span class="dr-y">${esc(r.y)}</span><div class="dr-q">${esc(r.q)}</div><div class="dr-a"><b>答案：</b>${esc(r.a)}</div><div class="dr-trap">⚠️ ${esc(r.trap)}</div></div>`).join("");
+  const drills=d.drill.map((x,i)=>`<div class="dr-item"><b>变式${i+1}：</b>${esc(x.q)}<div class="dr-a"><b>解析：</b>${esc(x.a)}</div></div>`).join("");
+  return `<div class="dr-card" data-hit="1" onclick="event.stopPropagation()">
+    <div class="dr-tab" onclick="this.parentNode.classList.toggle('open')">🎯 实战卡 · ${esc(d.label||it.t)} <span class="dr-n">真题${d.real.length} · 变式${d.drill.length} · 答题模板</span><span class="b-arrow">▶</span></div>
+    <div class="dr-body"><div class="dr-sec-t">📕 真题回放</div>${reals}<div class="dr-sec-t">✏️ 变式训练</div>${drills}<div class="dr-sec-t">🧩 答题模板</div><div class="dr-tpl">${esc(d.tpl)}</div></div></div>`;
+}
+function renderExam(){
+  contentEl.innerHTML="";
+  const ex=EXAM[curStage][curSub],color=SUBJECTS[curSub].color;
+  if(ex.banner){const bd=document.createElement("div");bd.className="exam-banner";bd.innerHTML="🧭 "+ex.banner;contentEl.appendChild(bd);}
+  ex.groups.forEach((g,gi)=>{
+    const itemsHTML=g.items.map(it=>{
+      const cdHit=(curFilter==="cd"&&isCD(it.y));
+      const hide=(curFilter!=="all"&&!cdHit&&it.f!=curFilter)?" style=\"display:none\"":"";
+      const tag=(it.tag?`<span class="tag ${it.tag}">${it.tag==="hard"?"难点":"拓展"}</span>`:"");
+      const cdTag=isCD(it.y)?`<span class="tag local">🔴 成都高频</span>`:"";
+      return `<div class="ekp f${it.f}" data-f="${it.f}" data-cd="${isCD(it.y)?1:0}"${hide}>
+        <div class="ekp-badge"><div class="kp-stars">${stars(it.f)}</div><div class="kp-lv">${FINFO[it.f].n}</div></div>
+        <div class="ekp-main"><div class="ekp-t">${it.t}${tag}${cdTag}</div>
+          <div class="ekp-row q"><span class="ico">📝 怎么考：</span>${it.q}</div>
+          <div class="ekp-row"><span class="ico" style="color:var(--cd)">📍 出处：</span><b>${it.y}</b></div>
+        ${drillHTML(it)}</div></div>`;
+    }).join("");
+    const avg=(g.items.reduce((a,it)=>a+it.f,0)/g.items.length).toFixed(1);
+    const b=document.createElement("div");
+    b.className="battle"+(expanded||curFilter!=="all"?" open":"");
+    b.dataset.tt=(g.t+" "+(g.d||"")+" "+g.items.map(it=>it.t+" "+it.y).join(" ")).toLowerCase();
+    b.innerHTML=`<div class="b-head" style="border-left-color:${color}">
+      <div class="b-idx" style="background:${color}">${gi+1}</div>
+      <div style="min-width:0"><div class="b-title">${g.t}</div><div class="b-desc">${g.d||""}</div></div>
+      <div class="b-meta"><span class="b-cnt">${g.items.length}个考点 · 均★${avg}</span><span class="b-arrow">▶</span></div>
+    </div><div class="b-body">${itemsHTML}</div>`;
+    b.querySelector(".b-head").onclick=()=>b.classList.toggle("open");
+    contentEl.appendChild(b);
+  });
+  /* 渲染后按当前搜索词复原：命中考点若带实战卡则自动展开 */
+  const _qe=$("#q"); const kw=(_qe&&_qe.value||"").trim().toLowerCase();
+  if(curView==="exam"&&kw){
+    contentEl.querySelectorAll(".ekp").forEach(k=>{
+      const card=k.querySelector(".dr-card"); if(!card)return;
+      const hit=k.textContent.toLowerCase().includes(kw);
+      card.classList.toggle("open", hit && k.style.display!=="none");
+    });
+  }
+}
+document.querySelectorAll(".stage-btn").forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll(".stage-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");curStage=b.dataset.stage;expanded=false;$("#expandAll").textContent="展开全部";
+    buildSubjectTabs();render();};
+});
+document.querySelectorAll("#freqFilter .fbtn").forEach(b=>{
+  if(b.classList.contains("reset"))return;
+  b.onclick=()=>{document.querySelectorAll("#freqFilter .fbtn:not(.reset)").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");curFilter=b.dataset.f;const _k=$("#q").value;render();if(_k)$("#q").value=_k;_applySearch();};
+});
+$("#expandAll").onclick=()=>{expanded=!expanded;
+  document.querySelectorAll(".module,.battle").forEach(m=>m.classList.toggle("open",expanded));
+  $("#expandAll").textContent=expanded?"收起全部":"展开全部";};
+function _applySearch(){
+  const kw=$("#q").value.trim().toLowerCase();let any=false;
+  const cardSel=curView==="exam"?".ekp":".kp",grpSel=curView==="exam"?".battle":".module";
+  contentEl.querySelectorAll(grpSel).forEach(m=>{
+    let vis=0;
+    const grpHit=kw&&(m.dataset.tt||"").toLowerCase().includes(kw);
+    m.querySelectorAll(cardSel).forEach(k=>{
+      const hit=!kw||grpHit||k.textContent.toLowerCase().includes(kw);
+      const fok=curFilter==="all"||(curFilter==="cd"&&k.dataset.cd==="1")||k.dataset.f===curFilter;
+      const show=hit&&fok;k.style.display=show?"":"none";if(show)vis++;
+      if(curView==="exam"){const card=k.querySelector(".dr-card");if(card)card.classList.toggle("open",show&&!!kw);}
+    });
+    m.style.display=vis?"":"none";if(vis){m.classList.add("open");any=true;}
+  });
+  $("#noResult").style.display=(kw&&!any)?"block":"none";
+}
+$("#q").oninput=_applySearch;
+/* 视图切换 */
+document.querySelectorAll("#viewToggle .vt").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("#viewToggle .vt").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");curView=b.dataset.v;
+    $("#vthint").textContent=curView==="exam"?"按成都/四川题型战役重组：考点 → 怎么考 → 真题出处，应试作战":"按课本章节铺开，系统学习、查漏补缺";
+    expanded=false;$("#expandAll").textContent="展开全部";
+    $("#q").value="";render();
+  };
+});
+buildSubjectTabs();render();
+</script>
+</body>
+</html>
