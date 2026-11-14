@@ -97,9 +97,11 @@ html.dark .chip .bk{color:#9db8ee;background:#26314d}
 .map-cd{font-size:11px;color:var(--warn);margin-top:2px;font-weight:600}
 #report{background:#fff}
 .rpt{background:#fff;padding:0;color:#1B2733}
-.rpt .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--pri);padding-bottom:14px;margin-bottom:18px}
-.rpt .rhead .logo{max-width:150px;max-height:66px;object-fit:contain;object-position:left center}
-.rpt .rhead .org{font-size:20px;font-weight:800;color:var(--pri-d)}
+.rpt .rhead{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--pri);padding-bottom:14px;margin-bottom:18px}
+.rpt .rhead .logo{width:56px;height:56px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid var(--line);padding:4px;flex-shrink:0}
+.rpt .rhead .rtitle{font-size:21px;font-weight:800;color:var(--pri-d);letter-spacing:2px}
+.rpt .rhead .rh-sub{font-size:12.5px;color:var(--sub);margin-top:4px;font-weight:600}
+.rpt .rhead .rh-meta{margin-left:auto;text-align:right;font-size:12px;color:var(--sub);line-height:1.8;flex-shrink:0}
 .rpt h3{font-size:15px;color:var(--pri-d);margin:18px 0 8px;padding-left:9px;border-left:3px solid var(--pri)}
 .rpt table{font-size:12.5px}
 .rlist{margin:6px 0 0 2px;padding-left:18px}.rlist li{margin:4px 0}
@@ -160,8 +162,15 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
 @media(max-width:820px){.pw-grid{grid-template-columns:1fr}}
 .set-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap;gap:10px}
 .set-foot .btns{margin-top:0}
+/* 退出登录独立模块 */
+.logout-card{border:1px solid rgba(214,67,59,.45);background:linear-gradient(180deg,rgba(214,67,59,.07),rgba(214,67,59,.02))}
+.logout-card .btn.gho{border-color:rgba(214,67,59,.55);color:#C24840;background:rgba(214,67,59,.06)}
+.logout-card .btn.gho:hover{background:rgba(214,67,59,.14)}
+html.dark .logout-card{border-color:rgba(240,150,143,.4);background:linear-gradient(180deg,rgba(214,67,59,.12),rgba(214,67,59,.04))}
+html.dark .logout-card .btn.gho{border-color:rgba(240,150,143,.5);color:#F0968F;background:rgba(214,67,59,.10)}
+html.dark .logout-card .btn.gho:hover{background:rgba(214,67,59,.20)}
 ::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#C3D4E8;border-radius:6px}
-@media print{.topbar,.tabs,.footer,.noprint{display:none!important}.wrap{max-width:100%;padding:0}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}html.dark #report,html.dark .rpt{background:#fff!important;color:#1B2733!important}html.dark #report table tr:nth-child(even) td{background:#FAFCFF!important}html.dark #report th{background:#EAF2FC!important;color:#1657B0!important}html.dark #report .muted{color:#5B6B7C!important}html.dark #report .pill{background:#EAF2FC!important;color:#1657B0!important}}
+@media print{@page{size:A4 portrait;margin:0}.topbar,.tabs,.footer,#alertMask,.noprint{display:none!important}.wrap{max-width:100%;padding:14mm 13mm}.card{border:none;box-shadow:none;padding:0}.panel{display:none!important}.panel#p-report{display:block!important}body{background:#fff}html.dark #report,html.dark .rpt{background:#fff!important;color:#1B2733!important}html.dark #report table tr:nth-child(even) td{background:#FAFCFF!important}html.dark #report th{background:#EAF2FC!important;color:#1657B0!important}html.dark #report .muted{color:#5B6B7C!important}html.dark #report .pill{background:#EAF2FC!important;color:#1657B0!important}}
 /* 平板适配（821~1024px）：多列网格降为两列 */
 @media(min-width:821px) and (max-width:1024px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
 /* 移动端适配（≤820px） */
@@ -196,8 +205,22 @@ html.dark .pill{background:var(--pri-l);color:#9CC4F5}
   /* 系统设置 / 报告头部 */
   .set-hero{padding:18px 16px}
   .rpt .rhead{flex-direction:column;align-items:flex-start;gap:8px}
+  .rpt .rhead .rh-meta{margin-left:0;text-align:left}
   .ai-head{flex-direction:column;align-items:flex-start}
   .chip{padding:5px 9px;font-size:12px}
+}
+/* 打印最终覆盖：A4 宽度(~794px)会命中上面的移动端断点，打印时恢复桌面横排布局 */
+@media print{
+  html,body{margin:0!important;padding:0!important;height:auto!important;overflow:visible!important}
+  .wrap{padding:12mm 13mm 8mm!important}
+  .rpt .rhead{flex-direction:row!important;align-items:center!important;gap:14px!important}
+  .rpt .rhead .rh-meta{margin-left:auto!important;text-align:right!important}
+  .rpt .rhead .logo{width:56px;height:56px}
+  .card,#report,.rpt{min-height:0!important;height:auto!important;overflow:visible!important}
+  /* 消除尾部溢出导致的空白页 */
+  .rpt>*:last-child,.rpt p:last-child,.rpt ul:last-child,.rpt .kv:last-child{margin-bottom:0!important}
+  h3{page-break-after:avoid!important}
+  tr,td,th{page-break-inside:avoid}
 }
 /* AI 建议模块卡片 */
 .ai-mod{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;box-shadow:0 1px 6px rgba(30,111,217,.05)}
@@ -817,7 +840,6 @@ document.addEventListener('DOMContentLoaded',function(){
         <div class="set-item"><div class="ic">🔑</div><div><b>找回需机构代码</b><span>忘记口令须在登录页输入机构代码验证身份后重设；机构代码为内部代码，请向机构内部获取。</span></div></div>
         <div class="set-item"><div class="ic">🛡️</div><div><b>管理员管理授权</b><span>系统管理员可在右侧添加/移除授权码（云端同步，全设备生效）并查看登录历史；管理员号码不可移除。</span></div></div>
         <div class="set-item"><div class="ic">🖥️</div><div><b>本地存储</b><span>登录状态与授权码名单保存在本机；云端仅存放口令库与登录日志，学员数据全程不出本机。</span></div></div>
-        <div class="set-item"><div class="ic">↩️</div><div><b>退出重置</b><span>退出登录会清除登录状态与当前学员数据（定位、建议、报告），恢复默认状态。</span></div></div>
       </div>
       <div class="card">
         <h2>界面主题</h2>
@@ -827,6 +849,12 @@ document.addEventListener('DOMContentLoaded',function(){
           <option value="dark">深色模式</option>
         </select>
         <div class="hint" style="margin-top:8px">「跟随系统」自动匹配操作系统的深色/浅色外观；选择后立即生效并保存在本机，刷新不丢。机构报告打印始终为白底样式，不受主题影响。</div>
+      </div>
+      <div class="card logout-card">
+        <h2>🚪 退出登录</h2>
+        <div class="set-item"><div class="ic">👤</div><div><b>当前登录</b><span id="logoutWho">—</span></div></div>
+        <div class="set-item"><div class="ic">↩️</div><div><b>退出即重置</b><span>退出登录会清除登录状态与当前学员数据（定位结果、智能补短建议、报告），恢复默认状态。</span></div></div>
+        <div class="btns"><button class="btn gho" onclick="doLogout()" style="width:100%">🚪 退出登录 · 清除学员数据</button></div>
       </div>
       </div>
       <div class="set-side">
@@ -845,13 +873,12 @@ document.addEventListener('DOMContentLoaded',function(){
         </div>
         <div class="set-foot">
           <div class="btns"><button class="btn" onclick="saveMyPw()">🔑 保存新口令</button></div>
-          <button class="btn gho" onclick="doLogout()">🚪 退出登录·清除学员数据</button>
         </div>
         <div class="hint" id="pwState"></div>
       </div>
       <div class="card" id="aiCard">
         <h2>AI 接口设置（可选 · 已预置免费AI产品）</h2>
-        <div class="hint" style="margin-bottom:10px">智能补短建议「🤖 AI 生成建议」优先走<b>云端 Worker 中转</b>（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用）；此处为本机直连配置，二者都不通时自动回退内置规则库。</div>
+        <div class="hint" style="margin-bottom:10px">AI 调用链：①<b>云端 Worker 中转</b>——管理员在 Worker 变量配置 AI_URL/AI_KEY（优先，全教师零配置可用）；②<b>智谱AI</b>——此处配置的直连接口与 Key（默认智谱 glm-4-flash，云端同步到全体教师设备）作为备用；③均不可用时自动回退内置规则库。</div>
         <div class="grid g3">
           <div><label>免费AI产品（预置，选后自动带出地址与模型）</label>
             <select id="ai_preset" onchange="onAIPreset()">
@@ -1619,9 +1646,19 @@ function applyIron(r,bgot,bfull){
 function linesFor(full){return {ba:ceilPct(0.75,full),linLo:ceilPct(0.72,full),bufHi:ceilPct(0.78,full),stepGg:ceilPct(0.60,full),stepTz:ceilPct(0.70,full),stepBg:ceilPct(0.80,full)};}
 
 /* ============ 学情定位 ============ */
+function validateScoreLogic(score,full,avg,bgot,bfull){ // 校验成绩录入字段间的逻辑关系，返回错误文案或空串
+  if(score>full)return "卷面得分（"+score+"）不能大于试卷满分（"+full+"）——卷面得分是整卷的实得总分。";
+  if(avg!=null&&avg>full)return "本校年级均分（"+avg+"）不能大于试卷满分（"+full+"）。";
+  if(bfull!=null&&bfull>full)return "基础题满分（"+bfull+"）不能大于试卷满分（"+full+"）——基础题是整卷的一部分。";
+  if(bgot!=null&&bfull!=null&&bgot>bfull)return "基础题实得（"+bgot+"）不能大于基础题满分（"+bfull+"）。";
+  if(bgot!=null&&bgot>score)return "基础题实得（"+bgot+"）不能大于卷面得分（"+score+"）——基础题实得是卷面得分的组成部分。";
+  return "";
+}
 function livePreview(){
   var score=num('l_score'),full=num('l_full'),avg=num('l_avg');
   if(score==null||full==null||full<=0){return;}
+  var err=validateScoreLogic(score,full,avg,num('l_bgot'),num('l_bfull'));
+  if(err){$('locResult').innerHTML='<div class="danger">⛔ 成绩录入不符合逻辑：'+esc(err)+'<br>请检查上方红色框区域的关系后重新填写。</div>';return;}
   var poolVal=$('l_pool')?$('l_pool').value:'__auto';
   var r=compute(score,full,avg,poolVal,scopeSpan(val('l_scope')));r.subject=val('l_subject');
   var bg=num('l_bgot'),bf=num('l_bfull');applyIron(r,bg,bf);
@@ -1645,6 +1682,8 @@ function doLocate(){
   var score=num('l_score'),full=num('l_full'),avg=num('l_avg'),bg=num('l_bgot'),bf=num('l_bfull');
   if(!name){alert("请填写学员姓名");return;}
   if(score==null||full==null||full<=0){alert("请填写有效的卷面得分和满分");return;}
+  var err=validateScoreLogic(score,full,avg,bg,bf);
+  if(err){alert("成绩录入不符合逻辑：\n\n"+err+"\n\n请检查后重新填写。");return;}
   var subject=val('l_subject'),poolVal=$('l_pool').value;
   var sc=scopeSpan(val('l_scope')),tm=val('a_term')||autoTerm();
   var r=applyIron(compute(score,full,avg,poolVal,sc),bg,bf);
@@ -1675,7 +1714,7 @@ function renderLocate(r){
   if(r.iron)h+='<div class="danger">⛔ '+esc(r.ironNote)+'。此类孩子高分多靠压轴赌分，卷子一变常规易崩，须先补基础概念闭环，配题先降一档。</div>';
   else if(r.layer=="临界观察")h+='<div class="note">🔎 临界观察：校准落 72%~75%，建议追踪3次（看趋势而非单次）再定层。此阶段配题以巩固段为主、拓展段少量试探。</div>';
   else if(r.cal>=0.75&&r.cal<0.78)h+='<div class="note">🟡 拔高下沿缓冲带：已判拔高冲刺层，处 75%~78%，建议追踪3次确认稳定后再加压轴限时训练。</div>';
-  h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去智能补短建议</button><button class="btn sec" onclick="gotoReport()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
+  h+='<div class="btns noprint"><button class="btn" onclick="gotoAdvice()">➜ 去智能补短建议</button><button class="btn sec" onclick="gotoReportAI()">➜ 生成机构报告</button><button class="btn gho" onclick="exportLocateCSV()">⬇ 导出本条CSV</button></div>';
   $('locResult').innerHTML=h;
 }
 function fillDemo(){
@@ -1694,6 +1733,33 @@ function gotoAdvice(){
   var t=document.querySelector('.tab[data-p="advice"]');switchTab('advice',t);
 }
 function gotoReport(){var t=document.querySelector('.tab[data-p="report"]');switchTab('report',t);genReport();}
+function gotoReportAI(){ // 生成机构报告：先AI多因子综合判定（学校/年级/学期/分数/基准P/卷面得分率/考试类别等），七段结构输出；AI不可用自动回退规则库
+  if(!ST.lastLocate){alert("请先完成学情定位");return;}
+  var L=ST.lastLocate;
+  // 将定位结果同步到建议页选择器，保证规则建议与报告口径一致
+  try{
+    var as=$('a_stage');if(as){as.value=L.stage||val('a_stage');onAdvStageChange();}
+    var ag=$('a_grade');if(ag&&L.grade){ag.value=L.grade;onAdvGradeChange();}
+    var at=$('a_term');if(at&&L.term)at.value=L.term;
+    var asu=$('a_subject');if(asu&&L.subject){asu.value=L.subject;onAdvSubjectChange();}
+    var al=$('a_layer');if(al&&L.layer)al.value=L.layer;
+  }catch(e){}
+  var a=ruleAdvice();
+  var br=(L.baseRate!=null)?(L.baseRate*100).toFixed(1)+'%':'未测';
+  var prompt='你是资深K12'+(L.stage||'')+(L.subject||'')+'教研老师。请基于以下多因子信息对学员做综合判定与教学建议，面向学生的知识漏洞。\n'
+   +'【学员信息】学校：'+(L.school||'未填')+'；年级：'+(L.grade||'')+'（'+(L.term=="下"?"下":"上")+'学期）；姓名：'+(L.name||'')+'。\n'
+   +'【考试/类别】'+(L.examLabel||'未填')+'；卷面得分：'+L.score+'/'+L.full+'（卷面得分率'+(L.sr*100).toFixed(1)+'%）；本校年级均分：'+(L.avg==null?'未填':L.avg)+'。\n'
+   +'【校准因子】常模池基准P：'+L.baseP.toFixed(3)+'（'+(L.usedAvg?'本校实测':'兜底')+'）；校准得分率：'+(L.cal*100).toFixed(1)+'%；基础题应得率：'+br+'；层级判定：'+L.layer+'（台阶：'+L.step+'）'+(L.iron?'；⚠️基础题应得率<85%已触发铁律强制降层待复核':'')+'。\n'
+   +'【判定规则】校准得分率=卷面得分率−（本校均分率−基准P）；基础题应得率<85%触发铁律强制降为基础巩固层。未填年级均分时基准P为卷别兜底值，结论仅供参考。\n'
+   +'【要求】先综合以上因子复核层级判定是否合理（如发现因子矛盾请指出并给出更合理的判定），再严格按七段结构输出：①卷面核对 ②漏洞诊断归因（概念漏洞/方法缺失/熟练度不足） ③优先补漏清单（含易错点与补法） ④巩固练习 ⑤压轴/拓展策略 ⑥暂缓清单 ⑦复核条件与本周动作。500字内，分点清晰。';
+  $('locResult').innerHTML=aiLoadingHtml();
+  function done(txt){ // 成功带AI文本回退规则库均可：报告第四部分结构完整
+    ST.lastAdvice=a;if(txt)ST.lastAIText=txt;
+    try{renderLocate(L);}catch(e){} // 恢复定位结果区，清除AI加载动画残留
+    var t=document.querySelector('.tab[data-p="report"]');switchTab('report',t);genReport(true);
+  }
+  aiCallChain(prompt,function(txt){done(txt||'');}); // 统一调用链：智谱AI优先→管理员配置的云端AI→规则库兜底
+}
 function gotoLocateTab(){switchTab('locate');}
 function gotoBatchTab(){switchTab('batch');}
 function hasLocateDone(){return !!(ST.lastLocate||(ST.lastBatch&&ST.lastBatch.length));}
@@ -1910,6 +1976,27 @@ function aiDirect(a,prompt,sig,cfg){ // 通道2：本机配置 Key 直连（可�
   .then(function(d){var txt=aiExtract(d);if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}else aiRuleFallback(a,'AI 响应解析失败');})
   .catch(function(e){aiRuleFallback(a,(e&&e.message)||'网络错误');});
 }
+/* ============ AI 统一调用链：①云端Worker中转（管理员在Worker变量配置，优先） ②智谱AI（管理员在AI设置卡配置的直连接口，默认智谱，Key云端同步到本机） ③失败回退规则库 ============ */
+function aiCallChain(prompt,cb){ // cb(txt)：txt 为 null 表示全部通道失败，调用方回退规则库
+  var cfg=aiCfg(),scfg=getSync();
+  var tried={worker:false,direct:false};
+  function direct(){ // 通道2：智谱AI直连（管理员配置的接口与Key，云端同步到全体教师设备）
+    if(tried.direct)return;tried.direct=true;
+    if(!cfg.key){cb(null);return;} // 未配置Key：直连不可用，全部通道失败
+    fetchWithTimeout(cfg.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},body:JSON.stringify({model:cfg.model||'glm-4-flash',messages:[{role:'user',content:prompt}],temperature:0.4})},30000)
+    .then(function(r){return r.json();})
+    .then(function(d){var t=aiExtract(d);if(t)cb(t);else cb(null);})
+    .catch(function(){cb(null);});
+  }
+  function worker(){ // 通道1：云端 Worker 中转（管理员在 Worker 变量配置 AI_URL/AI_KEY/AI_MODEL，全体教师零配置可用，优先）
+    if(tried.worker)return;tried.worker=true;
+    fetchWithTimeout(scfg.url+'/ai',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':scfg.key||''},body:JSON.stringify({prompt:prompt,temperature:0.4,max_tokens:900})},30000)
+    .then(function(r){return r.json();})
+    .then(function(d){var t=aiExtract(d);if(t)cb(t);else direct();})
+    .catch(direct);
+  }
+  worker();
+}
 /* ============ 生成入口：AI 联网优先，失败回退规则库 ============ */
 function genAdvice(force){
   if(!hasLocateDone()){$('advResult').innerHTML=needLocateTip();return;}
@@ -1924,12 +2011,10 @@ function genAdvice(force){
   var _term=val('a_term')||'上';
   var prompt="你是资深K12"+val('a_stage')+val('a_subject')+"教研老师。学员"+val('a_grade')+( _term=="下"?"下学期":"上学期")+"（教材默认进度已学至"+capLabel(val('a_stage'),val('a_grade'),_term)+"，仅供参考）。学员层级："+a.layer+"。本次失分题型（教师按试卷结构/知识板块勾选，可能包含总复习、压轴或后续册次题型，属教研有意勾选，请按先已学后未学、先基础后综合的教学逻辑处理）："+(picked.join('、')||"未指定")+"。请按①先核对②培养方向③先补题型(含易错与补法)④再练⑤压轴策略⑥暂缓⑦复核与本周动作，给出专业、可执行的补短方案，控制在500字内，分点清晰。";
   $('advResult').innerHTML=aiLoadingHtml(); // Loading
-  // 通道1：云端 Worker 中转（管理员在 Worker 配置 AI_KEY 后全体教师零配置可用，天然绕过 CORS）
-  var scfg=getSync();
-  fetchWithTimeout(scfg.url+'/ai',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':scfg.key||''},body:JSON.stringify({prompt:prompt,temperature:0.4,max_tokens:900})},30000)
-  .then(function(r){return r.json();})
-  .then(function(d){var txt=aiExtract(d);if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}else aiDirect(a,prompt,sig,cfg);})
-  .catch(function(){aiDirect(a,prompt,sig,cfg);});
+  aiCallChain(prompt,function(txt){ // 统一调用链：①智谱AI（默认）②管理员配置的云端中转 ③规则库兜底
+    if(txt){ST.lastAdvice=a;ST.lastAIText=txt;ST.lastAISig=sig;$('advResult').innerHTML=aiModulesHtml(a,txt);}
+    else aiRuleFallback(a,'智谱AI与管理员配置的云端AI均不可用');
+  });
 }
 function aiAdvice(force){genAdvice(force);} // 兼容旧调用
 
@@ -1945,14 +2030,23 @@ function copyPromptText(){var picked=[];Object.keys(CHIPS).forEach(function(k){v
 function copyPromptAdv(){var t=copyPromptText();if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){alert('提示词已复制，打开元宝网页/App粘贴即可。');},function(){prompt('请手动复制：',t);});}else{prompt('请手动复制：',t);}}
 function applyAIText(){var t=val('aiPaste')||'';if(!t.trim()){alert('请先粘贴元宝的回答');return;}var a=ruleAdvice();ST.lastAdvice=a;ST.lastAIText=t;ST.lastAISig=copyPromptText();$('advResult').innerHTML=aiModulesHtml(a,t,'元宝粘贴导入');}
 /* ============ 机构报告 ============ */
-function genReport(){
+function genReport(fromExport){
   var r=ST.lastLocate;
   if(!r){$('report').innerHTML='<div class="note">请先完成「学情定位」，报告将自动带入定位结果与智能补短建议。</div>';return;}
+  if(!fromExport&&!ST.lastAdvice){ // 报告第四部分需基于智能补短建议生成，未生成则引导
+    var tab=document.querySelector('.tab[data-p="advice"]');
+    alert("生成机构报告前，请先完成「智能补短建议」：\n报告第四部分（知识点与题型补短方案）需基于 AI/内置规则建议生成。\n点击「确定」前往智能补短建议页，勾选失分题型后生成即可。",function(){
+      if(tab)switchTab('advice',tab);else switchTab('advice');
+    });
+    return;
+  }
   var org=val('r_org')||"章圆智学中心",teacher=val('r_teacher'),logo=logoSrc();
   var a=ST.lastAdvice;
   var L=r.lines||linesFor(r.full);
   var d=new Date(),ds=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-  var h='<div class="rpt"><div class="rhead">'+(logo?'<img class="logo" src="'+esc(logo)+'" onerror="this.style.display=\'none\'">':'')+'<div><div class="org">'+esc(org)+'</div><div class="muted">学情分层定位报告 · '+ds+'</div></div></div>';
+  var h='<div class="rpt"><div class="rhead">'+(logo?'<img class="logo" src="'+esc(logo)+'" onerror="this.style.display=\'none\'">':'')
+   +'<div><div class="rtitle">学情分层定位报告</div><div class="rh-sub">'+esc(org)+'</div></div>'
+   +'<div class="rh-meta">报告日期：'+ds+'<br>'+esc(r.name)+' · '+esc(r.grade)+(r.school?' · '+esc(r.school):'')+'</div></div>';
   h+='<table><tr><th>姓名</th><th>年级</th><th>学校</th><th>科目</th></tr><tr><td>'+esc(r.name)+'</td><td>'+esc(r.grade)+'</td><td>'+esc(r.school||'—')+'</td><td>'+esc(r.subject)+'</td></tr></table>';
   if(r.campus||r.clazz||teacher)h+='<table style="margin-top:6px"><tr><th>校区</th><th>班级</th><th>报告教师</th></tr><tr><td>'+esc(r.campus||'—')+'</td><td>'+esc(r.clazz||'—')+'</td><td>'+esc(teacher||'—')+'</td></tr></table>';
   h+='<h3>一、定位结论</h3><table><tr><th>考试/卷别</th><th>卷面</th><th>满分</th><th>年级均分</th><th>常模池基准P</th><th>校准得分率</th><th>校准折算分</th></tr><tr><td>'+esc(r.examLabel)+'</td><td>'+r.score+'</td><td>'+r.full+'</td><td>'+(r.avg==null?'—':r.avg)+'</td><td>'+r.baseP.toFixed(3)+'（'+(r.usedAvg?'本校实测':'兜底')+'）</td><td><b>'+(r.cal*100).toFixed(1)+'%</b></td><td>'+Math.round(r.cal*r.full)+'</td></tr></table>';
@@ -2012,20 +2106,52 @@ function clearLogo(){
    （不依赖任何外部/内嵌重型库，彻底避免组件拖垮整页按钮的问题。） */
 function exportPDF(ev){
   if(!ST.lastLocate){alert("请先完成学情定位，再生成报告。");return;}
-  if(!ST.lastReport)genReport();
+  if(!ST.lastReport)genReport(true);
   if(!$('report')||!$('report').innerHTML.trim()){alert("报告为空");return;}
-  alert("即将打开打印窗口：请在「目标/打印机」中选【另存为PDF】，纸张选 A4、纵向，点保存即可得到PDF文件。\n（如需可编辑文本，请用旁边的「导出Word」。）");
-  window.print();
+  var tab=document.querySelector('.tab[data-p="report"]');
+  if(tab)switchTab('report',tab); // 打印前强制切到报告页，保证打印内容正确
+  alert("即将打开打印窗口：请在「目标/打印机」中选【另存为PDF】，纸张选 A4、纵向，点保存即可得到PDF文件。\n（如需可编辑文本，请用旁边的「导出Word」。）",function(){window.print();});
+}
+function utf8ToB64(str){return btoa(unescape(encodeURIComponent(str)));}
+function wrapB64(b){return b.replace(/(.{76})/g,'$1\r\n');}
+function getLogoDataURL(){ // 取LOGO为 {mime,b64}：优先本机保存的自定义LOGO，其次尝试 fetch（线上部署可用；file:// 下本地图片无法读取则返回 null）
+  return new Promise(function(res){
+    try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d){var m=d.match(/^data:([^;]+);base64,(.*)$/);if(m){res({mime:m[1],b64:m[2]});return;}}}catch(e){}
+    var src=logoSrc()||'';
+    if(/^data:/i.test(src)){var m2=src.match(/^data:([^;]+);base64,(.*)$/);res(m2?{mime:m2[1],b64:m2[2]}:null);return;}
+    if(!/^https?:/i.test(src)&&!/^https?:/i.test(location.protocol)){res(null);return;} // file:// 环境 fetch 本地文件会被浏览器拦截
+    try{
+      fetch(src,{cache:'no-store'}).then(function(r){if(!r.ok){res(null);return null;}return r.blob();}).then(function(b){
+        if(!b){res(null);return;}
+        var fr=new FileReader();
+        fr.onload=function(){var m3=String(fr.result).match(/^data:([^;]+);base64,(.*)$/);res(m3?{mime:m3[1],b64:m3[2]}:null);};
+        fr.onerror=function(){res(null);};
+        fr.readAsDataURL(b);
+      }).catch(function(){res(null);});
+    }catch(e){res(null);}
+  });
 }
 function exportWord(){
-  if(!ST.lastReport)genReport();
+  if(!ST.lastReport)genReport(true);
   if(!ST.lastLocate){alert("请先完成学情定位");return;}
-  var css="body{font-family:'Microsoft YaHei',sans-serif;color:#1B2733;line-height:1.7} .rhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1E6FD9;padding-bottom:12px;margin-bottom:16px} .logo{max-width:150px;max-height:66px} .org{font-size:20px;font-weight:800;color:#1657B0} h3{font-size:15px;color:#1657B0;border-left:3px solid #1E6FD9;padding-left:9px;margin:16px 0 8px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px} th,td{border:1px solid #DCE6F2;padding:6px 8px;text-align:center} th{background:#EAF2FC;color:#1657B0} .rlist{margin:4px 0 0 18px} .rlist li{margin:4px 0} .pill{background:#EAF2FC;color:#1657B0;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600} .muted{color:#5B6B7C;font-size:12px} .red{color:#D6433B}";
-  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+$('report').innerHTML+'</body></html>';
-  var blob=new Blob(['\ufeff'+html],{type:'application/msword'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  var nm=(val('r_org')||'章圆')+'_层级定位报告_'+(ST.lastLocate.name||'')+'_'+new Date().toISOString().slice(0,10)+'.doc';
-  a.download=nm;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+  getLogoDataURL().then(function(logo){
+    var css="body{font-family:'Microsoft YaHei',sans-serif;color:#1B2733;line-height:1.7} .rhead{display:flex;align-items:center;gap:14px;border-bottom:3px solid #1E6FD9;padding-bottom:12px;margin-bottom:16px} .logo{width:56px;height:56px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid #DCE6F2;padding:4px} .rtitle{font-size:21px;font-weight:800;color:#1657B0;letter-spacing:2px} .rh-sub{font-size:12.5px;color:#5B6B7C;margin-top:4px;font-weight:600} .rh-meta{margin-left:auto;text-align:right;font-size:12px;color:#5B6B7C;line-height:1.8} h3{font-size:15px;color:#1657B0;border-left:3px solid #1E6FD9;padding-left:9px;margin:16px 0 8px} table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px} th,td{border:1px solid #DCE6F2;padding:6px 8px;text-align:center} th{background:#EAF2FC;color:#1657B0} .rlist{margin:4px 0 0 18px} .rlist li{margin:4px 0} .pill{background:#EAF2FC;color:#1657B0;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600} .muted{color:#5B6B7C;font-size:12px} .red{color:#D6433B}";
+    var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+$('report').innerHTML+'</body></html>';
+    // MHTML：把LOGO作为附件嵌入，Word 中完整显示（相对路径/base64 内联在 Word 里都会丢图）
+    var B='------=_Part_ZY';
+    if(logo)html=html.replace(/(<img[^>]*class="logo"[^>]*src=")[^"]*(")/,'$1logo.png$2');
+    var mhtml='MIME-Version: 1.0\r\nContent-Type: multipart/related; boundary="----=_Part_ZY"\r\n\r\n'
+     +B+'\r\nContent-Location: file:///C:/zyreport/report.html\r\nContent-Type: text/html; charset="utf-8"\r\nContent-Transfer-Encoding: base64\r\n\r\n'
+     +wrapB64(utf8ToB64(html))+'\r\n';
+    if(logo)mhtml+=B+'\r\nContent-Location: file:///C:/zyreport/logo.png\r\nContent-Type: '+logo.mime+'\r\nContent-Transfer-Encoding: base64\r\n\r\n'
+     +wrapB64(logo.b64)+'\r\n';
+    mhtml+=B+'--\r\n';
+    var blob=new Blob([mhtml],{type:'application/msword'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    var nm=(val('r_org')||'章圆')+'_层级定位报告_'+(ST.lastLocate.name||'')+'_'+new Date().toISOString().slice(0,10)+'.doc';
+    a.download=nm;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+    if(!logo)alert("LOGO 图片未能嵌入（本地 file:// 打开时浏览器限制读取本地图片）。部署到线上后导出即可完整包含LOGO，或先在报告设置中粘贴LOGO图片URL。");
+  });
 }
 
 /* ============ 批量 ============ */
@@ -2187,19 +2313,50 @@ var AI_PRESETS={
     guide:"部署约3分钟（免费，每天10万次）：①登录 https://dash.cloudflare.com → Workers & Pages → Create → Create Worker → Deploy；②点 Edit code，把物料包 01_定位工具/cloudflare-worker/worker.js 的全部代码粘贴进去 → Deploy；③复制你的 Worker 地址（形如 https://xxx.xxx.workers.dev），替换本框中的「你的子域.你的账号」；④?up= 可切换厂商：tokenhub / siliconflow / glm（模型名需同步改：tokenhub 用 hy4 或 hy3-preview，siliconflow 用 Qwen/Qwen2.5-7B-Instruct，glm 用 glm-4-flash）；⑤到对应厂商免费领取 API Key 粘贴保存。本地双击打开 HTML 也可调用，彻底绕过 CORS。"},
   custom:{name:"自定义",url:"",model:"",guide:"自建或第三方兼容 OpenAI /chat/completions 的接口，自行填写地址、模型名与 Key。"}
 };
-var AI_DEFAULT="tokenhub"; // 默认预置：腾讯混元（元宝）免费模型
+var AI_DEFAULT="glm"; // 默认预置：智谱AI（glm-4-flash 永久免费）
 function aiDef(){var p=AI_PRESETS[AI_DEFAULT];return{url:p.url,key:"",model:p.model,preset:AI_DEFAULT};}
 function nk(k){return (k||"").toString().trim().replace(/[\s"']/g,"");}
-function syncAICard(){ // AI 接口设置仅系统管理员可用
+function syncAICard(){ // AI 接口设置仅系统管理员可用；打开时先拉取云端配置
   var c=$('aiCard');if(!c)return;
-  if(isAdmin()){c.style.display='';aiState();return;}
-  c.innerHTML='<h2>🔒 AI 接口设置（仅系统管理员可用）</h2><div class="hint" style="margin-top:6px">AI 接口地址与密钥由<b>系统管理员统一配置管理</b>，授权教师无需配置、亦不可见。教师端「AI 生成建议」优先走云端中转，零配置可用；不可用时自动回退内置规则库，结果同样完整。</div>';
+  if(isAdmin()){c.style.display='';pullAICloud().then(function(ch){aiState();if(ch)addLog('AI配置云端同步到本机');});return;}
+  c.innerHTML='<h2>🔒 AI 接口设置（仅系统管理员可用）</h2><div class="hint" style="margin-top:6px">AI 接口地址与密钥由<b>系统管理员统一配置管理</b>，授权教师无需配置、亦不可见。教师端「AI 生成建议」优先走云端 Worker 中转（管理员在 Worker 配置），失败后自动改用智谱AI直连（管理员配置的接口与Key自动同步到各设备），仍不可用则回退内置规则库，结果同样完整。</div>';
 }
 function aiCfg(){try{var s=localStorage.getItem(AI_KEY);if(s){var c=JSON.parse(s);var pr=c.preset||(c.url?(function(){for(var k in AI_PRESETS){if(AI_PRESETS[k].url===c.url)return k;}return"custom";})():AI_DEFAULT);var pp=AI_PRESETS[pr]||AI_PRESETS[AI_DEFAULT];return{url:c.url||pp.url,key:nk(c.key),model:c.model||pp.model,preset:pr};}}catch(e){}return aiDef();}
 function onAIPreset(){var k=val('ai_preset');var p=AI_PRESETS[k];if(!p)return;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;syncModelPreset();if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);}
 function onModelPreset(){var m=val('ai_model_preset');if(m&&$('ai_model'))$('ai_model').value=m;}
 function syncModelPreset(){var s=$('ai_model_preset');if(!s)return;var m=val('ai_model');var hit=false;for(var i=0;i<s.options.length;i++){if(s.options[i].value&&s.options[i].value===m){s.value=m;hit=true;break;}}if(!hit)s.value="";}
-function saveAI(){var k=val('ai_key').trim();if(!k)k=aiCfg().key||'';var c={preset:val('ai_preset'),url:val('ai_url').trim(),key:nk(k),model:val('ai_model').trim()};try{localStorage.setItem(AI_KEY,JSON.stringify(c));}catch(e){}aiState();}
+function pushAICloud(c){ // AI配置推送云端（管理员保存时触发，全设备生效）
+  var cfg=getSync();
+  return fetchWithTimeout(cfg.url+'/aicfg',{method:'POST',headers:{'Content-Type':'application/json','x-sync-key':cfg.key||''},body:JSON.stringify(c)},8000)
+  .then(function(r){return r.json();}).catch(function(){return {ok:false,error:'网络错误'};});
+}
+function pullAICloud(){ // 拉取云端AI配置（云端为准）：所有设备启动时自动同步，教师端零配置即可用
+  var cfg=getSync();
+  return fetchWithTimeout(cfg.url+'/aicfg',{headers:{'x-sync-key':cfg.key||''}},8000)
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d&&d.ok&&d.cfg&&d.cfg.key){
+      var cur=null;try{cur=JSON.parse(localStorage.getItem(AI_KEY)||'null');}catch(e){}
+      if(!cur||cur.key!==d.cfg.key||cur.url!==d.cfg.url||cur.model!==d.cfg.model||cur.preset!==d.cfg.preset){
+        try{localStorage.setItem(AI_KEY,JSON.stringify(d.cfg));}catch(e){}
+        return true;
+      }
+    }
+    return false;
+  }).catch(function(){return false;});
+}
+function saveAI(){
+  var k=val('ai_key').trim();if(!k)k=aiCfg().key||''; // 留空=保留已存密钥（不回显）
+  var c={preset:val('ai_preset'),url:val('ai_url').trim(),key:nk(k),model:val('ai_model').trim()};
+  try{localStorage.setItem(AI_KEY,JSON.stringify(c));}catch(e){}
+  aiState();
+  var h=$('aiState');
+  pushAICloud(c).then(function(d){
+    if(!h)return;
+    h.innerHTML=(c.key?'<span class="tag t-ba">AI已启用</span>':'<span class="tag t-lin">未配置Key（自动用内置规则库）</span>')
+     +' 配置已保存'+(d&&d.ok?'，并<b>同步云端</b>（全设备生效）':'，但<b>云端同步失败</b>（'+esc((d&&d.error)||'网络问题')+'），暂仅本机生效——请检查网络后重新保存。');
+  });
+}
 function clearAI(){try{localStorage.removeItem(AI_KEY);}catch(e){}var p=AI_PRESETS[AI_DEFAULT];if($('ai_preset'))$('ai_preset').value=AI_DEFAULT;if($('ai_url'))$('ai_url').value=p.url;if($('ai_model'))$('ai_model').value=p.model;if($('ai_key'))$('ai_key').value="";if($('aiGuide'))$('aiGuide').innerHTML=esc(p.guide);aiState();}
 function aiState(){var c=aiCfg();var h=$('aiState');var pn=(AI_PRESETS[c.preset]||{}).name||"免费AI";if(!h)return;
   h.innerHTML=c.key?('<span class="tag t-ba">AI已启用</span> 产品：'+esc(pn)+' · 模型：'+esc(c.model||"")+'，补短页「AI生成建议」将调用该接口。')
@@ -2266,6 +2423,7 @@ function renderAuthPanel(){
   var me=getCurPhone();
   var custom=false;try{custom=!!getPwMap()[me];}catch(e){}
   if(badge)badge.textContent=(me===ADMIN_PHONE?'🛡️ 系统管理员':'👤 授权教师')+' · '+maskPhone(me)+(custom?' · 已设个人口令':' · 默认口令');
+  var lw=$('logoutWho');if(lw)lw.textContent=(me===ADMIN_PHONE?'系统管理员':'授权教师')+' · '+maskPhone(me)+(custom?' · 已设个人口令':' · 默认口令');
   if(st)st.textContent='';
   if(me!==ADMIN_PHONE){
     if(ttl)ttl.textContent='账户信息';
@@ -2464,23 +2622,27 @@ function viewCloudPhones(){ // 管理员查看云端授权名单（CSV 原始数
 document.addEventListener('DOMContentLoaded',function(){
   var lg=$('topLogo');if(lg){var src='assets/logo.png';try{var d=localStorage.getItem(LOGO_KEY+'_data');if(d)src=d;}catch(e){}lg.src=src;}
   var fy=$('ftYear');if(fy)fy.textContent=new Date().getFullYear(); // 版权年份自动更新
+  pullAICloud().then(function(ch){if(ch){try{aiState();}catch(e){}}}); // 启动时同步云端AI配置（管理员保存后全设备生效）
 });
 /* ===== 统一美化提示弹窗（接管原生 alert，全站提示自动美化） ===== */
 (function(){
   var mask=document.createElement('div');
+  mask.id='alertMask';
   mask.style.cssText='position:fixed;inset:0;background:rgba(9,28,58,.5);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px';
   mask.innerHTML='<div style="background:#fff;border-radius:16px;max-width:370px;width:100%;box-shadow:0 24px 64px rgba(8,40,90,.35);overflow:hidden;text-align:center">'
-   +'<div style="background:linear-gradient(135deg,#12306E,#1B4396 60%,#2458C8);padding:13px 18px;display:flex;align-items:center;justify-content:center"><b style="color:#fff;font-size:15px;letter-spacing:3px">系 统 提 示</b></div>'
+   +'<div style="background:linear-gradient(135deg,#12306E,#1B4396 60%,#2458C8);padding:13px 18px;display:flex;align-items:center;justify-content:center"><b style="color:#fff;font-size:15px;letter-spacing:3px">温 馨 提 示</b></div>'
    +'<div id="alertMsg" style="padding:22px 20px;font-size:14.5px;line-height:1.85;color:#2A3A55;white-space:pre-wrap;word-break:break-word;max-height:52vh;overflow-y:auto"></div>'
    +'<div style="padding:0 20px 20px"><button id="alertOk" style="width:100%;padding:11px;border:none;border-radius:10px;background:linear-gradient(135deg,#1E6FD9,#3E8BEE);color:#fff;font-size:15px;font-weight:700;letter-spacing:6px;cursor:pointer;box-shadow:0 6px 16px rgba(30,111,217,.35)">确定</button></div></div>';
   document.body.appendChild(mask);
-  function hide(){mask.style.display='none';}
+  var cb=null;
+  function hide(){mask.style.display='none';var f=cb;cb=null;if(f){try{f();}catch(e){}}}
   document.getElementById('alertOk').addEventListener('click',hide);
   mask.addEventListener('click',function(e){if(e.target===mask)hide();});
+  window.addEventListener('beforeprint',function(){mask.style.display='none';cb=null;}); // 打印时确保弹窗不进入输出
   var orig=window.alert;
-  window.alert=function(msg){ // 接管原生 alert：所有提示自动使用统一样式
-    try{document.getElementById('alertMsg').textContent=String(msg==null?'':msg);mask.style.display='flex';}
-    catch(e){orig(msg);}
+  window.alert=function(msg,onOk){ // 非阻塞弹窗；可传回调，点「确定」后执行（替代原生阻塞语义）
+    try{document.getElementById('alertMsg').textContent=String(msg==null?'':msg);cb=(typeof onOk==='function')?onOk:null;mask.style.display='flex';}
+    catch(e){orig(msg);if(typeof onOk==='function')onOk();}
   };
 })();
 </script>
